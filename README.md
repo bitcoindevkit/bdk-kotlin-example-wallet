@@ -1,10 +1,10 @@
  # Bitcoindevkit Android Example Wallet
 
-<div align="center">
+<p align="center">
     <img src="./images/screenshots.png" width="600">
-</div>
+</p>
 
-The _Bitcoindevkit Android Example Wallet_ testnet bitcoin wallet built as a reference app for the [bitcoindevkit](https://github.com/bitcoindevkit) on Android. It is a fork of the long-standing [Devkit Wallet](https://github.com/thunderbiscuit/devkit-wallet), a repository that hosts a series of apps (4) of increasing complexity aimed at showcasing the bitcoindevkit library for beginner and advanced Android developers. 
+The _Bitcoindevkit Android Example Wallet_ is a wallet built as a reference app for the [bitcoindevkit](https://github.com/bitcoindevkit) on Android. It is a fork of the long-standing [Devkit Wallet](https://github.com/thunderbiscuit/devkit-wallet), a repository that hosts a series of apps (4) of increasing complexity aimed at showcasing the bitcoindevkit library for beginner and advanced Android developers. 
 
 This demo app is a departure of the Devkit Wallet approach and is built with the following goals in mind:
 1. Be a reference application for the bitcoindevkit API on Android.
