@@ -79,12 +79,12 @@ internal fun ReceiveScreen(
         modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize()
-            .background(DevkitWalletColors.night4)
+            .background(DevkitWalletColors.primary)
     ) {
         val (screenTitle, QRCode, bottomButtons) = createRefs()
         Text(
             text = "Receive Address",
-            color = DevkitWalletColors.snow1,
+            color = DevkitWalletColors.white,
             fontSize = 28.sp,
             fontFamily = firaMono,
             textAlign = TextAlign.Center,
@@ -121,14 +121,14 @@ internal fun ReceiveScreen(
                     Text(
                         text = address,
                         fontFamily = firaMono,
-                        color = DevkitWalletColors.snow1
+                        color = DevkitWalletColors.white
                     )
                 }
                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                 Text(
                     text = "m/84h/1h/0h/0/$addressIndex",
                     fontFamily = firaMono,
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             }
         }
@@ -145,7 +145,7 @@ internal fun ReceiveScreen(
         ) {
             Button(
                 onClick = { addressViewModel.updateAddress() },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(80.dp)
@@ -163,7 +163,7 @@ internal fun ReceiveScreen(
             }
             Button(
                 onClick = { navController.navigate(Screen.HomeScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(80.dp)
@@ -191,7 +191,7 @@ private fun addressToQR(address: String): ImageBitmap? {
         val bitMap = createBitmap(1000, 1000)
         for (x in 0 until 1000) {
             for (y in 0 until 1000) {
-                // uses night1 and snow1 for colors
+                // uses night1 and white for colors
                 bitMap.setPixel(x, y, if (bitMatrix[x, y]) 0xFF2e3440.toInt() else 0xFFd8dee9.toInt())
             }
         }

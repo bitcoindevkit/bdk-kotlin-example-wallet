@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.data.ElectrumSettings
 import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.ui.composables.AwayFromHomeAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 
@@ -50,7 +51,7 @@ internal fun ElectrumScreen(navController: NavController) {
 
     Scaffold(
         topBar = { AwayFromHomeAppBar(navController, "Electrum Server") },
-        containerColor = DevkitWalletColors.night4
+        containerColor = DevkitWalletColors.primaryDark
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -61,7 +62,7 @@ internal fun ElectrumScreen(navController: NavController) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "Use default electrum URL",
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                     fontSize = 14.sp,
                     fontFamily = firaMono,
                     textAlign = TextAlign.Center,
@@ -86,15 +87,15 @@ internal fun ElectrumScreen(navController: NavController) {
                     label = {
                         Text(
                             text = "Electrum Server",
-                            color = DevkitWalletColors.snow1,
+                            color = DevkitWalletColors.white,
                         )
                     },
                     singleLine = true,
-                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = DevkitWalletColors.auroraGreen,
-                        unfocusedBorderColor = DevkitWalletColors.snow1,
-                        cursorColor = DevkitWalletColors.auroraGreen,
+                        focusedBorderColor = DevkitWalletColors.accent1,
+                        unfocusedBorderColor = DevkitWalletColors.white,
+                        cursorColor = DevkitWalletColors.accent1,
                     ),
                     keyboardActions = KeyboardActions(onDone = {
                         focusManager.clearFocus()
@@ -111,12 +112,12 @@ internal fun ElectrumScreen(navController: NavController) {
                 modifier = Modifier
                     .align(alignment = Alignment.End)
                     .padding(all = 8.dp),
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryDark),
                 enabled = isBlockChainCreated && !isChecked.value
             ) {
                 Text(
                     text = "Save",
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                     fontSize = 12.sp,
                     fontFamily = firaMono,
                     textAlign = TextAlign.Center,

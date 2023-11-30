@@ -31,9 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.WalletCreateType
-import com.goldenraven.devkitwallet.ui.IntroAppBar
+import com.goldenraven.devkitwallet.ui.composables.IntroAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 
@@ -66,7 +65,7 @@ internal fun WalletRecoveryScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .background(DevkitWalletColors.night4)
+                    .background(DevkitWalletColors.primaryLight)
                     .constrainAs(screenTitle) {
                         top.linkTo(parent.top)
                     }
@@ -74,7 +73,7 @@ internal fun WalletRecoveryScreen(
                 Column {
                     Text(
                         text = "Recover Wallet",
-                        color = DevkitWalletColors.snow1,
+                        color = DevkitWalletColors.white,
                         fontSize = 28.sp,
                         fontFamily = firaMono,
                         modifier = Modifier
@@ -103,7 +102,7 @@ internal fun WalletRecoveryScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(DevkitWalletColors.night4)
+                    .background(DevkitWalletColors.primaryLight)
                     .constrainAs(button) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
@@ -119,7 +118,7 @@ internal fun WalletRecoveryScreen(
                                 )
                             )
                         },
-                        colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
+                        colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier
                             .size(width = 300.dp, height = 100.dp)
@@ -149,7 +148,7 @@ fun MyList(
     Column(
         modifier
             .fillMaxWidth(1f)
-            .background(DevkitWalletColors.night4)
+            .background(DevkitWalletColors.primary)
             .verticalScroll(state = scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -179,17 +178,17 @@ fun WordField(
         label = {
             Text(
                 text = "Word $wordNumber",
-                color = DevkitWalletColors.snow1,
+                color = DevkitWalletColors.white,
             )
         },
         textStyle = TextStyle(
             fontSize = 18.sp,
-            color = DevkitWalletColors.snow1
+            color = DevkitWalletColors.white
         ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = DevkitWalletColors.auroraGreen,
-            unfocusedBorderColor = DevkitWalletColors.snow1,
-            cursorColor = DevkitWalletColors.auroraGreen,
+            focusedBorderColor = DevkitWalletColors.accent1,
+            unfocusedBorderColor = DevkitWalletColors.white,
+            cursorColor = DevkitWalletColors.accent1,
         ),
         modifier = Modifier
             .padding(8.dp),

@@ -53,7 +53,7 @@ internal fun TransactionScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(DevkitWalletColors.night4)
+            .background(DevkitWalletColors.primary)
             .padding(paddingValues)
     ) {
         val (screenTitle, transactions, bottomButton) = createRefs()
@@ -69,7 +69,7 @@ internal fun TransactionScreen(
         ) {
             Text(
                 text = "Transaction",
-                color = DevkitWalletColors.snow1,
+                color = DevkitWalletColors.white,
                 fontSize = 28.sp,
                 fontFamily = firaMono,
                 textAlign = TextAlign.Center,
@@ -77,7 +77,7 @@ internal fun TransactionScreen(
             )
             Text(
                 text = transactionTitle(transaction = transaction),
-                color = DevkitWalletColors.snow1,
+                color = DevkitWalletColors.white,
                 fontSize = 14.sp,
                 fontFamily = firaMono,
                 textAlign = TextAlign.Center,
@@ -107,14 +107,14 @@ internal fun TransactionScreen(
                         text = "${it.first} :",
                         fontSize = 16.sp,
                         fontFamily = firaMono,
-                        color = DevkitWalletColors.snow1,
+                        color = DevkitWalletColors.white,
                     )
                     Text(
                         text = it.second,
                         fontSize = 16.sp,
                         fontFamily = firaMono,
                         textAlign = TextAlign.End,
-                        color = DevkitWalletColors.snow1,
+                        color = DevkitWalletColors.white,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -153,7 +153,7 @@ fun TransactionDetailButton(content: String, navController: NavController, txid:
                 }
             }
         },
-        colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+        colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryLight),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .height(60.dp)

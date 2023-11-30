@@ -52,11 +52,11 @@ internal fun WalletScreen(navController: NavController) {
 
     ModalNavigationDrawer (
         drawerState = drawerState,
-        drawerContainerColor = DevkitWalletColors.night4,
+        drawerContainerColor = DevkitWalletColors.primaryLight,
         drawerContent = {
             Column(
                 Modifier
-                    .background(color = DevkitWalletColors.frost4)
+                    .background(color = DevkitWalletColors.primaryLight)
                     .height(300.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,7 +71,7 @@ internal fun WalletScreen(navController: NavController) {
                 )
                 Text(
                     text = "Devkit Wallet",
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
                 Spacer(modifier = Modifier.padding(16.dp))
                 Row(
@@ -79,7 +79,7 @@ internal fun WalletScreen(navController: NavController) {
                 ) {
                     Text(
                         "Version:  ",
-                        color = DevkitWalletColors.snow1,
+                        color = DevkitWalletColors.white,
                     )
                     Column() {
                         Text(
@@ -96,7 +96,7 @@ internal fun WalletScreen(navController: NavController) {
                         )
                         Text(
                             text = "\uD83D\uDE0E AdvancedFeatures",
-                            color = DevkitWalletColors.snow1,
+                            color = DevkitWalletColors.white,
                             fontFamily = firaMono
                         )
                     }
@@ -109,10 +109,10 @@ internal fun WalletScreen(navController: NavController) {
                 onClick = { navController.navigate(Screen.AboutScreen.route) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                 colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = DevkitWalletColors.night4,
-                    unselectedContainerColor = DevkitWalletColors.night4,
-                    selectedTextColor = DevkitWalletColors.snow1,
-                    unselectedTextColor = DevkitWalletColors.snow1
+                    selectedContainerColor = DevkitWalletColors.primaryDark,
+                    unselectedContainerColor = DevkitWalletColors.primaryDark,
+                    selectedTextColor = DevkitWalletColors.white,
+                    unselectedTextColor = DevkitWalletColors.white
                 )
             )
             NavigationDrawerItem(
@@ -121,10 +121,10 @@ internal fun WalletScreen(navController: NavController) {
                 onClick = { navController.navigate(Screen.RecoveryPhraseScreen.route) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                 colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = DevkitWalletColors.night4,
-                    unselectedContainerColor = DevkitWalletColors.night4,
-                    selectedTextColor = DevkitWalletColors.snow1,
-                    unselectedTextColor = DevkitWalletColors.snow1
+                    selectedContainerColor = DevkitWalletColors.primaryDark,
+                    unselectedContainerColor = DevkitWalletColors.primaryDark,
+                    selectedTextColor = DevkitWalletColors.white,
+                    unselectedTextColor = DevkitWalletColors.white
                 )
             )
             NavigationDrawerItem(
@@ -133,10 +133,10 @@ internal fun WalletScreen(navController: NavController) {
                 onClick = { navController.navigate(Screen.ElectrumScreen.route) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                 colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = DevkitWalletColors.night4,
-                    unselectedContainerColor = DevkitWalletColors.night4,
-                    selectedTextColor = DevkitWalletColors.snow1,
-                    unselectedTextColor = DevkitWalletColors.snow1
+                    selectedContainerColor = DevkitWalletColors.primaryDark,
+                    unselectedContainerColor = DevkitWalletColors.primaryDark,
+                    selectedTextColor = DevkitWalletColors.white,
+                    unselectedTextColor = DevkitWalletColors.white
                 )
             )
         },
@@ -155,13 +155,13 @@ internal fun WalletScreen(navController: NavController) {
 internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
     SmallTopAppBar(
         title = { AppTitle() },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.night1),
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.primaryDark),
         navigationIcon = {
             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                 Icon(
                     imageVector = Icons.Rounded.Menu,
                     contentDescription = "Open drawer",
-                    tint = DevkitWalletColors.snow1
+                    tint = DevkitWalletColors.white
                 )
             }
         },
@@ -173,7 +173,7 @@ internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
 internal fun AppTitle() {
     Text(
         text = "Devkit Wallet",
-        color = DevkitWalletColors.snow1,
+        color = DevkitWalletColors.white,
         // fontFamily = firaMonoMedium,
         // fontSize = 20.sp
     )

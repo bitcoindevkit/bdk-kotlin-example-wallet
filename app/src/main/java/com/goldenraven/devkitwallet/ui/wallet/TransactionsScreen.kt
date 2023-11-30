@@ -48,13 +48,13 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(DevkitWalletColors.night4)
+            .background(DevkitWalletColors.primaryLight)
             .padding(paddingValues)
     ) {
         val (screenTitle, transactions, bottomButton) = createRefs()
         Text(
             text = "Transaction History",
-            color = DevkitWalletColors.snow1,
+            color = DevkitWalletColors.white,
             fontSize = 28.sp,
             fontFamily = firaMono,
             textAlign = TextAlign.Center,
@@ -81,21 +81,21 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .background(DevkitWalletColors.night3)
+                    .background(DevkitWalletColors.primary)
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(
                     text = "Pending",
                     fontSize = 18.sp,
                     fontFamily = firaMono,
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(120.dp)
-                    .background(DevkitWalletColors.night2)
+                    .background(DevkitWalletColors.primary)
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 val scrollState = rememberScrollState()
@@ -110,7 +110,7 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
                                 text = pendingTransactionsItem(it),
                                 fontSize = 12.sp,
                                 fontFamily = firaMono,
-                                color = DevkitWalletColors.snow1,
+                                color = DevkitWalletColors.white,
                                 modifier = Modifier
                                     .padding(all = 4.dp)
                                     .clickable { viewTransaction(navController = navController, txid = it.txid) }
@@ -121,7 +121,7 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
                             text = "No Pending Transactions",
                             fontSize = 12.sp,
                             fontFamily = firaMono,
-                            color = DevkitWalletColors.snow1,
+                            color = DevkitWalletColors.white,
                         )
                     }
                 }
@@ -129,21 +129,21 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .background(DevkitWalletColors.night3)
+                    .background(DevkitWalletColors.primary)
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(
                     "Confirmed",
                     fontSize = 18.sp,
                     fontFamily = firaMono,
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(200.dp)
-                    .background(DevkitWalletColors.night2)
+                    .background(DevkitWalletColors.primary)
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 val scrollState = rememberScrollState()
@@ -158,7 +158,7 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
                                 text = confirmedTransactionsItem(it),
                                 fontSize = 12.sp,
                                 fontFamily = firaMono,
-                                color = DevkitWalletColors.snow1,
+                                color = DevkitWalletColors.white,
                                 modifier = Modifier
                                     .padding(all = 4.dp)
                                     .clickable { viewTransaction(navController = navController, txid = it.txid) }
@@ -169,7 +169,7 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
                             text = "No Confirmed Transactions",
                             fontSize = 12.sp,
                             fontFamily = firaMono,
-                            color = DevkitWalletColors.snow1
+                            color = DevkitWalletColors.white
                         )
                     }
                 }
@@ -178,7 +178,7 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
 
         Button(
             onClick = { navController.navigate(Screen.HomeScreen.route) },
-            colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+            colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .height(80.dp)

@@ -70,13 +70,13 @@ internal fun RBFScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-            .background(DevkitWalletColors.night4)
+            .background(DevkitWalletColors.primary)
     ) {
         val (screenTitle, transactionInputs, bottomButtons) = createRefs()
 
         Text(
             text = "Send Bitcoin",
-            color = DevkitWalletColors.snow1,
+            color = DevkitWalletColors.white,
             fontSize = 28.sp,
             fontFamily = firaMono,
             textAlign = TextAlign.Center,
@@ -123,7 +123,7 @@ internal fun RBFScreen(
         ) {
             Button(
                 onClick = { setShowDialog(true) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent2),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(80.dp)
@@ -141,7 +141,7 @@ internal fun RBFScreen(
             }
             Button(
                 onClick = { navController.navigate(Screen.HomeScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryLight),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(80.dp)
@@ -176,15 +176,15 @@ private fun ShowTxnDetail(name: String, content: String) {
             label = {
                 Text(
                     text = name,
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                 )
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow1,
-                cursorColor = DevkitWalletColors.auroraGreen,
+                focusedBorderColor = DevkitWalletColors.accent1,
+                unfocusedBorderColor = DevkitWalletColors.white,
+                cursorColor = DevkitWalletColors.accent1,
             ),
             enabled = false,
         )
@@ -203,17 +203,17 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
                 feeRate.value = newValue.filter { it.isDigit() }
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
             label = {
                 Text(
                     text = "New fee rate",
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                 )
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow1,
-                cursorColor = DevkitWalletColors.auroraGreen,
+                focusedBorderColor = DevkitWalletColors.accent1,
+                unfocusedBorderColor = DevkitWalletColors.white,
+                cursorColor = DevkitWalletColors.accent1,
             ),
         )
     }
@@ -234,18 +234,18 @@ fun BumpFeeDialog(
             confirmationText += "Fee Rate : ${feeRate.value.toULong()}"
         }
         AlertDialog(
-            containerColor = DevkitWalletColors.night4,
+            containerColor = DevkitWalletColors.primaryLight,
             onDismissRequest = {},
             title = {
                 Text(
                     text = "Confirm transaction",
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             },
             text = {
                 Text(
                     text = confirmationText,
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             },
             confirmButton = {
@@ -261,7 +261,7 @@ fun BumpFeeDialog(
                 ) {
                     Text(
                         text = "Confirm",
-                        color = DevkitWalletColors.snow1
+                        color = DevkitWalletColors.white
                     )
                 }
             },
@@ -273,7 +273,7 @@ fun BumpFeeDialog(
                 ) {
                     Text(
                         text = "Cancel",
-                        color = DevkitWalletColors.snow1
+                        color = DevkitWalletColors.white
                     )
                 }
             },

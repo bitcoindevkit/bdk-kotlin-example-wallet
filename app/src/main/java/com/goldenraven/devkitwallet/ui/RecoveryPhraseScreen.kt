@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.data.Repository
+import com.goldenraven.devkitwallet.ui.composables.AwayFromHomeAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 
@@ -27,7 +28,7 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
 
     Scaffold(
         topBar = { AwayFromHomeAppBar(navController, "Recovery Phrase") },
-        containerColor = DevkitWalletColors.night4
+        containerColor = DevkitWalletColors.primary
     ) {
         Column(
             modifier = Modifier
@@ -38,7 +39,7 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
                 Text(
                     text = "${index + 1}. $item",
                     modifier = Modifier.weight(weight = 1F),
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                     fontFamily = firaMono
                 )
             }

@@ -80,7 +80,7 @@ internal fun SendScreen(
     BottomSheetScaffold(
         sheetContent = { AdvancedOptions(sendAll, rbfEnabled, opReturnMsg, recipientList) },
         scaffoldState = bottomSheetScaffoldState,
-        sheetBackgroundColor = DevkitWalletColors.night1,
+        sheetBackgroundColor = DevkitWalletColors.primaryDark,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetElevation = 12.dp,
         sheetPeekHeight = 0.dp,
@@ -89,13 +89,13 @@ internal fun SendScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DevkitWalletColors.night4)
+                .background(DevkitWalletColors.primaryDark)
         ) {
             val (screenTitle, transactionInputs, bottomButtons) = createRefs()
 
             Text(
                 text = "Send Bitcoin",
-                color = DevkitWalletColors.snow1,
+                color = DevkitWalletColors.white,
                 fontSize = 28.sp,
                 fontFamily = firaMono,
                 textAlign = TextAlign.Center,
@@ -148,7 +148,7 @@ internal fun SendScreen(
             ) {
                 Button(
                     onClick = { setShowDialog(true) },
-                    colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
+                    colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent2),
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier
                         .height(80.dp)
@@ -166,7 +166,7 @@ internal fun SendScreen(
                 }
                 Button(
                     onClick = { navController.navigate(Screen.HomeScreen.route) },
-                    colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                    colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryLight),
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier
                         .height(80.dp)
@@ -207,7 +207,7 @@ internal fun AdvancedOptions(
         ) {
             Text(
                 text = "Advanced Options",
-                color = DevkitWalletColors.snow3,
+                color = DevkitWalletColors.white,
                 fontSize = 18.sp,
                 fontFamily = firaMonoMedium,
             )
@@ -220,7 +220,7 @@ internal fun AdvancedOptions(
         ) {
             Text(
                 text = "Send All",
-                color = DevkitWalletColors.snow3,
+                color = DevkitWalletColors.white,
                 fontSize = 14.sp,
                 fontFamily = firaMono,
                 textAlign = TextAlign.Center,
@@ -234,11 +234,11 @@ internal fun AdvancedOptions(
                     while (recipientList.size > 1) { recipientList.removeLast() }
                 },
                 colors = SwitchDefaults.colors(
-                    uncheckedBorderColor = DevkitWalletColors.night1,
-                    uncheckedThumbColor = DevkitWalletColors.night1,
-                    uncheckedTrackColor = DevkitWalletColors.snow1,
-                    checkedThumbColor = DevkitWalletColors.snow1,
-                    checkedTrackColor = DevkitWalletColors.auroraGreen,
+                    uncheckedBorderColor = DevkitWalletColors.primaryDark,
+                    uncheckedThumbColor = DevkitWalletColors.primaryDark,
+                    uncheckedTrackColor = DevkitWalletColors.white,
+                    checkedThumbColor = DevkitWalletColors.white,
+                    checkedTrackColor = DevkitWalletColors.accent1,
                 )
             )
         }
@@ -250,7 +250,7 @@ internal fun AdvancedOptions(
         ) {
             Text(
                 text = "Enable Replace-by-Fee",
-                color = DevkitWalletColors.snow3,
+                color = DevkitWalletColors.white,
                 fontSize = 14.sp,
                 fontFamily = firaMono,
                 textAlign = TextAlign.Center,
@@ -263,11 +263,11 @@ internal fun AdvancedOptions(
                     rbfEnabled.value = !rbfEnabled.value
                 },
                 colors = SwitchDefaults.colors(
-                    uncheckedBorderColor = DevkitWalletColors.night1,
-                    uncheckedThumbColor = DevkitWalletColors.night1,
-                    uncheckedTrackColor = DevkitWalletColors.snow1,
-                    checkedThumbColor = DevkitWalletColors.snow1,
-                    checkedTrackColor = DevkitWalletColors.auroraGreen,
+                    uncheckedBorderColor = DevkitWalletColors.primaryDark,
+                    uncheckedThumbColor = DevkitWalletColors.primaryDark,
+                    uncheckedTrackColor = DevkitWalletColors.white,
+                    checkedThumbColor = DevkitWalletColors.white,
+                    checkedTrackColor = DevkitWalletColors.accent1,
                 )
             )
         }
@@ -284,15 +284,15 @@ internal fun AdvancedOptions(
                 label = {
                     Text(
                         text = "Optional OP_RETURN message",
-                        color = DevkitWalletColors.snow1,
+                        color = DevkitWalletColors.white,
                     )
                 },
                 singleLine = true,
-                textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+                textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = DevkitWalletColors.auroraGreen,
-                    unfocusedBorderColor = DevkitWalletColors.snow1,
-                    cursorColor = DevkitWalletColors.auroraGreen,
+                    focusedBorderColor = DevkitWalletColors.accent1,
+                    unfocusedBorderColor = DevkitWalletColors.white,
+                    cursorColor = DevkitWalletColors.accent1,
                 ),
             )
         }
@@ -305,7 +305,7 @@ internal fun AdvancedOptions(
         ) {
             Text(
                 text = "Number of Recipients",
-                color = DevkitWalletColors.snow3,
+                color = DevkitWalletColors.white,
                 fontSize = 14.sp,
                 fontFamily = firaMonoMedium,
             )
@@ -319,7 +319,7 @@ internal fun AdvancedOptions(
             Button(
                 onClick = { if (recipientList.size > 1) { recipientList.removeLast() } },
                 enabled = !sendAll.value,
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent2),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.width(70.dp)
             ) {
@@ -328,14 +328,14 @@ internal fun AdvancedOptions(
 
             Text(
                 text = "${recipientList.size}",
-                color = DevkitWalletColors.snow1,
+                color = DevkitWalletColors.white,
                 fontSize = 18.sp,
             )
 
             Button(
                 onClick = { recipientList.add(Recipient("", 0u)) },
                 enabled = !sendAll.value,
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.width(70.dp)
             ) {
@@ -369,15 +369,15 @@ private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
                     label = {
                         Text(
                             text = "Recipient address ${index + 1}",
-                            color = DevkitWalletColors.snow1,
+                            color = DevkitWalletColors.white,
                         )
                     },
                     singleLine = true,
-                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = DevkitWalletColors.auroraGreen,
-                        unfocusedBorderColor = DevkitWalletColors.snow1,
-                        cursorColor = DevkitWalletColors.auroraGreen,
+                        focusedBorderColor = DevkitWalletColors.accent1,
+                        unfocusedBorderColor = DevkitWalletColors.white,
+                        cursorColor = DevkitWalletColors.accent1,
                     ),
                 )
             }
@@ -430,23 +430,23 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
                             TransactionType.SEND_ALL -> {
                                 Text(
                                     text = "Amount (Send All)",
-                                    color = DevkitWalletColors.snow1Disabled,
+                                    color = DevkitWalletColors.white,
                                 )
                             }
                             else -> {
                                 Text(
                                     text = "Amount ${index + 1}",
-                                    color = DevkitWalletColors.snow1,
+                                    color = DevkitWalletColors.white,
                                 )
                             }
                         }
                     },
                     singleLine = true,
-                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = DevkitWalletColors.auroraGreen,
-                        unfocusedBorderColor = DevkitWalletColors.snow1,
-                        cursorColor = DevkitWalletColors.auroraGreen,
+                        focusedBorderColor = DevkitWalletColors.accent1,
+                        unfocusedBorderColor = DevkitWalletColors.white,
+                        cursorColor = DevkitWalletColors.accent1,
                     ),
                     enabled = (
                             when (transactionType) {
@@ -472,17 +472,17 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
                 feeRate.value = newValue.filter { it.isDigit() }
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
             label = {
                 Text(
                     text = "Fee rate",
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                 )
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow1,
-                cursorColor = DevkitWalletColors.auroraGreen,
+                focusedBorderColor = DevkitWalletColors.accent1,
+                unfocusedBorderColor = DevkitWalletColors.white,
+                cursorColor = DevkitWalletColors.accent1,
             ),
         )
     }
@@ -495,7 +495,7 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .background(DevkitWalletColors.auroraGreen)
+            .background(DevkitWalletColors.accent1)
     ) {
         Button(
             onClick = {
@@ -507,14 +507,14 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
                     }
                 }
             },
-            // colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
+            // colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
             colors = ButtonDefaults.buttonColors(Color.Transparent),
             modifier = Modifier
                 .height(50.dp)
                 .fillMaxWidth(fraction = 0.9f)
                 .padding(vertical = 8.dp)
                 .border(
-                    BorderStroke(width = 1.dp, color = DevkitWalletColors.snow1),
+                    BorderStroke(width = 1.dp, color = DevkitWalletColors.white),
                     shape = RoundedCornerShape(5.dp)
                 )
         ) {
@@ -527,7 +527,7 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
             )
             Icon(
                 painter = painterResource(id = R.drawable.ic_round_expand_more_24),
-                tint = DevkitWalletColors.snow1,
+                tint = DevkitWalletColors.white,
                 contentDescription = "More options"
             )
         }
@@ -555,18 +555,18 @@ fun Dialog(
             confirmationText += "OP_RETURN Message : $opReturnMsg"
         }
         AlertDialog(
-            containerColor = DevkitWalletColors.night4,
+            containerColor = DevkitWalletColors.primaryLight,
             onDismissRequest = {},
             title = {
                 Text(
                     text = "Confirm transaction",
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             },
             text = {
                 Text(
                     text = confirmationText,
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             },
             confirmButton = {
@@ -586,7 +586,7 @@ fun Dialog(
                 ) {
                     Text(
                         text = "Confirm",
-                        color = DevkitWalletColors.snow1
+                        color = DevkitWalletColors.white
                     )
                 }
             },
@@ -598,7 +598,7 @@ fun Dialog(
                 ) {
                     Text(
                         text = "Cancel",
-                        color = DevkitWalletColors.snow1
+                        color = DevkitWalletColors.white
                     )
                 }
             },

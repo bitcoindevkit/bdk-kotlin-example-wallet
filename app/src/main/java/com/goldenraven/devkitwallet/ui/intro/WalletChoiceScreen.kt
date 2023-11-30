@@ -32,7 +32,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.WalletCreateType
-import com.goldenraven.devkitwallet.ui.IntroAppBar
+import com.goldenraven.devkitwallet.ui.composables.IntroAppBar
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
@@ -50,7 +50,7 @@ internal fun WalletChoiceScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DevkitWalletColors.night4)
+                .background(DevkitWalletColors.primary)
                 .padding(paddingValues)
         ) {
             val (logo, create, recover) = createRefs()
@@ -73,7 +73,7 @@ internal fun WalletChoiceScreen(
                 Spacer(modifier = Modifier.padding(8.dp))
                 Text(
                     text = "Bitcoin\nTestnet",
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                     fontSize = 28.sp,
                     fontFamily = firaMono,
                 )
@@ -81,7 +81,7 @@ internal fun WalletChoiceScreen(
 
             Button(
                 onClick = { onBuildWalletButtonClicked(WalletCreateType.FROMSCRATCH) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryLight),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .size(width = 300.dp, height = 170.dp)
@@ -104,7 +104,7 @@ internal fun WalletChoiceScreen(
 
             Button(
                 onClick = { navController.navigate(Screen.WalletRecoveryScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryLight),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .size(width = 300.dp, height = 170.dp)

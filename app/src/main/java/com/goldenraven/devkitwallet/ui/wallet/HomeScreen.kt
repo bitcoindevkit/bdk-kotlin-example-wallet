@@ -36,16 +36,21 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
+import com.goldenraven.devkitwallet.ui.composables.LoadingAnimation
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
 import com.goldenraven.devkitwallet.utilities.TAG
 import com.goldenraven.devkitwallet.utilities.formatInBtc
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class WalletViewModel : ViewModel() {
 
@@ -53,10 +58,19 @@ internal class WalletViewModel : ViewModel() {
     val balance: LiveData<ULong>
         get() = _balance
 
+    private var _syncing: MutableLiveData<Boolean> = MutableLiveData(false)
+    val syncing: LiveData<Boolean>
+        get() = _syncing
+
     fun updateBalance() {
-        Wallet.sync()
-        _balance.value = Wallet.getBalance()
-        Log.i(TAG, "Balance updated ${Wallet.getBalance()}")
+        _syncing.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            Wallet.sync()
+            withContext(Dispatchers.Main) {
+                _balance.value = Wallet.getBalance()
+                _syncing.value = false
+            }
+        }
     }
 }
 
@@ -68,6 +82,7 @@ internal fun HomeScreen(
 ) {
 
     val networkAvailable: Boolean = isOnline(LocalContext.current)
+    val syncing by walletViewModel.syncing.observeAsState(true)
     val balance by walletViewModel.balance.observeAsState()
     if (networkAvailable && !Wallet.isBlockChainCreated()) {
         Log.i(TAG, "Creating new blockchain")
@@ -77,16 +92,20 @@ internal fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DevkitWalletColors.night4)
+            .background(DevkitWalletColors.primary)
             .padding(paddingValues),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.padding(24.dp))
         Row(
             Modifier
-                .fillMaxWidth()
-                .background(color = DevkitWalletColors.night3)
-                .height(110.dp),
+                .fillMaxWidth(0.9f)
+                .padding(horizontal = 8.dp)
+                .background(
+                    color = DevkitWalletColors.primaryLight,
+                    shape = RoundedCornerShape(16.dp)
+                )
+                .height(100.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -101,14 +120,22 @@ internal fun HomeScreen(
                 balance.formatInBtc(),
                 fontFamily = firaMonoMedium,
                 fontSize = 32.sp,
-                color = DevkitWalletColors.snow1
+                color = DevkitWalletColors.white
             )
         }
+        Spacer(modifier = Modifier.padding(4.dp))
+        Row(
+            modifier = Modifier.height(40.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (syncing) LoadingAnimation()
+        }
+
         if (!networkAvailable) {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .background(color = DevkitWalletColors.auroraYellow)
+                    .background(color = DevkitWalletColors.accent2)
                     .height(50.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -117,16 +144,15 @@ internal fun HomeScreen(
                     text = "Network unavailable",
                     fontFamily = firaMonoMedium,
                     fontSize = 18.sp,
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             }
         }
-        Spacer(modifier = Modifier.padding(16.dp))
         Button(
             onClick = { walletViewModel.updateBalance() },
             colors = ButtonDefaults.buttonColors(
-                containerColor = DevkitWalletColors.frost4,
-                disabledContainerColor = DevkitWalletColors.frost4Disabled,
+                containerColor = DevkitWalletColors.secondary,
+                disabledContainerColor = DevkitWalletColors.secondary,
             ),
             enabled = networkAvailable,
             shape = RoundedCornerShape(16.dp),
@@ -149,8 +175,8 @@ internal fun HomeScreen(
         Button(
             onClick = { navController.navigate(Screen.TransactionsScreen.route) },
             colors = ButtonDefaults.buttonColors(
-                containerColor = DevkitWalletColors.frost4,
-                disabledContainerColor = DevkitWalletColors.frost4Disabled,
+                containerColor = DevkitWalletColors.secondary,
+                disabledContainerColor = DevkitWalletColors.secondary,
             ),
             shape = RoundedCornerShape(16.dp),
             enabled = networkAvailable,
@@ -178,7 +204,7 @@ internal fun HomeScreen(
         ) {
             Button(
                 onClick = { navController.navigate(Screen.ReceiveScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(160.dp)
@@ -200,8 +226,8 @@ internal fun HomeScreen(
             Button(
                 onClick = { navController.navigate(Screen.SendScreen.route) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = DevkitWalletColors.auroraRed,
-                    disabledContainerColor = DevkitWalletColors.auroraRedDisabled,
+                    containerColor = DevkitWalletColors.accent2,
+                    disabledContainerColor = DevkitWalletColors.accent2,
                 ),
                 shape = RoundedCornerShape(16.dp),
                 enabled = networkAvailable,

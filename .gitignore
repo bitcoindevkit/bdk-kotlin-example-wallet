@@ -16,3 +16,4 @@ app-ui-only/app/build/
 app-clean/
 .idea/
 local.properties
+app.run.xml

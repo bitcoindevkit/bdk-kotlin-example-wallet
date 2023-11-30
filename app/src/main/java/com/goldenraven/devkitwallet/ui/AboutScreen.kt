@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.R
+import com.goldenraven.devkitwallet.ui.composables.AwayFromHomeAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +41,7 @@ internal fun AboutScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DevkitWalletColors.night4)
+                .background(DevkitWalletColors.primary)
                 .padding(paddingValues),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -53,7 +54,7 @@ internal fun AboutScreen(navController: NavController) {
             Spacer(modifier = Modifier.padding(24.dp))
             Text(
                 text = "This wallet is build for developers to learn how to leverage the bitcoindevkit. You are currently running the \"SimpleWallet\" version of the app, which implements the following basic bitcoin wallet capabilities: create a wallet, receive testnet coins, send coins, display transaction history, and recover from a mnemonic.",
-                color = DevkitWalletColors.snow1,
+                color = DevkitWalletColors.white,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(all = 8.dp)
@@ -70,7 +71,7 @@ internal fun AboutScreen(navController: NavController) {
             Text(
                 buildAnnotatedString {
                     features.forEach {
-                        withStyle(style = SpanStyle(color = DevkitWalletColors.snow1, fontSize = 16.sp)) {
+                        withStyle(style = SpanStyle(color = DevkitWalletColors.white, fontSize = 16.sp)) {
                             append(bullet)
                             append("\t\t")
                             append(it)
