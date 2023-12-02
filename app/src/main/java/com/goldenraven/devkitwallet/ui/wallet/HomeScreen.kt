@@ -43,6 +43,7 @@ import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.composables.LoadingAnimation
+import com.goldenraven.devkitwallet.ui.composables.NeutralButton
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
@@ -148,52 +149,18 @@ internal fun HomeScreen(
                 )
             }
         }
-        Button(
-            onClick = { walletViewModel.updateBalance() },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = DevkitWalletColors.secondary,
-                disabledContainerColor = DevkitWalletColors.secondary,
-            ),
-            enabled = networkAvailable,
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier
-                .height(80.dp)
-                .fillMaxWidth(0.9f)
-                .padding(vertical = 8.dp, horizontal = 8.dp)
-                .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-        ) {
-            Text(
-                text = "sync",
-                fontSize = 16.sp,
-                fontFamily = firaMono,
-                textAlign = TextAlign.Center,
-                lineHeight = 28.sp,
-            )
-        }
 
-
-        Button(
-            onClick = { navController.navigate(Screen.TransactionsScreen.route) },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = DevkitWalletColors.secondary,
-                disabledContainerColor = DevkitWalletColors.secondary,
-            ),
-            shape = RoundedCornerShape(16.dp),
+        NeutralButton(
+            text = "sync",
             enabled = networkAvailable,
-            modifier = Modifier
-                .height(80.dp)
-                .fillMaxWidth(0.9f)
-                .padding(vertical = 8.dp, horizontal = 8.dp)
-                .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-        ) {
-            Text(
-                text = "transaction history",
-                fontSize = 16.sp,
-                fontFamily = firaMono,
-                textAlign = TextAlign.Center,
-                lineHeight = 28.sp,
-            )
-        }
+            onClick = { walletViewModel.updateBalance() }
+        )
+
+        NeutralButton(
+            text = "transaction history",
+            enabled = networkAvailable,
+            onClick = { navController.navigate(Screen.TransactionsScreen.route) }
+        )
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
