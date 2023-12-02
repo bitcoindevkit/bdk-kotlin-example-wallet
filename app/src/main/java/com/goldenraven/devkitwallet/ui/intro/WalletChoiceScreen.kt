@@ -81,7 +81,7 @@ internal fun WalletChoiceScreen(
 
             Button(
                 onClick = { onBuildWalletButtonClicked(WalletCreateType.FROMSCRATCH) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryLight),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .size(width = 300.dp, height = 170.dp)
@@ -104,7 +104,7 @@ internal fun WalletChoiceScreen(
 
             Button(
                 onClick = { navController.navigate(Screen.WalletRecoveryScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryLight),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .size(width = 300.dp, height = 170.dp)

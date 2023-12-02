@@ -45,13 +45,12 @@ internal fun WalletRecoveryScreen(
         topBar = { IntroAppBar() }
     ) {
 
-        // the screen is broken into 3 parts
-        // the screen title, the body, and the button
+        // the screen is broken into 2 parts: the screen title and the body
         ConstraintLayout(
             modifier = Modifier.fillMaxHeight(1f)
         ) {
 
-            val (screenTitle, body, button) = createRefs()
+            val (screenTitle, body) = createRefs()
 
             val emptyRecoveryPhrase: Map<Int, String> = mapOf(
                 1 to "", 2 to "", 3 to "", 4 to "", 5 to "", 6 to "",
@@ -65,24 +64,23 @@ internal fun WalletRecoveryScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .background(DevkitWalletColors.primaryLight)
+                    .background(DevkitWalletColors.primary)
                     .constrainAs(screenTitle) {
                         top.linkTo(parent.top)
                     }
             ) {
                 Column {
                     Text(
-                        text = "Recover Wallet",
+                        text = "Enter your 12-word recovery phrase to recover an existing wallet.",
                         color = DevkitWalletColors.white,
-                        fontSize = 28.sp,
+                        fontSize = 14.sp,
                         fontFamily = firaMono,
                         modifier = Modifier
-                            .padding(top = 70.dp, bottom = 8.dp)
+                            .padding(top = 70.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
                             .align(Alignment.CenterHorizontally)
                     )
                 }
             }
-
 
             // the body
             MyList(
@@ -91,49 +89,14 @@ internal fun WalletRecoveryScreen(
                 modifier = Modifier
                     .constrainAs(body) {
                         top.linkTo(screenTitle.bottom)
-                        bottom.linkTo(button.top)
-                        height = Dimension.fillToConstraints
-                    }
-            )
-
-
-            // the button
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(DevkitWalletColors.primaryLight)
-                    .constrainAs(button) {
                         bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-            ) {
-                Column {
-                    Button(
-                        onClick = {
-                            onBuildWalletButtonClicked(
-                                WalletCreateType.RECOVER(
-                                    buildRecoveryPhrase(recoveryPhraseWordMap)
-                                )
-                            )
-                        },
-                        colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
-                        shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier
-                            .size(width = 300.dp, height = 100.dp)
-                            .padding(vertical = 8.dp, horizontal = 8.dp)
-                            .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
-                    ) {
-                        Text(
-                            text = "Recover Wallet",
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 28.sp,
-                        )
-                    }
+                        // bottom.linkTo(button.top)
+                        height = Dimension.fillToConstraints
+                    },
+                onClick = {
+                    onBuildWalletButtonClicked(WalletCreateType.RECOVER(buildRecoveryPhrase(recoveryPhraseWordMap)))
                 }
-            }
+            )
         }
     }
 }
@@ -142,7 +105,8 @@ internal fun WalletRecoveryScreen(
 fun MyList(
     recoveryPhraseWordMap: Map<Int, String>,
     setRecoveryPhraseWordMap: (Map<Int, String>) -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    onClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -155,6 +119,22 @@ fun MyList(
         val focusManager = LocalFocusManager.current
         for (i in 1..12) {
             WordField(wordNumber = i, recoveryPhraseWordMap, setRecoveryPhraseWordMap, focusManager)
+        }
+        Button(
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier
+                .size(width = 300.dp, height = 100.dp)
+                .padding(vertical = 8.dp, horizontal = 8.dp)
+                .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
+        ) {
+            Text(
+                text = "Recover Wallet",
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                lineHeight = 28.sp,
+            )
         }
     }
 }
