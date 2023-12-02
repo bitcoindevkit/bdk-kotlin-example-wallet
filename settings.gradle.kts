@@ -1,2 +1,2 @@
-rootProject.name = "BDK Kotlin Example Wallet"
+rootProject.name = "BDK Android Example Wallet"
 include("app")
