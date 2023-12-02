@@ -33,7 +33,7 @@ fun HomeNavigation() {
             popEnterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             },
-        ) { WalletScreen(navController = navController) }
+        ) { WalletRoot(navController = navController) }
 
         composable(
             route = Screen.AboutScreen.route,
