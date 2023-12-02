@@ -34,7 +34,7 @@ internal fun AwayFromHomeAppBar(navController: NavController, title: String) {
 @Composable
 internal fun IntroAppBar() {
     SmallTopAppBar(
-        title = { IntroAppTitle("Devkit Wallet") },
+        title = { IntroAppTitle("BDK Sample Wallet") },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.primaryDark),
         actions = { }
     )

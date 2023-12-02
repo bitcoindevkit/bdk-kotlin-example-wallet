@@ -134,7 +134,7 @@ internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
 @Composable
 internal fun AppTitle() {
     Text(
-        text = "Devkit Wallet",
+        text = "BDK Sample Wallet",
         color = DevkitWalletColors.white,
     )
 }
