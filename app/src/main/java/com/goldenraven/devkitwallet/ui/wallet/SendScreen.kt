@@ -45,7 +45,6 @@ import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
-import com.goldenraven.devkitwallet.utilities.TAG
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.graphics.Color
@@ -55,6 +54,8 @@ import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.PartiallySignedTransaction
+
+private const val TAG = "SendScreen"
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

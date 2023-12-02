@@ -36,9 +36,10 @@ import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
-import com.goldenraven.devkitwallet.utilities.TAG
 import com.goldenraven.devkitwallet.utilities.timestampToString
 import org.bitcoindevkit.TransactionDetails
+
+private const val TAG = "TransactionsScreen"
 
 @Composable
 internal fun TransactionsScreen(navController: NavController, paddingValues: PaddingValues) {

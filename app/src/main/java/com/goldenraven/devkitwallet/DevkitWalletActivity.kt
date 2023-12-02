@@ -13,7 +13,8 @@ import com.goldenraven.devkitwallet.data.Repository
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.HomeNavigation
 import com.goldenraven.devkitwallet.ui.intro.CreateWalletNavigation
-import com.goldenraven.devkitwallet.utilities.TAG
+
+private const val TAG = "DevkitWalletActivity"
 
 class DevkitWalletActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

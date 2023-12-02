@@ -47,11 +47,12 @@ import com.goldenraven.devkitwallet.ui.composables.NeutralButton
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
-import com.goldenraven.devkitwallet.utilities.TAG
 import com.goldenraven.devkitwallet.utilities.formatInBtc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+private const val TAG = "WalletViewModel"
 
 internal class WalletViewModel : ViewModel() {
 

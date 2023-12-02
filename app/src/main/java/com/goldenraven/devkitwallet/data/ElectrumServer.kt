@@ -6,10 +6,11 @@
 package com.goldenraven.devkitwallet.data
 
 import android.util.Log
-import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.Blockchain
 import org.bitcoindevkit.BlockchainConfig
 import org.bitcoindevkit.ElectrumConfig
+
+private const val TAG = "ElectrumServer"
 
 class ElectrumServer {
     private var useDefaultElectrum: Boolean = true

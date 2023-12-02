@@ -7,9 +7,10 @@ package com.goldenraven.devkitwallet.data
 
 import android.util.Log
 import com.goldenraven.devkitwallet.ui.wallet.Recipient
-import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.*
 import org.bitcoindevkit.Wallet as BdkWallet
+
+private const val TAG = "Wallet"
 
 object Wallet {
 
