@@ -132,10 +132,17 @@ internal fun TransactionScreen(
                     end.linkTo(parent.end)
                 }
         ) {
-            TransactionDetailButton(content = "increase fees", navController = navController, txid = txid)
+            TransactionDetailButton(
+                content = "increase fees",
+                navController = navController,
+                txid = txid
+            )
             Spacer(modifier = Modifier.padding(all = 8.dp))
             TransactionDetailButton(
-                content = "back to transaction list", navController = navController, txid = null)
+                content = "back to transaction list",
+                navController = navController,
+                txid = null
+            )
         }
     }
 }
@@ -153,7 +160,7 @@ fun TransactionDetailButton(content: String, navController: NavController, txid:
                 }
             }
         },
-        colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryLight),
+        colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .height(60.dp)
