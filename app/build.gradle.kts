@@ -44,14 +44,12 @@ android {
 
 dependencies {
     // basic android dependencies
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
-    implementation ("androidx.core:core-ktx:1.6.0")
-    implementation ("androidx.appcompat:appcompat:1.3.1")
-    implementation ("com.google.android.material:material:1.4.0")
-    implementation ("androidx.constraintlayout:constraintlayout:2.1.0")
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.9.21")
+    implementation ("androidx.core:core-ktx:1.12.0")
+    implementation ("com.google.android.material:material:1.10.0")
 
     // compose
-    implementation("androidx.activity:activity-compose:1.5.0")
+    implementation("androidx.activity:activity-compose:1.8.1")
     implementation("androidx.compose.material:material:1.1.1")
     implementation("androidx.compose.animation:animation:1.1.1")
     implementation("androidx.compose.ui:ui-tooling:1.1.1")
@@ -65,7 +63,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.23.1")
 
     // toolbar
-    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 
     // bitcoindevkit
     implementation("org.bitcoindevkit:bdk-android:0.29.0")
@@ -75,6 +73,6 @@ dependencies {
 
     // tests
     testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
 }
