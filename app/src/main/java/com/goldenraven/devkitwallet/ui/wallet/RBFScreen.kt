@@ -162,6 +162,7 @@ internal fun RBFScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShowTxnDetail(name: String, content: String) {
     Row(
@@ -192,6 +193,7 @@ private fun ShowTxnDetail(name: String, content: String) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionFeeInput(feeRate: MutableState<String>) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {

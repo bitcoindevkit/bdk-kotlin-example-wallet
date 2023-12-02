@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AwayFromHomeAppBar(navController: NavController, title: String) {
     SmallTopAppBar(
@@ -31,6 +32,7 @@ internal fun AwayFromHomeAppBar(navController: NavController, title: String) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun IntroAppBar() {
     SmallTopAppBar(

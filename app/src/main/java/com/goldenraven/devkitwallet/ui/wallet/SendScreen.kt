@@ -188,6 +188,7 @@ internal fun SendScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AdvancedOptions(
     sendAll: MutableState<Boolean>,
@@ -349,6 +350,7 @@ internal fun AdvancedOptions(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
     LazyColumn (modifier = Modifier
@@ -408,6 +410,7 @@ fun checkRecipientList(
     return true
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transactionType: TransactionType) {
     LazyColumn (modifier = Modifier
@@ -461,6 +464,7 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionFeeInput(feeRate: MutableState<String>) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {

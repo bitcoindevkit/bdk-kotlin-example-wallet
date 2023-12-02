@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -52,55 +53,61 @@ internal fun WalletRoot(navController: NavController) {
 
     ModalNavigationDrawer (
         drawerState = drawerState,
-        drawerContainerColor = DevkitWalletColors.primary,
         drawerContent = {
-            Column(
-                Modifier
-                    .background(color = DevkitWalletColors.secondary)
-                    .height(300.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_testnet_logo),
-                    contentDescription = "Bitcoin testnet logo",
+            ModalDrawerSheet {
+                Column(
                     Modifier
-                        .size(90.dp)
-                        .padding(bottom = 16.dp)
-                )
-                Text(
-                    text = "BDK Android Sample Wallet",
-                    color = DevkitWalletColors.white
-                )
-                Spacer(modifier = Modifier.padding(16.dp))
-                Text(
-                    "Version: 0.1.0",
-                    color = DevkitWalletColors.white,
-                )
+                        .background(color = DevkitWalletColors.secondary)
+                        .height(300.dp)
+                        .fillMaxHeight()
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_testnet_logo),
+                        contentDescription = "Bitcoin testnet logo",
+                        Modifier
+                            .size(90.dp)
+                            .padding(bottom = 16.dp)
+                    )
+                    Text(
+                        text = "BDK Android Sample Wallet",
+                        color = DevkitWalletColors.white
+                    )
+                    Spacer(modifier = Modifier.padding(16.dp))
+                    Text(
+                        "Version: 0.1.0",
+                        color = DevkitWalletColors.white,
+                    )
+                }
+                Column(
+                    Modifier.fillMaxHeight().background(color = DevkitWalletColors.primary)
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    NavigationDrawerItem(
+                        label = { Text("About") },
+                        selected = items[0] == selectedItem.value,
+                        onClick = { navController.navigate(Screen.AboutScreen.route) },
+                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                        colors = navigationItemColors
+                    )
+                    NavigationDrawerItem(
+                        label = { Text("Recovery Phrase") },
+                        selected = items[1] == selectedItem.value,
+                        onClick = { navController.navigate(Screen.RecoveryPhraseScreen.route) },
+                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                        colors = navigationItemColors
+                    )
+                    NavigationDrawerItem(
+                        label = { Text("Electrum Server") },
+                        selected = items[2] == selectedItem.value,
+                        onClick = { navController.navigate(Screen.ElectrumScreen.route) },
+                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                        colors = navigationItemColors
+                    )
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            NavigationDrawerItem(
-                label = { Text("About") },
-                selected = items[0] == selectedItem.value,
-                onClick = { navController.navigate(Screen.AboutScreen.route) },
-                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-                colors = navigationItemColors
-            )
-            NavigationDrawerItem(
-                label = { Text("Recovery Phrase") },
-                selected = items[1] == selectedItem.value,
-                onClick = { navController.navigate(Screen.RecoveryPhraseScreen.route) },
-                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-                colors = navigationItemColors
-            )
-            NavigationDrawerItem(
-                label = { Text("Electrum Server") },
-                selected = items[2] == selectedItem.value,
-                onClick = { navController.navigate(Screen.ElectrumScreen.route) },
-                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-                colors = navigationItemColors
-            )
         },
         content = {
             Scaffold(
