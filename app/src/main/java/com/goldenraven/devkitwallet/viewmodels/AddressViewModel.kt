@@ -3,7 +3,7 @@ package com.goldenraven.devkitwallet.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.domain.Wallet
 
 internal class AddressViewModel : ViewModel() {
     private var _address: MutableLiveData<String> = MutableLiveData("No address yet")

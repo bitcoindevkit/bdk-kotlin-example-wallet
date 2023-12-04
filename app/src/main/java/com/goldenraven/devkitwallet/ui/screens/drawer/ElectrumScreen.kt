@@ -30,8 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.goldenraven.devkitwallet.data.ElectrumSettings
-import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.domain.ElectrumSettings
+import com.goldenraven.devkitwallet.domain.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors

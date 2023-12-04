@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.goldenraven.devkitwallet.R
-import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.domain.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.components.LoadingAnimation
 import com.goldenraven.devkitwallet.ui.components.NeutralButton

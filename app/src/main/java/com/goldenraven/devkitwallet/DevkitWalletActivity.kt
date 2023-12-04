@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
-import com.goldenraven.devkitwallet.data.Repository
-import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.domain.Repository
+import com.goldenraven.devkitwallet.domain.Wallet
 import com.goldenraven.devkitwallet.navigation.HomeNavigation
 import com.goldenraven.devkitwallet.navigation.CreateWalletNavigation
 

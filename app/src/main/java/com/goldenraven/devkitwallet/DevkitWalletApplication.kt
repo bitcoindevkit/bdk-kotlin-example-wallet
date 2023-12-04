@@ -8,8 +8,8 @@ package com.goldenraven.devkitwallet
 import android.app.Application
 import android.content.Context
 import com.goldenraven.devkitwallet.utils.SharedPreferencesManager
-import com.goldenraven.devkitwallet.data.Repository
-import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.domain.Repository
+import com.goldenraven.devkitwallet.domain.Wallet
 
 class DevkitWalletApplication : Application() {
     override fun onCreate() {
