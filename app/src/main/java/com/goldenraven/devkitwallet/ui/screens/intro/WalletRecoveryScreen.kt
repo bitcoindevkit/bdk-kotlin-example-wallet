@@ -31,23 +31,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.WalletCreateType
-import com.goldenraven.devkitwallet.ui.components.IntroAppBar
+import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WalletRecoveryScreen(
+    navController: NavController,
     onBuildWalletButtonClicked: (WalletCreateType) -> Unit
 ) {
     Scaffold(
-        topBar = { IntroAppBar() }
-    ) {
+        topBar = {
+            SecondaryScreensAppBar(title = "Recover a Wallet", navigation = { navController.popBackStack() })
+        }
+    ) { paddingValues ->
 
         // the screen is broken into 2 parts: the screen title and the body
         ConstraintLayout(
-            modifier = Modifier.fillMaxHeight(1f)
+            modifier = Modifier
+                .fillMaxHeight(1f)
+                .padding(paddingValues)
         ) {
 
             val (screenTitle, body) = createRefs()
@@ -187,7 +192,7 @@ fun WordField(
 // input words can have capital letters, space around them, space inside of them
 private fun buildRecoveryPhrase(recoveryPhraseWordMap: Map<Int, String>): String {
     var recoveryPhrase = ""
-    recoveryPhraseWordMap.values.forEach() {
+    recoveryPhraseWordMap.values.forEach {
         recoveryPhrase = recoveryPhrase.plus(it.trim().replace(" ", "").lowercase().plus(" "))
     }
     return recoveryPhrase.trim()

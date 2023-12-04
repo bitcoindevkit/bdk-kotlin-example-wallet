@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui.screens.intro
+package com.goldenraven.devkitwallet.navigation
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.goldenraven.devkitwallet.WalletCreateType
 import com.goldenraven.devkitwallet.ui.Screen
+import com.goldenraven.devkitwallet.ui.screens.intro.WalletChoiceScreen
+import com.goldenraven.devkitwallet.ui.screens.intro.WalletRecoveryScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -51,6 +53,6 @@ fun CreateWalletNavigation(onBuildWalletButtonClicked: (WalletCreateType) -> Uni
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { WalletRecoveryScreen(onBuildWalletButtonClicked) }
+        ) { WalletRecoveryScreen(navController = navController, onBuildWalletButtonClicked) }
     }
 }

@@ -15,7 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.data.Repository
-import com.goldenraven.devkitwallet.ui.components.AwayFromHomeAppBar
+import com.goldenraven.devkitwallet.ui.Screen
+import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
@@ -26,12 +27,18 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
     val wordList: List<String> = seedPhrase.split(" ")
 
     Scaffold(
-        topBar = { AwayFromHomeAppBar(navController, "Recovery Phrase") },
+        topBar = {
+            SecondaryScreensAppBar(
+                title = "Your Recovery Phrase",
+                navigation = { navController.navigate(Screen.WalletScreen.route) }
+            )
+        },
         containerColor = DevkitWalletColors.primary
-    ) {
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues)
                 .padding(all = 32.dp)
         ) {
             wordList.forEachIndexed { index, item ->

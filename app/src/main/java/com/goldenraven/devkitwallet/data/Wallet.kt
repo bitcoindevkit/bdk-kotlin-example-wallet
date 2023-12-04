@@ -6,7 +6,7 @@
 package com.goldenraven.devkitwallet.data
 
 import android.util.Log
-import com.goldenraven.devkitwallet.ui.wallet.Recipient
+import com.goldenraven.devkitwallet.ui.screens.wallet.Recipient
 import org.bitcoindevkit.*
 import org.bitcoindevkit.Wallet as BdkWallet
 

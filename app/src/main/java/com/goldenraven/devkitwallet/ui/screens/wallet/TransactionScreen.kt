@@ -3,14 +3,12 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui.wallet
+package com.goldenraven.devkitwallet.ui.screens.wallet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +32,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
+import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 import com.goldenraven.devkitwallet.utils.timestampToString
@@ -41,7 +41,6 @@ import org.bitcoindevkit.TransactionDetails
 @Composable
 internal fun TransactionScreen(
     navController: NavController,
-    paddingValues: PaddingValues,
     txid: String?,
 ) {
     val transaction = getTransaction(txid = txid)
@@ -50,100 +49,104 @@ internal fun TransactionScreen(
     }
     val transactionDetail = getTransactionDetails(transaction = transaction!!)
 
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DevkitWalletColors.primary)
-            .padding(paddingValues)
-    ) {
-        val (screenTitle, transactions, bottomButton) = createRefs()
-
-        Column(
+    Scaffold(
+        topBar = {
+            SecondaryScreensAppBar(
+                title = "Transaction Details",
+                navigation = { navController.popBackStack() }
+            )
+        }
+    ) { paddingValues ->
+        ConstraintLayout(
             modifier = Modifier
-                .constrainAs(screenTitle) {
-                    top.linkTo(parent.top)
+                .fillMaxSize()
+                .background(DevkitWalletColors.primary)
+                .padding(paddingValues)
+        ) {
+            val (screenTitle, transactions, bottomButton) = createRefs()
+
+            Column(
+                modifier = Modifier
+                    .constrainAs(screenTitle) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(top = 70.dp)
+            ) {
+                Text(
+                    text = "Transaction",
+                    color = DevkitWalletColors.white,
+                    fontSize = 28.sp,
+                    fontFamily = jetBrainsMonoLight,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(
+                    text = transactionTitle(transaction = transaction),
+                    color = DevkitWalletColors.white,
+                    fontSize = 14.sp,
+                    fontFamily = jetBrainsMonoLight,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+
+
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.constrainAs(transactions) {
+                    top.linkTo(screenTitle.bottom)
+                    bottom.linkTo(bottomButton.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                    height = Dimension.fillToConstraints
                 }
-                .padding(top = 70.dp)
-        ) {
-            Text(
-                text = "Transaction",
-                color = DevkitWalletColors.white,
-                fontSize = 28.sp,
-                fontFamily = jetBrainsMonoLight,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Text(
-                text = transactionTitle(transaction = transaction),
-                color = DevkitWalletColors.white,
-                fontSize = 14.sp,
-                fontFamily = jetBrainsMonoLight,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-        }
-
-
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.constrainAs(transactions) {
-                top.linkTo(screenTitle.bottom)
-                bottom.linkTo(bottomButton.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                height = Dimension.fillToConstraints
+            ) {
+                items(transactionDetail) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 16.dp)
+                    ) {
+                        Text(
+                            text = "${it.first} :",
+                            fontSize = 16.sp,
+                            fontFamily = jetBrainsMonoLight,
+                            color = DevkitWalletColors.white,
+                        )
+                        Text(
+                            text = it.second,
+                            fontSize = 16.sp,
+                            fontFamily = jetBrainsMonoLight,
+                            textAlign = TextAlign.End,
+                            color = DevkitWalletColors.white,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             }
-        ) {
-            items(transactionDetail) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp)
-                ) {
-                    Text(
-                        text = "${it.first} :",
-                        fontSize = 16.sp,
-                        fontFamily = jetBrainsMonoLight,
-                        color = DevkitWalletColors.white,
-                    )
-                    Text(
-                        text = it.second,
-                        fontSize = 16.sp,
-                        fontFamily = jetBrainsMonoLight,
-                        textAlign = TextAlign.End,
-                        color = DevkitWalletColors.white,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .padding(vertical = 8.dp, horizontal = 8.dp)
+                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                    .constrainAs(bottomButton) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            ) {
+                TransactionDetailButton(
+                    content = "increase fees",
+                    navController = navController,
+                    txid = txid
+                )
             }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .padding(vertical = 8.dp, horizontal = 8.dp)
-                .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-                .constrainAs(bottomButton) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-        ) {
-            TransactionDetailButton(
-                content = "increase fees",
-                navController = navController,
-                txid = txid
-            )
-            Spacer(modifier = Modifier.padding(all = 8.dp))
-            TransactionDetailButton(
-                content = "back to transaction list",
-                navController = navController,
-                txid = null
-            )
-        }
     }
 }
 

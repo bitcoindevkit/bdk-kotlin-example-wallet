@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui.wallet
+package com.goldenraven.devkitwallet.ui.screens.wallet
 
 import android.content.Context
 import android.util.Log
@@ -50,8 +50,8 @@ private const val TAG = "RBFScreen"
 @Composable
 internal fun RBFScreen(
     navController: NavController,
-    paddingValues: PaddingValues,
     txid: String?,
+    paddingValues: PaddingValues = PaddingValues(0.dp),
 ) {
     if (txid.isNullOrEmpty()) {
         navController.popBackStack()

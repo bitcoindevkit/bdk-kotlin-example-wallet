@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 thunderbiscuit and contributors.
+ * Copyright 2020-2023 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,21 +31,17 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.WalletCreateType
-import com.goldenraven.devkitwallet.ui.components.IntroAppBar
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WalletChoiceScreen(
     navController: NavController,
     onBuildWalletButtonClicked: (WalletCreateType) -> Unit
 ) {
 
-    Scaffold(
-        topBar = { IntroAppBar() },
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,7 +67,7 @@ internal fun WalletChoiceScreen(
                 )
                 Spacer(modifier = Modifier.padding(8.dp))
                 Text(
-                    text = "Bitcoin\nTestnet",
+                    text = "BDK\nSample\nTestnet\nWallet",
                     color = DevkitWalletColors.white,
                     fontSize = 28.sp,
                     fontFamily = jetBrainsMonoLight,

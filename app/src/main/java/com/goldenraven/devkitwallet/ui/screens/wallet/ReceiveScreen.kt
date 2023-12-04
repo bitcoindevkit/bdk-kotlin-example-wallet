@@ -3,14 +3,13 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui.wallet
+package com.goldenraven.devkitwallet.ui.screens.wallet
 
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,148 +36,105 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.graphics.createBitmap
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
+import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoRegular
+import com.goldenraven.devkitwallet.viewmodels.AddressViewModel
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 
-internal class AddressViewModel : ViewModel() {
-
-    private var _address: MutableLiveData<String> = MutableLiveData("No address yet")
-    private var _addressIndex: MutableLiveData<UInt> = MutableLiveData(0u)
-    val address: LiveData<String>
-        get() = _address
-    val addressIndex: LiveData<UInt>
-        get() = _addressIndex
-
-    fun updateAddress() {
-        val newAddress = Wallet.getNewAddress()
-        _address.value = newAddress.address.asString()
-        _addressIndex.value = newAddress.index
-    }
-}
-
 @Composable
 internal fun ReceiveScreen(
     navController: NavController,
-    paddingValues: PaddingValues,
     addressViewModel: AddressViewModel = viewModel()
 ) {
 
     val address by addressViewModel.address.observeAsState("Generate new address")
     val addressIndex by addressViewModel.addressIndex.observeAsState("")
 
-    ConstraintLayout(
-        modifier = Modifier
-            .padding(paddingValues)
-            .fillMaxSize()
-            .background(DevkitWalletColors.primary)
-    ) {
-        val (screenTitle, QRCode, bottomButtons) = createRefs()
-        Text(
-            text = "Receive Address",
-            color = DevkitWalletColors.white,
-            fontSize = 28.sp,
-            fontFamily = jetBrainsMonoRegular,
-            textAlign = TextAlign.Center,
+    Scaffold(
+        topBar = {
+            SecondaryScreensAppBar(
+                title = "Receive Address",
+                navigation = { navController.navigate(Screen.HomeScreen.route) }
+            )
+        }
+    ) { paddingValues ->
+        ConstraintLayout(
             modifier = Modifier
-                .constrainAs(screenTitle) {
+                .padding(paddingValues)
+                .fillMaxSize()
+                .background(DevkitWalletColors.primary)
+        ) {
+            val (QRCode, bottomButtons) = createRefs()
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.constrainAs(QRCode) {
                     top.linkTo(parent.top)
+                    bottom.linkTo(bottomButtons.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                    height = Dimension.fillToConstraints
                 }
-                .padding(top = 70.dp)
-        )
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.constrainAs(QRCode) {
-                top.linkTo(screenTitle.bottom)
-                bottom.linkTo(bottomButtons.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                height = Dimension.fillToConstraints
-            }
-        ) {
-            val QR: ImageBitmap? = addressToQR(address)
-            Log.i("ReceiveScreen", "New receive address is $address")
-            if (address != "No address yet" && QR != null) {
-                Image(
-                    bitmap = QR,
-                    contentDescription = "Bitcoindevkit website QR code",
-                    Modifier.size(250.dp)
-                )
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                SelectionContainer {
+            ) {
+                val QR: ImageBitmap? = addressToQR(address)
+                Log.i("ReceiveScreen", "New receive address is $address")
+                if (address != "No address yet" && QR != null) {
+                    Image(
+                        bitmap = QR,
+                        contentDescription = "Bitcoindevkit website QR code",
+                        Modifier.size(250.dp)
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                    SelectionContainer {
+                        Text(
+                            text = address,
+                            fontFamily = jetBrainsMonoRegular,
+                            color = DevkitWalletColors.white
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
                     Text(
-                        text = address,
+                        text = "m/84h/1h/0h/0/$addressIndex",
                         fontFamily = jetBrainsMonoRegular,
                         color = DevkitWalletColors.white
                     )
                 }
-                Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                Text(
-                    text = "m/84h/1h/0h/0/$addressIndex",
-                    fontFamily = jetBrainsMonoRegular,
-                    color = DevkitWalletColors.white
-                )
             }
-        }
 
-        // Log.i("Colors", getColor(requireContext(), R.color.night_1).toString())
-        Column(
-            Modifier
-                .constrainAs(bottomButtons) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
+            Column(
+                Modifier
+                    .constrainAs(bottomButtons) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(bottom = 24.dp)
+            ) {
+                Button(
+                    onClick = { addressViewModel.updateAddress() },
+                    colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier
+                        .height(80.dp)
+                        .fillMaxWidth(0.9f)
+                        .padding(vertical = 8.dp, horizontal = 8.dp)
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                ) {
+                    Text(
+                        text = "generate address",
+                        fontSize = 14.sp,
+                        fontFamily = jetBrainsMonoRegular,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 28.sp,
+                    )
                 }
-                .padding(bottom = 24.dp)
-        ) {
-            Button(
-                onClick = { addressViewModel.updateAddress() },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .height(80.dp)
-                    .fillMaxWidth(0.9f)
-                    .padding(vertical = 8.dp, horizontal = 8.dp)
-                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-            ) {
-                Text(
-                    text = "generate new address",
-                    fontSize = 14.sp,
-                    fontFamily = jetBrainsMonoRegular,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 28.sp,
-                )
-            }
-            Button(
-                onClick = { navController.navigate(Screen.HomeScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .height(80.dp)
-                    .fillMaxWidth(0.9f)
-                    .padding(vertical = 8.dp, horizontal = 8.dp)
-                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-            ) {
-                Text(
-                    text = "back to wallet",
-                    fontSize = 14.sp,
-                    fontFamily = jetBrainsMonoRegular,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 28.sp,
-                )
             }
         }
     }

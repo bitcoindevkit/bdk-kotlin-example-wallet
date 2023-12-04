@@ -16,7 +16,6 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Switch
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,11 +32,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.data.ElectrumSettings
 import com.goldenraven.devkitwallet.data.Wallet
-import com.goldenraven.devkitwallet.ui.components.AwayFromHomeAppBar
+import com.goldenraven.devkitwallet.ui.Screen
+import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ElectrumScreen(navController: NavController) {
     val focusManager = LocalFocusManager.current
@@ -50,13 +49,19 @@ internal fun ElectrumScreen(navController: NavController) {
     }
 
     Scaffold(
-        topBar = { AwayFromHomeAppBar(navController, "Electrum Server") },
-        containerColor = DevkitWalletColors.primaryDark
+        topBar = {
+            SecondaryScreensAppBar(
+                title = "Custom Electrum Server",
+                navigation = { navController.navigate(Screen.WalletScreen.route) }
+            )
+        },
+        containerColor = DevkitWalletColors.primary
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .padding(all = 16.dp),
         ) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -112,7 +117,7 @@ internal fun ElectrumScreen(navController: NavController) {
                 modifier = Modifier
                     .align(alignment = Alignment.End)
                     .padding(all = 8.dp),
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryDark),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 enabled = isBlockChainCreated && !isChecked.value
             ) {
                 Text(

@@ -12,7 +12,7 @@ import androidx.activity.compose.setContent
 import com.goldenraven.devkitwallet.data.Repository
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.navigation.HomeNavigation
-import com.goldenraven.devkitwallet.ui.screens.intro.CreateWalletNavigation
+import com.goldenraven.devkitwallet.navigation.CreateWalletNavigation
 
 private const val TAG = "DevkitWalletActivity"
 

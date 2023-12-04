@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 thunderbiscuit and contributors.
+ * Copyright 2020-2023 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -29,14 +29,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.R
-import com.goldenraven.devkitwallet.ui.components.AwayFromHomeAppBar
+import com.goldenraven.devkitwallet.ui.Screen
+import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AboutScreen(navController: NavController) {
     Scaffold(
-        topBar = { AwayFromHomeAppBar(navController, "About") }
+        topBar = {
+            SecondaryScreensAppBar(
+                title = "About",
+                navigation = { navController.navigate(Screen.WalletScreen.route) }
+            )
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier

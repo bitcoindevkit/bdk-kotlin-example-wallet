@@ -17,32 +17,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.material3.NavigationDrawerItemDefaults.colors
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
-import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoSemiBold
-import com.goldenraven.devkitwallet.ui.wallet.WalletNavigation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.goldenraven.devkitwallet.ui.screens.wallet.WalletNavigation
 
-@OptIn(ExperimentalMaterial3Api::class, androidx.compose.animation.ExperimentalAnimationApi::class)
+@OptIn(androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
 internal fun WalletRoot(navController: NavController) {
-
-    val scope = rememberCoroutineScope()
-
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email, Icons.Default.Face)
@@ -104,7 +95,7 @@ internal fun WalletRoot(navController: NavController) {
                         colors = navigationItemColors
                     )
                     NavigationDrawerItem(
-                        label = { Text("Electrum Server") },
+                        label = { Text("Custom Electrum Server") },
                         selected = items[2] == selectedItem.value,
                         onClick = { navController.navigate(Screen.ElectrumScreen.route) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
@@ -114,48 +105,9 @@ internal fun WalletRoot(navController: NavController) {
             }
         },
         content = {
-            Scaffold(
-                topBar = { WalletAppBar(scope, drawerState) },
-            ) { padding ->
-                WalletNavigation(padding)
-            }
+            WalletNavigation(
+                drawerState = drawerState,
+            )
         }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
-    CenterAlignedTopAppBar(
-        title = { AppTitle() },
-        navigationIcon = {
-            IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                Icon(
-                    imageVector = Icons.Rounded.Menu,
-                    contentDescription = "Open drawer",
-                    tint = DevkitWalletColors.white
-                )
-            }
-        },
-        // actions = fun RowScope.() {},
-        colors = topAppBarColors(
-        // containerColor = Color.Red,
-        containerColor = DevkitWalletColors.primaryDark,
-        // scrolledContainerColor = MaterialTheme.colorScheme.applyTonalElevation(
-        //     // backgroundColor = containerColor,
-        //     // elevation = TopAppBarSmallTokens.OnScrollContainerElevation
-        // )
-        )
-    )
-}
-
-@Composable
-internal fun AppTitle() {
-    Text(
-        text = "BDK Sample Wallet",
-        color = DevkitWalletColors.white,
-        fontFamily = jetBrainsMonoSemiBold,
-        fontSize = 20.sp,
-        // modifier = Modifier.background(Color.Magenta)
     )
 }

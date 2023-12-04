@@ -1,16 +1,14 @@
 /*
- * Copyright 2020-2022 thunderbiscuit and contributors.
+ * Copyright 2020-2023 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui.wallet
+package com.goldenraven.devkitwallet.ui.screens.wallet
 
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -50,6 +48,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.goldenraven.devkitwallet.R
+import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.PartiallySignedTransaction
@@ -60,7 +59,6 @@ private const val TAG = "SendScreen"
 @Composable
 internal fun SendScreen(
     navController: NavController,
-    paddingValues: PaddingValues,
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -78,41 +76,31 @@ internal fun SendScreen(
     )
 
     BottomSheetScaffold(
+        topBar = {
+            SecondaryScreensAppBar(
+                title = "Send Bitcoin",
+                navigation = { navController.navigate(Screen.HomeScreen.route) }
+            )
+        },
         sheetContent = { AdvancedOptions(sendAll, rbfEnabled, opReturnMsg, recipientList) },
         scaffoldState = bottomSheetScaffoldState,
         sheetBackgroundColor = DevkitWalletColors.primaryDark,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetElevation = 12.dp,
         sheetPeekHeight = 0.dp,
-        modifier = Modifier.padding(paddingValues)
-    ) {
+    ) { paddingValues ->
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DevkitWalletColors.primaryDark)
+                .padding(paddingValues)
+                .background(DevkitWalletColors.primary)
         ) {
-            val (screenTitle, transactionInputs, bottomButtons) = createRefs()
-
-            Text(
-                text = "Send Bitcoin",
-                color = DevkitWalletColors.white,
-                fontSize = 28.sp,
-                fontFamily = jetBrainsMonoLight,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .constrainAs(screenTitle) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                    .padding(top = 70.dp)
-            )
-
+            val (transactionInputs, bottomButtons) = createRefs()
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier.constrainAs(transactionInputs) {
-                    top.linkTo(screenTitle.bottom)
+                    top.linkTo(parent.top)
                     bottom.linkTo(bottomButtons.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
@@ -158,24 +146,6 @@ internal fun SendScreen(
                 ) {
                     Text(
                         text = "broadcast transaction",
-                        fontSize = 14.sp,
-                        fontFamily = jetBrainsMonoLight,
-                        textAlign = TextAlign.Center,
-                        lineHeight = 28.sp,
-                    )
-                }
-                Button(
-                    onClick = { navController.navigate(Screen.HomeScreen.route) },
-                    colors = ButtonDefaults.buttonColors(DevkitWalletColors.primaryLight),
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier
-                        .height(80.dp)
-                        .fillMaxWidth(0.9f)
-                        .padding(vertical = 8.dp, horizontal = 8.dp)
-                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-                ) {
-                    Text(
-                        text = "back to wallet",
                         fontSize = 14.sp,
                         fontFamily = jetBrainsMonoLight,
                         textAlign = TextAlign.Center,
@@ -499,7 +469,7 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .background(DevkitWalletColors.accent1)
+            .background(DevkitWalletColors.secondary)
     ) {
         Button(
             onClick = {
@@ -511,16 +481,11 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
                     }
                 }
             },
-            // colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
             colors = ButtonDefaults.buttonColors(Color.Transparent),
             modifier = Modifier
                 .height(50.dp)
                 .fillMaxWidth(fraction = 0.9f)
                 .padding(vertical = 8.dp)
-                .border(
-                    BorderStroke(width = 1.dp, color = DevkitWalletColors.white),
-                    shape = RoundedCornerShape(5.dp)
-                )
         ) {
             Text(
                 text = "more options",
