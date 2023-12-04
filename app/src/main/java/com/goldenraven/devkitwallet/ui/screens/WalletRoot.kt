@@ -30,6 +30,7 @@ import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.screens.wallet.WalletNavigation
+import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @OptIn(androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
@@ -68,12 +69,14 @@ internal fun WalletRoot(navController: NavController) {
                     )
                     Text(
                         text = "BDK Android Sample Wallet",
-                        color = DevkitWalletColors.white
-                    )
-                    Spacer(modifier = Modifier.padding(16.dp))
-                    Text(
-                        "Version: 0.1.0",
                         color = DevkitWalletColors.white,
+                        fontFamily = jetBrainsMonoLight,
+                    )
+                    Spacer(modifier = Modifier.padding(8.dp))
+                    Text(
+                        "Version 0.1.0",
+                        color = DevkitWalletColors.white,
+                        fontFamily = jetBrainsMonoLight,
                     )
                 }
                 Column(
@@ -81,21 +84,21 @@ internal fun WalletRoot(navController: NavController) {
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
                     NavigationDrawerItem(
-                        label = { Text("About") },
+                        label = { DrawerItemLabel("About") },
                         selected = items[0] == selectedItem.value,
                         onClick = { navController.navigate(Screen.AboutScreen.route) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         colors = navigationItemColors
                     )
                     NavigationDrawerItem(
-                        label = { Text("Recovery Phrase") },
+                        label = { DrawerItemLabel("Recovery Phrase") },
                         selected = items[1] == selectedItem.value,
                         onClick = { navController.navigate(Screen.RecoveryPhraseScreen.route) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         colors = navigationItemColors
                     )
                     NavigationDrawerItem(
-                        label = { Text("Custom Electrum Server") },
+                        label = { DrawerItemLabel("Custom Electrum Server") },
                         selected = items[2] == selectedItem.value,
                         onClick = { navController.navigate(Screen.ElectrumScreen.route) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
@@ -109,5 +112,13 @@ internal fun WalletRoot(navController: NavController) {
                 drawerState = drawerState,
             )
         }
+    )
+}
+
+@Composable
+fun DrawerItemLabel(text: String) {
+    Text(
+        text = text,
+        fontFamily = jetBrainsMonoLight,
     )
 }
