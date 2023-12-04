@@ -34,7 +34,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.goldenraven.devkitwallet.WalletCreateType
 import com.goldenraven.devkitwallet.ui.components.IntroAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
-import com.goldenraven.devkitwallet.ui.theme.firaMono
+import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +74,7 @@ internal fun WalletRecoveryScreen(
                         text = "Enter your 12-word recovery phrase to recover an existing wallet.",
                         color = DevkitWalletColors.white,
                         fontSize = 14.sp,
-                        fontFamily = firaMono,
+                        fontFamily = jetBrainsMonoLight,
                         modifier = Modifier
                             .padding(top = 70.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
                             .align(Alignment.CenterHorizontally)

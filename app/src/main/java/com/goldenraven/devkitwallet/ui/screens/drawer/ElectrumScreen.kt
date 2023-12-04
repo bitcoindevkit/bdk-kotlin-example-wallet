@@ -35,7 +35,7 @@ import com.goldenraven.devkitwallet.data.ElectrumSettings
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.components.AwayFromHomeAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
-import com.goldenraven.devkitwallet.ui.theme.firaMono
+import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,7 +64,7 @@ internal fun ElectrumScreen(navController: NavController) {
                     text = "Use default electrum URL",
                     color = DevkitWalletColors.white,
                     fontSize = 14.sp,
-                    fontFamily = firaMono,
+                    fontFamily = jetBrainsMonoLight,
                     textAlign = TextAlign.Center,
                 )
                 Switch(
@@ -91,7 +91,7 @@ internal fun ElectrumScreen(navController: NavController) {
                         )
                     },
                     singleLine = true,
-                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
+                    textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = DevkitWalletColors.accent1,
                         unfocusedBorderColor = DevkitWalletColors.white,
@@ -119,7 +119,7 @@ internal fun ElectrumScreen(navController: NavController) {
                     text = "Save",
                     color = DevkitWalletColors.white,
                     fontSize = 12.sp,
-                    fontFamily = firaMono,
+                    fontFamily = jetBrainsMonoLight,
                     textAlign = TextAlign.Center,
                 )
             }

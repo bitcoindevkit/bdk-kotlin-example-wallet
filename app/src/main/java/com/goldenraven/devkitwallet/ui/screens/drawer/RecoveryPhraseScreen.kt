@@ -17,9 +17,8 @@ import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.data.Repository
 import com.goldenraven.devkitwallet.ui.components.AwayFromHomeAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
-import com.goldenraven.devkitwallet.ui.theme.firaMono
+import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun RecoveryPhraseScreen(navController: NavController) {
 
@@ -40,7 +39,7 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
                     text = "${index + 1}. $item",
                     modifier = Modifier.weight(weight = 1F),
                     color = DevkitWalletColors.white,
-                    fontFamily = firaMono
+                    fontFamily = jetBrainsMonoLight
                 )
             }
         }

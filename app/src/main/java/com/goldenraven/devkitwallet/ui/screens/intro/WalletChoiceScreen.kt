@@ -35,7 +35,7 @@ import com.goldenraven.devkitwallet.WalletCreateType
 import com.goldenraven.devkitwallet.ui.components.IntroAppBar
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
-import com.goldenraven.devkitwallet.ui.theme.firaMono
+import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,7 +75,7 @@ internal fun WalletChoiceScreen(
                     text = "Bitcoin\nTestnet",
                     color = DevkitWalletColors.white,
                     fontSize = 28.sp,
-                    fontFamily = firaMono,
+                    fontFamily = jetBrainsMonoLight,
                 )
             }
 
@@ -96,7 +96,7 @@ internal fun WalletChoiceScreen(
                 Text(
                     text = "Create a\nNew Wallet",
                     fontSize = 18.sp,
-                    fontFamily = firaMono,
+                    fontFamily = jetBrainsMonoLight,
                     textAlign = TextAlign.Center,
                     lineHeight = 28.sp,
                 )
@@ -119,7 +119,7 @@ internal fun WalletChoiceScreen(
                 Text(
                     text = "Recover an\nExisting Wallet",
                     fontSize = 18.sp,
-                    fontFamily = firaMono,
+                    fontFamily = jetBrainsMonoLight,
                     textAlign = TextAlign.Center,
                     lineHeight = 28.sp,
                 )
