@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 thunderbiscuit and contributors.
+ * Copyright 2020-2023 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -16,4 +16,16 @@ val firaMono = FontFamily(
 
 val firaMonoMedium = FontFamily(
     Font(R.font.fira_mono_medium, FontWeight.Medium)
+)
+
+val jetBrainsMonoLight = FontFamily(
+    Font(R.font.jetbrains_mono_light, FontWeight.Light)
+)
+
+val jetBrainsMonoRegular = FontFamily(
+    Font(R.font.jetbrains_mono_regular, FontWeight.Normal)
+)
+
+val jetBrainsMonoSemiBold = FontFamily(
+    Font(R.font.jetbrains_mono_semibold, FontWeight.SemiBold)
 )

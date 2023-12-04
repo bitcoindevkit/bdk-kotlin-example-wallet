@@ -6,7 +6,7 @@
 package com.goldenraven.devkitwallet.data
 
 import android.util.Log
-import com.goldenraven.devkitwallet.utilities.SharedPreferencesManager
+import com.goldenraven.devkitwallet.utils.SharedPreferencesManager
 
 private const val TAG = "Repository"
 

@@ -1,9 +1,9 @@
 /*
- * Copyright 2020-2022 thunderbiscuit and contributors.
+ * Copyright 2020-2023 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui
+package com.goldenraven.devkitwallet.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,15 +20,19 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.material3.NavigationDrawerItemDefaults.colors
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.R
+import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
+import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoSemiBold
 import com.goldenraven.devkitwallet.ui.wallet.WalletNavigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -122,9 +126,8 @@ internal fun WalletRoot(navController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
-    SmallTopAppBar(
+    CenterAlignedTopAppBar(
         title = { AppTitle() },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.primaryDark),
         navigationIcon = {
             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                 Icon(
@@ -134,7 +137,15 @@ internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
                 )
             }
         },
-        actions = {  }
+        // actions = fun RowScope.() {},
+        colors = topAppBarColors(
+        // containerColor = Color.Red,
+        containerColor = DevkitWalletColors.primaryDark,
+        // scrolledContainerColor = MaterialTheme.colorScheme.applyTonalElevation(
+        //     // backgroundColor = containerColor,
+        //     // elevation = TopAppBarSmallTokens.OnScrollContainerElevation
+        // )
+        )
     )
 }
 
@@ -143,5 +154,8 @@ internal fun AppTitle() {
     Text(
         text = "BDK Sample Wallet",
         color = DevkitWalletColors.white,
+        fontFamily = jetBrainsMonoSemiBold,
+        fontSize = 20.sp,
+        // modifier = Modifier.background(Color.Magenta)
     )
 }

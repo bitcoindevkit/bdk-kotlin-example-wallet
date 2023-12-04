@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.utilities
+package com.goldenraven.devkitwallet.utils
 
 import android.text.format.DateFormat
 import java.util.Calendar

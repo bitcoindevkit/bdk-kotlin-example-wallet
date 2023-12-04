@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui.intro
+package com.goldenraven.devkitwallet.ui.screens.intro
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,7 +32,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.WalletCreateType
-import com.goldenraven.devkitwallet.ui.composables.IntroAppBar
+import com.goldenraven.devkitwallet.ui.components.IntroAppBar
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono

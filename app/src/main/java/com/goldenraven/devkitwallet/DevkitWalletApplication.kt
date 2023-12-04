@@ -7,7 +7,7 @@ package com.goldenraven.devkitwallet
 
 import android.app.Application
 import android.content.Context
-import com.goldenraven.devkitwallet.utilities.SharedPreferencesManager
+import com.goldenraven.devkitwallet.utils.SharedPreferencesManager
 import com.goldenraven.devkitwallet.data.Repository
 import com.goldenraven.devkitwallet.data.Wallet
 

@@ -1,4 +1,4 @@
-package com.goldenraven.devkitwallet.ui.composables
+package com.goldenraven.devkitwallet.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
-import com.goldenraven.devkitwallet.ui.theme.firaMono
+import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @Composable
 fun NeutralButton(text: String, enabled: Boolean, onClick: () -> Unit) {
@@ -35,7 +35,7 @@ fun NeutralButton(text: String, enabled: Boolean, onClick: () -> Unit) {
         Text(
             text = text,
             fontSize = 16.sp,
-            fontFamily = firaMono,
+            fontFamily = jetBrainsMonoLight,
             textAlign = TextAlign.Center,
             lineHeight = 28.sp,
         )

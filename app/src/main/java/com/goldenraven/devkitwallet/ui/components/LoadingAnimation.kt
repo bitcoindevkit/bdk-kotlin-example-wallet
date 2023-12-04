@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui.composables
+package com.goldenraven.devkitwallet.ui.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.RepeatMode

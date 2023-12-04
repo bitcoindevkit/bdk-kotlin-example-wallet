@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui
+package com.goldenraven.devkitwallet.ui.screens.drawer
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.data.Repository
-import com.goldenraven.devkitwallet.ui.composables.AwayFromHomeAppBar
+import com.goldenraven.devkitwallet.ui.components.AwayFromHomeAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 
