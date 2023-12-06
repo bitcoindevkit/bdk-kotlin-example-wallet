@@ -18,10 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +29,7 @@ import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
+import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @Composable
 internal fun AboutScreen(navController: NavController) {
@@ -47,43 +45,24 @@ internal fun AboutScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(DevkitWalletColors.primary)
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .padding(16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.bdk_logo),
                 contentDescription = "Bitcoin testnet logo",
-                Modifier.size(270.dp)
+                Modifier.size(180.dp)
             )
             Spacer(modifier = Modifier.padding(24.dp))
             Text(
-                text = "This wallet is build for developers to learn how to leverage the bitcoindevkit. You are currently running the \"SimpleWallet\" version of the app, which implements the following basic bitcoin wallet capabilities: create a wallet, receive testnet coins, send coins, display transaction history, and recover from a mnemonic.",
+                text = "This wallet is build for developers to learn how to leverage the Bitcoin Development Kit.",
                 color = DevkitWalletColors.white,
-                fontSize = 16.sp,
+                fontSize = 14.sp,
+                fontFamily = jetBrainsMonoLight,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(all = 8.dp)
-            )
-
-            val features: List<String> = listOf(
-                "create a wallet",
-                "receive testnet coins",
-                "send coins",
-                "display transaction history",
-                "recover from a mnemonic"
-            )
-            val bullet = "\u2022"
-            Text(
-                buildAnnotatedString {
-                    features.forEach {
-                        withStyle(style = SpanStyle(color = DevkitWalletColors.white, fontSize = 16.sp)) {
-                            append(bullet)
-                            append("\t\t")
-                            append(it)
-                            append("\n")
-                        }
-                    }
-                }
             )
         }
     }
