@@ -11,6 +11,8 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,6 +47,7 @@ import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoSemiBold
 import com.goldenraven.devkitwallet.utils.formatInBtc
+import com.goldenraven.devkitwallet.viewmodels.CurrencyUnit
 import com.goldenraven.devkitwallet.viewmodels.WalletViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -61,11 +64,13 @@ internal fun WalletHomeScreen(
     val networkAvailable: Boolean = isOnline(LocalContext.current)
     val syncing by walletViewModel.syncing.observeAsState(true)
     val balance by walletViewModel.balance.observeAsState()
+    val unit by walletViewModel.unit.observeAsState()
     if (networkAvailable && !Wallet.isBlockChainCreated()) {
         Log.i(TAG, "Creating new blockchain")
         Wallet.createBlockchain()
     }
 
+    val interactionSource = remember { MutableInteractionSource() }
     val scope: CoroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -81,6 +86,11 @@ internal fun WalletHomeScreen(
             Spacer(Modifier.padding(24.dp))
             Row(
                 Modifier
+                    .clickable(
+                        interactionSource,
+                        indication = null,
+                        onClick = { walletViewModel.switchUnit() }
+                    )
                     .fillMaxWidth(0.9f)
                     .padding(horizontal = 8.dp)
                     .background(
@@ -91,19 +101,31 @@ internal fun WalletHomeScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_bitcoin_logo),
-                    contentDescription = "Bitcoin testnet logo",
-                    Modifier
-                        .align(Alignment.CenterVertically)
-                        .rotate(-13f)
-                )
-                Text(
-                    balance.formatInBtc(),
-                    fontFamily = jetBrainsMonoSemiBold,
-                    fontSize = 32.sp,
-                    color = DevkitWalletColors.white
-                )
+                when(unit) {
+                    CurrencyUnit.Bitcoin, null -> {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_bitcoin_logo),
+                            contentDescription = "Bitcoin testnet logo",
+                            Modifier
+                                .align(Alignment.CenterVertically)
+                                .rotate(-13f)
+                        )
+                        Text(
+                            text = balance.formatInBtc(),
+                            fontFamily = jetBrainsMonoSemiBold,
+                            fontSize = 32.sp,
+                            color = DevkitWalletColors.white
+                        )
+                    }
+                    CurrencyUnit.Satoshi -> {
+                        Text(
+                            text = "$balance sat",
+                            fontFamily = jetBrainsMonoSemiBold,
+                            fontSize = 32.sp,
+                            color = DevkitWalletColors.white
+                        )
+                    }
+                }
             }
             Spacer(modifier = Modifier.padding(4.dp))
             Row(

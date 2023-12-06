@@ -19,6 +19,18 @@ internal class WalletViewModel : ViewModel() {
     val syncing: LiveData<Boolean>
         get() = _syncing
 
+    private var _unit: MutableLiveData<CurrencyUnit> = MutableLiveData(CurrencyUnit.Bitcoin)
+    val unit: LiveData<CurrencyUnit>
+        get() = _unit
+
+    fun switchUnit() {
+        _unit.value = when (_unit.value) {
+            CurrencyUnit.Bitcoin -> CurrencyUnit.Satoshi
+            CurrencyUnit.Satoshi -> CurrencyUnit.Bitcoin
+            null -> CurrencyUnit.Bitcoin
+        }
+    }
+
     fun updateBalance() {
         _syncing.value = true
         viewModelScope.launch(Dispatchers.IO) {
@@ -29,4 +41,9 @@ internal class WalletViewModel : ViewModel() {
             }
         }
     }
+}
+
+enum class CurrencyUnit {
+    Bitcoin,
+    Satoshi
 }
