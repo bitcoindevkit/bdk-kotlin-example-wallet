@@ -53,7 +53,7 @@ internal fun ReceiveScreen(
     addressViewModel: AddressViewModel = viewModel()
 ) {
 
-    val address by addressViewModel.address.observeAsState("Generate new address")
+    val address by addressViewModel.address.observeAsState(null)
     val addressIndex by addressViewModel.addressIndex.observeAsState("")
 
     Scaffold(
@@ -83,9 +83,9 @@ internal fun ReceiveScreen(
                     height = Dimension.fillToConstraints
                 }
             ) {
-                val QR: ImageBitmap? = addressToQR(address)
+                val QR: ImageBitmap? = address?.let { addressToQR(it) }
                 Log.i("ReceiveScreen", "New receive address is $address")
-                if (address != "No address yet" && QR != null) {
+                if (QR != null) {
                     Image(
                         bitmap = QR,
                         contentDescription = "Bitcoindevkit website QR code",
@@ -94,7 +94,7 @@ internal fun ReceiveScreen(
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
                     SelectionContainer {
                         Text(
-                            text = address,
+                            text = address!!,
                             fontFamily = jetBrainsMonoRegular,
                             color = DevkitWalletColors.white
                         )
@@ -148,11 +148,9 @@ private fun addressToQR(address: String): ImageBitmap? {
         val bitMap = createBitmap(1000, 1000)
         for (x in 0 until 1000) {
             for (y in 0 until 1000) {
-                // uses night1 and white for colors
                 bitMap.setPixel(x, y, if (bitMatrix[x, y]) 0xFF2e3440.toInt() else 0xFFd8dee9.toInt())
             }
         }
-        // Log.i("ReceiveScreen", "QR is ${bitMap.asImageBitmap()}")
         return bitMap.asImageBitmap()
     } catch (e: Throwable) {
         Log.i("ReceiveScreen", "Error with QRCode generation, $e")

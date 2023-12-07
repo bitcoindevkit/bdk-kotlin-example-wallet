@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.domain.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
@@ -46,6 +47,7 @@ internal fun TransactionsScreen(navController: NavController) {
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(DevkitWalletColors.primary)
+                .padding(top = 6.dp)
                 .verticalScroll(state = scrollState)
         ) {
             if (unconfirmedTransactions.isNotEmpty()) {

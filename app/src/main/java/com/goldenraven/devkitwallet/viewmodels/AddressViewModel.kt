@@ -6,10 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.goldenraven.devkitwallet.domain.Wallet
 
 internal class AddressViewModel : ViewModel() {
-    private var _address: MutableLiveData<String> = MutableLiveData("No address yet")
-    private var _addressIndex: MutableLiveData<UInt> = MutableLiveData(0u)
-    val address: LiveData<String>
+    private var _address: MutableLiveData<String?> = MutableLiveData(null)
+    val address: LiveData<String?>
         get() = _address
+
+    private var _addressIndex: MutableLiveData<UInt> = MutableLiveData(0u)
     val addressIndex: LiveData<UInt>
         get() = _addressIndex
 
