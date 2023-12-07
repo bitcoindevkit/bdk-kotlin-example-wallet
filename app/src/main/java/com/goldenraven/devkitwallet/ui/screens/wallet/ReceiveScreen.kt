@@ -47,6 +47,8 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 
+private const val TAG = "ReceiveScreen"
+
 @Composable
 internal fun ReceiveScreen(
     navController: NavController,
@@ -141,14 +143,15 @@ internal fun ReceiveScreen(
 }
 
 private fun addressToQR(address: String): ImageBitmap? {
-    Log.i("ReceiveScreen", "We are generating the QR code for address $address")
+    Log.i(TAG, "We are generating the QR code for address $address")
     try {
         val qrCodeWriter: QRCodeWriter = QRCodeWriter()
         val bitMatrix: BitMatrix = qrCodeWriter.encode(address, BarcodeFormat.QR_CODE, 1000, 1000)
         val bitMap = createBitmap(1000, 1000)
         for (x in 0 until 1000) {
             for (y in 0 until 1000) {
-                bitMap.setPixel(x, y, if (bitMatrix[x, y]) 0xFF2e3440.toInt() else 0xFFd8dee9.toInt())
+                // DevkitWalletColors.primaryDark for dark and DevkitWalletColors.white for light
+                bitMap.setPixel(x, y, if (bitMatrix[x, y]) 0xff203b46.toInt() else 0xffffffff.toInt())
             }
         }
         return bitMap.asImageBitmap()
