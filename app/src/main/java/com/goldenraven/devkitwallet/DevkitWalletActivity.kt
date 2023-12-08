@@ -13,6 +13,7 @@ import com.goldenraven.devkitwallet.domain.Repository
 import com.goldenraven.devkitwallet.domain.Wallet
 import com.goldenraven.devkitwallet.navigation.HomeNavigation
 import com.goldenraven.devkitwallet.navigation.CreateWalletNavigation
+import com.goldenraven.devkitwallet.ui.theme.DevkitTheme
 
 private const val TAG = "DevkitWalletActivity"
 
@@ -30,7 +31,9 @@ class DevkitWalletActivity : AppCompatActivity() {
                     is WalletCreateType.RECOVER -> Wallet.recoverWallet(walletCreateType.recoveryPhrase)
                 }
                 setContent {
-                    HomeNavigation()
+                    DevkitTheme {
+                        HomeNavigation()
+                    }
                 }
             } catch(e: Throwable) {
                 Log.i(TAG, "Could not build wallet: $e")
@@ -40,11 +43,15 @@ class DevkitWalletActivity : AppCompatActivity() {
         if (Repository.doesWalletExist()) {
             Wallet.loadExistingWallet()
             setContent {
-                HomeNavigation()
+                DevkitTheme {
+                    HomeNavigation()
+                }
             }
         } else {
             setContent {
-                CreateWalletNavigation(onBuildWalletButtonClicked)
+                DevkitTheme {
+                    CreateWalletNavigation(onBuildWalletButtonClicked)
+                }
             }
         }
     }

@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +34,7 @@ import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.WalletCreateType
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
+import com.goldenraven.devkitwallet.ui.theme.devkitTypography
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @Composable
@@ -90,10 +92,10 @@ internal fun WalletChoiceScreen(
             ) {
                 Text(
                     text = "Create a\nNew Wallet",
-                    fontSize = 18.sp,
-                    fontFamily = jetBrainsMonoLight,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 28.sp,
+                    // fontSize = 18.sp,
+                    // fontFamily = jetBrainsMonoLight,
+                    // textAlign = TextAlign.Center,
+                    // lineHeight = 28.sp,
                 )
             }
 
@@ -113,10 +115,10 @@ internal fun WalletChoiceScreen(
             ) {
                 Text(
                     text = "Recover an\nExisting Wallet",
-                    fontSize = 18.sp,
-                    fontFamily = jetBrainsMonoLight,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 28.sp,
+                    // fontSize = 18.sp,
+                    // fontFamily = jetBrainsMonoLight,
+                    // textAlign = TextAlign.Center,
+                    // lineHeight = 28.sp,
                 )
             }
         }

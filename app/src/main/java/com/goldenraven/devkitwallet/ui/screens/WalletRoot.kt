@@ -29,7 +29,7 @@ import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
-import com.goldenraven.devkitwallet.ui.screens.wallet.WalletNavigation
+import com.goldenraven.devkitwallet.navigation.WalletNavigation
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @OptIn(androidx.compose.animation.ExperimentalAnimationApi::class)

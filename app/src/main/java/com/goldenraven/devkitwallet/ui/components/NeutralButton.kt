@@ -10,11 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
-import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @Composable
 fun NeutralButton(text: String, enabled: Boolean, onClick: () -> Unit) {
@@ -34,10 +31,6 @@ fun NeutralButton(text: String, enabled: Boolean, onClick: () -> Unit) {
     ) {
         Text(
             text = text,
-            fontSize = 16.sp,
-            fontFamily = jetBrainsMonoLight,
-            textAlign = TextAlign.Center,
-            lineHeight = 28.sp,
         )
     }
 }
