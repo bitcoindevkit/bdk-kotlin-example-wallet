@@ -45,15 +45,15 @@ fun HomeNavigation() {
             enterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
             exitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
-            popEnterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
-            },
             popExitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
-            }
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
         ) { AboutScreen(navController = navController) }
 
         composable(
@@ -61,14 +61,14 @@ fun HomeNavigation() {
             enterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
             exitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
-            popEnterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
-            },
             popExitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             }
         ) { RecoveryPhraseScreen(navController = navController) }
 
@@ -77,14 +77,14 @@ fun HomeNavigation() {
             enterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
             exitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
-            popEnterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
-            },
             popExitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             }
         ) { ElectrumScreen(navController = navController) }
     }
