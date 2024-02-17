@@ -20,18 +20,17 @@ import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.domain.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
-import com.goldenraven.devkitwallet.ui.components.ConfirmedTransactionCard
-import com.goldenraven.devkitwallet.ui.components.PendingTransactionCard
+// import com.goldenraven.devkitwallet.ui.components.ConfirmedTransactionCard
+// import com.goldenraven.devkitwallet.ui.components.PendingTransactionCard
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.utils.timestampToString
-import org.bitcoindevkit.TransactionDetails
 
 private const val TAG = "TransactionsScreen"
 
 @Composable
 internal fun TransactionsScreen(navController: NavController) {
-    val allTransactions: List<TransactionDetails> = Wallet.getAllTransactions()
-    val (confirmedTransactions, unconfirmedTransactions) = sortTransactions(allTransactions)
+    // val allTransactions: List<TransactionDetails> = Wallet.getAllTransactions()
+    // val (confirmedTransactions, unconfirmedTransactions) = sortTransactions(allTransactions)
 
     Scaffold(
         topBar = {
@@ -50,16 +49,16 @@ internal fun TransactionsScreen(navController: NavController) {
                 .padding(top = 6.dp)
                 .verticalScroll(state = scrollState)
         ) {
-            if (unconfirmedTransactions.isNotEmpty()) {
-                unconfirmedTransactions.forEach {
-                    PendingTransactionCard(details = it, navController = navController)
-                }
-            }
-            if (confirmedTransactions.isNotEmpty()) {
-                confirmedTransactions.forEach {
-                    ConfirmedTransactionCard(it, navController)
-                }
-            }
+            // if (unconfirmedTransactions.isNotEmpty()) {
+            //     unconfirmedTransactions.forEach {
+            //         PendingTransactionCard(details = it, navController = navController)
+            //     }
+            // }
+            // if (confirmedTransactions.isNotEmpty()) {
+            //     confirmedTransactions.forEach {
+            //         ConfirmedTransactionCard(it, navController)
+            //     }
+            // }
         }
     }
 }
@@ -68,44 +67,44 @@ fun viewTransaction(navController: NavController, txid: String) {
     navController.navigate("${Screen.TransactionScreen.route}/txid=$txid")
 }
 
-private fun sortTransactions(transactions: List<TransactionDetails>): Transactions {
-    val confirmedTransactions = mutableListOf<TransactionDetails>()
-    val unconfirmedTransactions = mutableListOf<TransactionDetails>()
-    transactions.forEach { tx ->
-        if (tx.confirmationTime != null) confirmedTransactions.add(tx) else unconfirmedTransactions.add(tx)
-    }
-    return Transactions(
-        confirmedTransactions = confirmedTransactions,
-        unconfirmedTransactions = unconfirmedTransactions
-    )
-}
-
-fun pendingTransactionsItem(transaction: TransactionDetails): String {
-    return buildString {
-        Log.i(TAG, "Pending transaction list item: $transaction")
-        appendLine("Timestamp: Pending")
-        appendLine("Received: ${transaction.received}")
-        appendLine("Sent: ${transaction.sent}")
-        appendLine("Fees: ${transaction.fee}")
-        append("Txid: ${transaction.txid.take(n = 8)}...${transaction.txid.takeLast(n = 8)}")
-    }
-}
-
-fun confirmedTransactionsItem(transaction: TransactionDetails): String {
-    return buildString {
-        Log.i(TAG, "Transaction list item: $transaction")
-        appendLine("Timestamp: ${transaction.confirmationTime!!.timestamp.timestampToString()}")
-        appendLine("Received: ${transaction.received}")
-        appendLine("Sent: ${transaction.sent}")
-        appendLine("Block: ${transaction.confirmationTime!!.height}")
-        append("Txid: ${transaction.txid.take(n = 8)}...${transaction.txid.takeLast(n = 8)}")
-    }
-}
-
-data class Transactions(
-    val confirmedTransactions: List<TransactionDetails>,
-    val unconfirmedTransactions: List<TransactionDetails>
-)
+// private fun sortTransactions(transactions: List<TransactionDetails>): Transactions {
+//     val confirmedTransactions = mutableListOf<TransactionDetails>()
+//     val unconfirmedTransactions = mutableListOf<TransactionDetails>()
+//     transactions.forEach { tx ->
+//         if (tx.confirmationTime != null) confirmedTransactions.add(tx) else unconfirmedTransactions.add(tx)
+//     }
+//     return Transactions(
+//         confirmedTransactions = confirmedTransactions,
+//         unconfirmedTransactions = unconfirmedTransactions
+//     )
+// }
+//
+// fun pendingTransactionsItem(transaction: TransactionDetails): String {
+//     return buildString {
+//         Log.i(TAG, "Pending transaction list item: $transaction")
+//         appendLine("Timestamp: Pending")
+//         appendLine("Received: ${transaction.received}")
+//         appendLine("Sent: ${transaction.sent}")
+//         appendLine("Fees: ${transaction.fee}")
+//         append("Txid: ${transaction.txid.take(n = 8)}...${transaction.txid.takeLast(n = 8)}")
+//     }
+// }
+//
+// fun confirmedTransactionsItem(transaction: TransactionDetails): String {
+//     return buildString {
+//         Log.i(TAG, "Transaction list item: $transaction")
+//         appendLine("Timestamp: ${transaction.confirmationTime!!.timestamp.timestampToString()}")
+//         appendLine("Received: ${transaction.received}")
+//         appendLine("Sent: ${transaction.sent}")
+//         appendLine("Block: ${transaction.confirmationTime!!.height}")
+//         append("Txid: ${transaction.txid.take(n = 8)}...${transaction.txid.takeLast(n = 8)}")
+//     }
+// }
+//
+// data class Transactions(
+//     val confirmedTransactions: List<TransactionDetails>,
+//     val unconfirmedTransactions: List<TransactionDetails>
+// )
 
 // @Preview(device = Devices.PIXEL_4, showBackground = true)
 // @Composable

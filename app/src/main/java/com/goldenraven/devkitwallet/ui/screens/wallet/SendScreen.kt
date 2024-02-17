@@ -51,6 +51,7 @@ import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.bitcoindevkit.FeeRate
 import org.bitcoindevkit.PartiallySignedTransaction
 
 private const val TAG = "SendScreen"
@@ -586,8 +587,9 @@ private fun broadcastTransaction(
     try {
         // create, sign, and broadcast
         val psbt: PartiallySignedTransaction = when (transactionType) {
-            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, feeRate, rbfEnabled, opReturnMsg)
-            TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, feeRate, rbfEnabled, opReturnMsg)
+            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, FeeRate.fromSatPerVb(feeRate), rbfEnabled, opReturnMsg)
+            // TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, FeeRate.fromSatPerVb(feeRate), rbfEnabled, opReturnMsg)
+            TransactionType.SEND_ALL -> throw NotImplementedError("Send all not implemented")
         }
         var isSigned = Wallet.sign(psbt)
         if (isSigned) {

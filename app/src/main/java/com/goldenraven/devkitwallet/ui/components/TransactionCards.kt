@@ -20,83 +20,83 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.goldenraven.devkitwallet.ui.screens.wallet.confirmedTransactionsItem
-import com.goldenraven.devkitwallet.ui.screens.wallet.pendingTransactionsItem
+// import com.goldenraven.devkitwallet.ui.screens.wallet.confirmedTransactionsItem
+// import com.goldenraven.devkitwallet.ui.screens.wallet.pendingTransactionsItem
 import com.goldenraven.devkitwallet.ui.screens.wallet.viewTransaction
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
-import org.bitcoindevkit.TransactionDetails
+// import org.bitcoindevkit.TransactionDetails
 
-@Composable
-fun ConfirmedTransactionCard(details: TransactionDetails, navController: NavController) {
-    Row(
-        Modifier
-            .padding(horizontal = 8.dp, vertical = 6.dp)
-            .fillMaxWidth()
-            .background(
-                color = DevkitWalletColors.primaryLight,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .clickable { viewTransaction(navController = navController, txid = details.txid) },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween
-    ) {
-        Text(
-            confirmedTransactionsItem(details),
-            fontFamily = jetBrainsMonoLight,
-            fontSize = 12.sp,
-            color = DevkitWalletColors.white,
-            modifier = Modifier.padding(16.dp)
-        )
-        Box(
-            modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
-                .size(size = 24.dp)
-                .clip(shape = CircleShape)
-                .background(DevkitWalletColors.secondary)
-                .align(Alignment.Top)
-        )
-    }
-}
-
-@Composable
-fun PendingTransactionCard(details: TransactionDetails, navController: NavController) {
-    Row(
-        Modifier
-            .padding(horizontal = 8.dp, vertical = 6.dp)
-            .fillMaxWidth()
-            .background(
-                color = DevkitWalletColors.primaryLight,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .border(
-                width = 2.dp,
-                color = DevkitWalletColors.accent1,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .clickable {
-                viewTransaction(
-                    navController = navController,
-                    txid = details.txid
-                )
-            },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween
-    ) {
-        Text(
-            pendingTransactionsItem(details),
-            fontFamily = jetBrainsMonoLight,
-            fontSize = 12.sp,
-            color = DevkitWalletColors.white,
-            modifier = Modifier.padding(16.dp)
-        )
-        Box(
-            modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
-                .size(size = 24.dp)
-                .clip(shape = CircleShape)
-                .background(Color(0xffE9C46A))
-                .align(Alignment.Top)
-        )
-    }
-}
+// @Composable
+// fun ConfirmedTransactionCard(details: TransactionDetails, navController: NavController) {
+//     Row(
+//         Modifier
+//             .padding(horizontal = 8.dp, vertical = 6.dp)
+//             .fillMaxWidth()
+//             .background(
+//                 color = DevkitWalletColors.primaryLight,
+//                 shape = RoundedCornerShape(16.dp)
+//             )
+//             .clickable { viewTransaction(navController = navController, txid = details.txid) },
+//         verticalAlignment = Alignment.CenterVertically,
+//         horizontalArrangement = Arrangement.Absolute.SpaceBetween
+//     ) {
+//         Text(
+//             confirmedTransactionsItem(details),
+//             fontFamily = jetBrainsMonoLight,
+//             fontSize = 12.sp,
+//             color = DevkitWalletColors.white,
+//             modifier = Modifier.padding(16.dp)
+//         )
+//         Box(
+//             modifier = Modifier
+//                 .padding(top = 16.dp, end = 16.dp)
+//                 .size(size = 24.dp)
+//                 .clip(shape = CircleShape)
+//                 .background(DevkitWalletColors.secondary)
+//                 .align(Alignment.Top)
+//         )
+//     }
+// }
+//
+// @Composable
+// fun PendingTransactionCard(details: TransactionDetails, navController: NavController) {
+//     Row(
+//         Modifier
+//             .padding(horizontal = 8.dp, vertical = 6.dp)
+//             .fillMaxWidth()
+//             .background(
+//                 color = DevkitWalletColors.primaryLight,
+//                 shape = RoundedCornerShape(16.dp)
+//             )
+//             .border(
+//                 width = 2.dp,
+//                 color = DevkitWalletColors.accent1,
+//                 shape = RoundedCornerShape(16.dp)
+//             )
+//             .clickable {
+//                 viewTransaction(
+//                     navController = navController,
+//                     txid = details.txid
+//                 )
+//             },
+//         verticalAlignment = Alignment.CenterVertically,
+//         horizontalArrangement = Arrangement.Absolute.SpaceBetween
+//     ) {
+//         Text(
+//             pendingTransactionsItem(details),
+//             fontFamily = jetBrainsMonoLight,
+//             fontSize = 12.sp,
+//             color = DevkitWalletColors.white,
+//             modifier = Modifier.padding(16.dp)
+//         )
+//         Box(
+//             modifier = Modifier
+//                 .padding(top = 16.dp, end = 16.dp)
+//                 .size(size = 24.dp)
+//                 .clip(shape = CircleShape)
+//                 .background(Color(0xffE9C46A))
+//                 .align(Alignment.Top)
+//         )
+//     }
+// }

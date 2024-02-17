@@ -65,10 +65,10 @@ internal fun WalletHomeScreen(
     val syncing by walletViewModel.syncing.observeAsState(true)
     val balance by walletViewModel.balance.observeAsState()
     val unit by walletViewModel.unit.observeAsState()
-    if (networkAvailable && !Wallet.isBlockChainCreated()) {
-        Log.i(TAG, "Creating new blockchain")
-        Wallet.createBlockchain()
-    }
+    // if (networkAvailable && !Wallet.isBlockChainCreated()) {
+    //     Log.i(TAG, "Creating new blockchain")
+    //     Wallet.createBlockchain()
+    // }
 
     val interactionSource = remember { MutableInteractionSource() }
     val scope: CoroutineScope = rememberCoroutineScope()

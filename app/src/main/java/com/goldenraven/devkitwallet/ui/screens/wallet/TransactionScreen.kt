@@ -36,18 +36,17 @@ import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.jetBrainsMonoLight
 import com.goldenraven.devkitwallet.utils.timestampToString
-import org.bitcoindevkit.TransactionDetails
 
 @Composable
 internal fun TransactionScreen(
     navController: NavController,
     txid: String?,
 ) {
-    val transaction = getTransaction(txid = txid)
-    if (transaction == null) {
-        navController.popBackStack()
-    }
-    val transactionDetail = getTransactionDetails(transaction = transaction!!)
+    // val transaction = getTransaction(txid = txid)
+    // if (transaction == null) {
+    //     navController.popBackStack()
+    // }
+    // val transactionDetail = getTransactionDetails(transaction = transaction!!)
 
     Scaffold(
         topBar = {
@@ -82,14 +81,14 @@ internal fun TransactionScreen(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
-                Text(
-                    text = transactionTitle(transaction = transaction),
-                    color = DevkitWalletColors.white,
-                    fontSize = 14.sp,
-                    fontFamily = jetBrainsMonoLight,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+                // Text(
+                //     text = transactionTitle(transaction = transaction),
+                //     color = DevkitWalletColors.white,
+                //     fontSize = 14.sp,
+                //     fontFamily = jetBrainsMonoLight,
+                //     textAlign = TextAlign.Center,
+                //     modifier = Modifier.padding(horizontal = 16.dp)
+                // )
             }
 
 
@@ -104,28 +103,28 @@ internal fun TransactionScreen(
                     height = Dimension.fillToConstraints
                 }
             ) {
-                items(transactionDetail) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(all = 16.dp)
-                    ) {
-                        Text(
-                            text = "${it.first} :",
-                            fontSize = 16.sp,
-                            fontFamily = jetBrainsMonoLight,
-                            color = DevkitWalletColors.white,
-                        )
-                        Text(
-                            text = it.second,
-                            fontSize = 16.sp,
-                            fontFamily = jetBrainsMonoLight,
-                            textAlign = TextAlign.End,
-                            color = DevkitWalletColors.white,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                }
+                // items(transactionDetail) {
+                //     Row(
+                //         modifier = Modifier
+                //             .fillMaxWidth()
+                //             .padding(all = 16.dp)
+                //     ) {
+                //         Text(
+                //             text = "${it.first} :",
+                //             fontSize = 16.sp,
+                //             fontFamily = jetBrainsMonoLight,
+                //             color = DevkitWalletColors.white,
+                //         )
+                //         Text(
+                //             text = it.second,
+                //             fontSize = 16.sp,
+                //             fontFamily = jetBrainsMonoLight,
+                //             textAlign = TextAlign.End,
+                //             color = DevkitWalletColors.white,
+                //             modifier = Modifier.fillMaxWidth()
+                //         )
+                //     }
+                // }
             }
 
             Column(
@@ -179,33 +178,33 @@ fun TransactionDetailButton(content: String, navController: NavController, txid:
     }
 }
 
-fun getTransactionDetails(transaction: TransactionDetails): List<Pair<String, String>> {
-    val transactionDetails = mutableListOf<Pair<String, String>>()
-
-    if (transaction.confirmationTime != null) {
-        transactionDetails.add(Pair("Status", "Confirmed"))
-        transactionDetails.add(Pair("Timestamp", transaction.confirmationTime!!.timestamp.timestampToString()))
-        transactionDetails.add(Pair("Received", (if (transaction.received < transaction.sent) 0 else transaction.received).toString()))
-        transactionDetails.add(Pair("Sent", (if (transaction.sent < transaction.received) 0 else transaction.sent - transaction.received - transaction.fee!!).toString()))
-        transactionDetails.add(Pair("Fees", transaction.fee.toString()))
-        transactionDetails.add(Pair("Block", transaction.confirmationTime!!.height.toString()))
-    } else {
-        transactionDetails.add(Pair("Status", "Pending"))
-        transactionDetails.add(Pair("Timestamp", "Pending"))
-        transactionDetails.add(Pair("Received", (if (transaction.received < transaction.sent) 0 else transaction.received).toString()))
-        transactionDetails.add(Pair("Sent", (if (transaction.sent < transaction.received) 0 else transaction.sent - transaction.received - transaction.fee!!).toString()))
-        transactionDetails.add(Pair("Fees", transaction.fee.toString()))
-    }
-    return transactionDetails
-}
-
-fun transactionTitle(transaction: TransactionDetails): String {
-    return transaction.txid
-}
-
-fun getTransaction(txid: String?): TransactionDetails? {
-    if (txid.isNullOrEmpty()) {
-        return null
-    }
-    return Wallet.getTransaction(txid = txid)
-}
+// fun getTransactionDetails(transaction: TransactionDetails): List<Pair<String, String>> {
+//     val transactionDetails = mutableListOf<Pair<String, String>>()
+//
+//     if (transaction.confirmationTime != null) {
+//         transactionDetails.add(Pair("Status", "Confirmed"))
+//         transactionDetails.add(Pair("Timestamp", transaction.confirmationTime!!.timestamp.timestampToString()))
+//         transactionDetails.add(Pair("Received", (if (transaction.received < transaction.sent) 0 else transaction.received).toString()))
+//         transactionDetails.add(Pair("Sent", (if (transaction.sent < transaction.received) 0 else transaction.sent - transaction.received - transaction.fee!!).toString()))
+//         transactionDetails.add(Pair("Fees", transaction.fee.toString()))
+//         transactionDetails.add(Pair("Block", transaction.confirmationTime!!.height.toString()))
+//     } else {
+//         transactionDetails.add(Pair("Status", "Pending"))
+//         transactionDetails.add(Pair("Timestamp", "Pending"))
+//         transactionDetails.add(Pair("Received", (if (transaction.received < transaction.sent) 0 else transaction.received).toString()))
+//         transactionDetails.add(Pair("Sent", (if (transaction.sent < transaction.received) 0 else transaction.sent - transaction.received - transaction.fee!!).toString()))
+//         transactionDetails.add(Pair("Fees", transaction.fee.toString()))
+//     }
+//     return transactionDetails
+// }
+//
+// fun transactionTitle(transaction: TransactionDetails): String {
+//     return transaction.txid
+// }
+//
+// fun getTransaction(txid: String?): TransactionDetails? {
+//     if (txid.isNullOrEmpty()) {
+//         return null
+//     }
+//     return Wallet.getTransaction(txid = txid)
+// }

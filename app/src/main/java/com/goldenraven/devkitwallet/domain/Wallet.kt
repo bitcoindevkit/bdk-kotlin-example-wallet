@@ -16,54 +16,49 @@ object Wallet {
 
     private lateinit var wallet: BdkWallet
     private lateinit var path: String
-    private lateinit var electrumServer: ElectrumServer
+    // private lateinit var electrumServer: ElectrumServer
+    // private val esploraClient: EsploraClient = EsploraClient("http://10.0.2.2:3002")
+    private val esploraClient: EsploraClient = EsploraClient("https://esplora.testnet.kuutamo.cloud/")
     // to use Esplora on regtest locally, use the following address
     // private const val regtestEsploraUrl: String = "http://10.0.2.2:3002"
 
-    object LogProgress: Progress {
-        override fun update(progress: Float, message: String?) {
-            Log.i(TAG, "Sync wallet")
-        }
-    }
-
-    // setting the path requires the application context and is done once by the BdkSampleApplication class
+    // Setting the path requires the application context and is done once by the BdkSampleApplication class
     fun setPath(path: String) {
-        Wallet.path = path
+        this.path = path
     }
 
     private fun initialize(
         descriptor: Descriptor,
-        changeDescriptor: Descriptor,
+        changeDescriptor: Descriptor?,
     ) {
-        val database = DatabaseConfig.Sqlite(SqliteDbConfiguration("$path/bdk-sqlite"))
+        val databasePath = "$path/wallet.db"
         wallet = BdkWallet(
             descriptor,
             changeDescriptor,
+            databasePath,
             Network.TESTNET,
-            database
         )
     }
 
-    fun createBlockchain() {
-        electrumServer = ElectrumServer()
-        Log.i(TAG, "Current electrum URL : ${electrumServer.getElectrumURL()}")
-    }
+    // fun createBlockchain() {
+        // electrumServer = ElectrumServer()
+        // Log.i(TAG, "Current electrum URL : ${electrumServer.getElectrumURL()}")
+    // }
 
-    fun changeElectrumServer(electrumURL: String) {
-        electrumServer.createCustomElectrum(electrumURL = electrumURL)
-        wallet.sync(electrumServer.server, LogProgress)
-    }
+    // fun changeElectrumServer(electrumURL: String) {
+    //     electrumServer.createCustomElectrum(electrumURL = electrumURL)
+    //     wallet.sync(electrumServer.server, LogProgress)
+    // }
 
     fun createWallet() {
         val mnemonic = Mnemonic(WordCount.WORDS12)
-        val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
+        val bip32ExtendedRootKey = DescriptorSecretKey(Network.REGTEST, mnemonic, null)
         val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
-        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
             descriptor = descriptor,
-            changeDescriptor = changeDescriptor,
+            changeDescriptor = null,
         )
-        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate())
+        Repository.saveWallet(path, descriptor.asStringPrivate(), "")
         Repository.saveMnemonic(mnemonic.asString())
     }
 
@@ -97,19 +92,20 @@ object Wallet {
         val mnemonic = Mnemonic.fromString(recoveryPhrase)
         val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
         val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
-        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
             descriptor = descriptor,
-            changeDescriptor = changeDescriptor,
+            changeDescriptor = null,
         )
-        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate())
+        // Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate())
+        Repository.saveWallet(path, descriptor.asStringPrivate(), "")
         Repository.saveMnemonic(mnemonic.asString())
     }
 
     @OptIn(ExperimentalUnsignedTypes::class)
     fun createTransaction(
         recipientList: MutableList<Recipient>,
-        feeRate: Float,
+        feeRate: FeeRate,
+        // feeRate: Float,
         enableRBF: Boolean,
         opReturnMsg: String?
     ): PartiallySignedTransaction {
@@ -122,70 +118,72 @@ object Wallet {
 
         // technique 2 for adding a list of recipients to the TxBuilder
         var txBuilder = recipientList.fold(TxBuilder()) { builder, recipient ->
-            val scriptPubkey: Script = Address(recipient.address).scriptPubkey()
-            builder.addRecipient(scriptPubkey, recipient.amount)
+            // val address = Address(recipient.address)
+            val scriptPubKey: Script = Address(recipient.address, Network.TESTNET).scriptPubkey()
+            builder.addRecipient(scriptPubKey, recipient.amount)
         }
         if (enableRBF) {
             txBuilder = txBuilder.enableRbf()
         }
-        if (!opReturnMsg.isNullOrEmpty()) {
-            txBuilder = txBuilder.addData(opReturnMsg.toByteArray(charset = Charsets.UTF_8).asUByteArray().toList())
-        }
-        return txBuilder.feeRate(feeRate).finish(wallet).psbt
+        // if (!opReturnMsg.isNullOrEmpty()) {
+        //     txBuilder = txBuilder.addData(opReturnMsg.toByteArray(charset = Charsets.UTF_8).asUByteArray().toList())
+        // }
+        return txBuilder.feeRate(feeRate).finish(wallet)
     }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
-    fun createSendAllTransaction(
-        recipient: String,
-        feeRate: Float,
-        enableRBF: Boolean,
-        opReturnMsg: String?
-    ): PartiallySignedTransaction {
-        val scriptPubkey: Script = Address(recipient).scriptPubkey()
-        var txBuilder = TxBuilder()
-            .drainWallet()
-            .drainTo(scriptPubkey)
-            .feeRate(satPerVbyte = feeRate)
+    // @OptIn(ExperimentalUnsignedTypes::class)
+    // fun createSendAllTransaction(
+    //     recipient: String,
+    //     feeRate: Float,
+    //     enableRBF: Boolean,
+    //     opReturnMsg: String?
+    // ): PartiallySignedTransaction {
+    //     val scriptPubkey: Script = Address(recipient).scriptPubkey()
+    //     var txBuilder = TxBuilder()
+    //         .drainWallet()
+    //         .drainTo(scriptPubkey)
+    //         .feeRate(satPerVbyte = feeRate)
+    //
+    //     if (enableRBF) {
+    //         txBuilder = txBuilder.enableRbf()
+    //     }
+    //     if (!opReturnMsg.isNullOrEmpty()) {
+    //         txBuilder = txBuilder.addData(opReturnMsg.toByteArray(charset = Charsets.UTF_8).asUByteArray().toList())
+    //     }
+    //     return txBuilder.finish(wallet).psbt
+    // }
 
-        if (enableRBF) {
-            txBuilder = txBuilder.enableRbf()
-        }
-        if (!opReturnMsg.isNullOrEmpty()) {
-            txBuilder = txBuilder.addData(opReturnMsg.toByteArray(charset = Charsets.UTF_8).asUByteArray().toList())
-        }
-        return txBuilder.finish(wallet).psbt
-    }
-
-    fun createBumpFeeTransaction(txid: String, feeRate: Float): PartiallySignedTransaction {
-        return BumpFeeTxBuilder(txid = txid, newFeeRate = feeRate)
-            .enableRbf()
-            .finish(wallet = wallet)
-    }
+    // fun createBumpFeeTransaction(txid: String, feeRate: Float): PartiallySignedTransaction {
+    //     return BumpFeeTxBuilder(txid = txid, newFeeRate = feeRate)
+    //         .enableRbf()
+    //         .finish(wallet = wallet)
+    // }
 
     fun sign(psbt: PartiallySignedTransaction): Boolean {
-        return wallet.sign(psbt, null)
+        return wallet.sign(psbt)
     }
 
     fun broadcast(signedPsbt: PartiallySignedTransaction): String {
-        electrumServer.server.broadcast(signedPsbt.extractTx())
-        return signedPsbt.txid()
+        esploraClient.broadcast(signedPsbt.extractTx())
+        return signedPsbt.extractTx().txid()
     }
 
-    fun getAllTransactions(): List<TransactionDetails> = wallet.listTransactions(true)
+    // fun getAllTransactions(): List<TransactionDetails> = wallet.listTransactions(true)
 
-    fun getTransaction(txid: String): TransactionDetails? {
-        val allTransactions = getAllTransactions()
-        allTransactions.forEach {
-            if (it.txid == txid) {
-                return it
-            }
-        }
-        return null
-    }
+    // fun getTransaction(txid: String): TransactionDetails? {
+    //     val allTransactions = getAllTransactions()
+    //     allTransactions.forEach {
+    //         if (it.txid == txid) {
+    //             return it
+    //         }
+    //     }
+    //     return null
+    // }
 
     fun sync() {
         Log.i(TAG, "Wallet is syncing")
-        wallet.sync(electrumServer.server, LogProgress)
+        val update: Update = esploraClient.fullScan(wallet, 10u, 1u)
+        wallet.applyUpdate(update)
     }
 
     fun getBalance(): ULong = wallet.getBalance().total
@@ -194,18 +192,18 @@ object Wallet {
 
     fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LastUnused)
 
-    fun isBlockChainCreated() = ::electrumServer.isInitialized
+    // fun isBlockChainCreated() = ::electrumServer.isInitialized
 
-    fun getElectrumURL(): String = electrumServer.getElectrumURL()
+    // fun getElectrumURL(): String = electrumServer.getElectrumURL()
 
-    fun isElectrumServerDefault(): Boolean = electrumServer.isElectrumServerDefault()
+    // fun isElectrumServerDefault(): Boolean = electrumServer.isElectrumServerDefault()
 
-    fun setElectrumSettings(electrumSettings: ElectrumSettings) {
-        when (electrumSettings) {
-            ElectrumSettings.DEFAULT -> electrumServer.useDefaultElectrum()
-            ElectrumSettings.CUSTOM ->  electrumServer.useCustomElectrum()
-        }
-    }
+    // fun setElectrumSettings(electrumSettings: ElectrumSettings) {
+    //     when (electrumSettings) {
+    //         ElectrumSettings.DEFAULT -> electrumServer.useDefaultElectrum()
+    //         ElectrumSettings.CUSTOM ->  electrumServer.useCustomElectrum()
+    //     }
+    // }
 }
 
 enum class ElectrumSettings {
