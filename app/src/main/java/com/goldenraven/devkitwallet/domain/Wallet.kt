@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 thunderbiscuit and contributors.
+ * Copyright 2021-2024 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -7,7 +7,23 @@ package com.goldenraven.devkitwallet.domain
 
 import android.util.Log
 import com.goldenraven.devkitwallet.ui.screens.wallet.Recipient
-import org.bitcoindevkit.*
+import org.bitcoindevkit.Network
+import org.bitcoindevkit.Address
+import org.bitcoindevkit.Descriptor
+import org.bitcoindevkit.DescriptorSecretKey
+import org.bitcoindevkit.DerivationPath
+import org.bitcoindevkit.KeychainKind
+import org.bitcoindevkit.Mnemonic
+import org.bitcoindevkit.WordCount
+import org.bitcoindevkit.TxBuilder
+import org.bitcoindevkit.PartiallySignedTransaction
+import org.bitcoindevkit.AddressInfo
+import org.bitcoindevkit.AddressIndex
+import org.bitcoindevkit.FeeRate
+import org.bitcoindevkit.Update
+import org.bitcoindevkit.EsploraClient
+import org.bitcoindevkit.Script
+import org.bitcoindevkit.Transaction
 import org.bitcoindevkit.Wallet as BdkWallet
 
 private const val TAG = "Wallet"
@@ -53,13 +69,13 @@ object Wallet {
     fun createWallet() {
         val mnemonic = Mnemonic(WordCount.WORDS12)
         val bip32ExtendedRootKey = DescriptorSecretKey(Network.REGTEST, mnemonic, null)
-        val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+        val descriptor: Descriptor = Descriptor.newBip86(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+        val changeDescriptor: Descriptor = Descriptor.newBip86(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
             descriptor = descriptor,
-            changeDescriptor = null,
+            changeDescriptor = changeDescriptor,
         )
-        Repository.saveWallet(path, descriptor.asStringPrivate(), "")
-        Repository.saveMnemonic(mnemonic.asString())
+        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate(), mnemonic.asString())
     }
 
     // only create BIP84 compatible wallets
@@ -92,20 +108,17 @@ object Wallet {
         val mnemonic = Mnemonic.fromString(recoveryPhrase)
         val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
         val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
             descriptor = descriptor,
-            changeDescriptor = null,
+            changeDescriptor = changeDescriptor,
         )
-        // Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate())
-        Repository.saveWallet(path, descriptor.asStringPrivate(), "")
-        Repository.saveMnemonic(mnemonic.asString())
+        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate(), mnemonic.asString())
     }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     fun createTransaction(
         recipientList: MutableList<Recipient>,
         feeRate: FeeRate,
-        // feeRate: Float,
         enableRBF: Boolean,
         opReturnMsg: String?
     ): PartiallySignedTransaction {
@@ -168,7 +181,22 @@ object Wallet {
         return signedPsbt.extractTx().txid()
     }
 
-    // fun getAllTransactions(): List<TransactionDetails> = wallet.listTransactions(true)
+    fun getAllTransactions(): List<Transaction>  = wallet.transactions()
+
+    fun getTxDetails(transactions: List<Transaction>): List<TxDetails> {
+        val details = transactions.map { tx ->
+            val txid = tx.txid()
+            // val received = tx.received()
+            // val sent = tx.sent()
+            // val fee = tx.fee()
+            // val feeRate = tx.feeRate()
+            // val block = tx.blockHeight()
+            // val pending = tx.pending()
+            TxDetails(tx, txid)
+        }.toList()
+
+        return details
+    }
 
     // fun getTransaction(txid: String): TransactionDetails? {
     //     val allTransactions = getAllTransactions()
@@ -205,6 +233,18 @@ object Wallet {
     //     }
     // }
 }
+
+
+data class TxDetails(
+    val transaction: Transaction,
+    val txid: String,
+    // val received: ULong,
+    // val sent: ULong,
+    // val fee: ULong,
+    // val feeRate: FeeRate,
+    // val block: Int?,
+    // val pending: Boolean,
+)
 
 enum class ElectrumSettings {
     DEFAULT,

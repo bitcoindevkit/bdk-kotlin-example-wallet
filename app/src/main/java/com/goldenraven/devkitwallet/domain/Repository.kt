@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 thunderbiscuit and contributors.
+ * Copyright 2021-2024 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -28,20 +28,20 @@ object Repository {
 
     // save the necessary data for wallet reconstruction in shared preferences
     // upon application launch, the wallet can initialize itself using that data
-    fun saveWallet(path: String, descriptor: String, changeDescriptor: String) {
+    fun saveWallet(path: String, descriptor: String, changeDescriptor: String, mnemonic: String) {
         Log.i(
             TAG,
-            "Saved wallet:\npath -> $path \ndescriptor -> $descriptor \nchange descriptor -> $changeDescriptor"
+            "----------------\nSaved wallet:\ndatabase path     -> $path\ndescriptor        -> $descriptor\nchange descriptor -> $changeDescriptor\nmnemonic          -> $mnemonic\n----------------"
         )
         sharedPreferencesManager.walletInitialised = true
         sharedPreferencesManager.path = path
         sharedPreferencesManager.descriptor = descriptor
         sharedPreferencesManager.changeDescriptor = changeDescriptor
+        sharedPreferencesManager.mnemonic = mnemonic
     }
 
     fun saveMnemonic(mnemonic: String) {
         Log.i(TAG, "The recovery phrase is: $mnemonic")
-        sharedPreferencesManager.mnemonic = mnemonic
     }
 
     fun getMnemonic(): String {
