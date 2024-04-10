@@ -23,16 +23,16 @@ import com.goldenraven.devkitwallet.ui.components.PendingTransactionCard
 import com.goldenraven.devkitwallet.ui.components.SecondaryScreensAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 
-private const val TAG = "TransactionsScreen"
+private const val TAG = "TransactionHistoryScreen"
 
 @Composable
-internal fun TransactionsScreen(navController: NavController) {
+internal fun TransactionHistoryScreen(navController: NavController) {
     val (pendingTransactions, confirmedTransactions) = Wallet.getAllTxDetails().partition { it.pending }
 
     Scaffold(
         topBar = {
             SecondaryScreensAppBar(
-                title = "Transactions History",
+                title = "Transaction History",
                 navigation = { navController.navigate(Screen.HomeScreen.route) }
             )
         }

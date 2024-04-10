@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 thunderbiscuit and contributors.
+ * Copyright 2020-2024 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -16,7 +16,7 @@ import com.goldenraven.devkitwallet.ui.screens.wallet.RBFScreen
 import com.goldenraven.devkitwallet.ui.screens.wallet.ReceiveScreen
 import com.goldenraven.devkitwallet.ui.screens.wallet.SendScreen
 import com.goldenraven.devkitwallet.ui.screens.wallet.TransactionScreen
-import com.goldenraven.devkitwallet.ui.screens.wallet.TransactionsScreen
+import com.goldenraven.devkitwallet.ui.screens.wallet.TransactionHistoryScreen
 import com.goldenraven.devkitwallet.ui.screens.wallet.WalletHomeScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -109,7 +109,7 @@ fun WalletNavigation(drawerState: DrawerState) {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { TransactionsScreen(navController) }
+        ) { TransactionHistoryScreen(navController) }
 
         composable(
             route = "${Screen.TransactionScreen.route}/txid={txid}",

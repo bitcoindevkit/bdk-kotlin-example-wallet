@@ -112,7 +112,8 @@ fun PendingTransactionCard(details: TxDetails, navController: NavController) {
 fun pendingTransactionsItem(txDetails: TxDetails): String {
     return buildString {
         Log.i(TAG, "Pending transaction list item: $txDetails")
-        appendLine("Timestamp: Pending")
+
+        appendLine("Confirmation time: Pending")
         appendLine("Received: ${txDetails.received}")
         appendLine("Sent: ${txDetails.sent}")
         appendLine("Total fee: ${txDetails.fee} sat")
@@ -124,8 +125,8 @@ fun pendingTransactionsItem(txDetails: TxDetails): String {
 fun confirmedTransactionsItem(txDetails: TxDetails): String {
     return buildString {
         Log.i(TAG, "Transaction list item: $txDetails")
-        // appendLine("Timestamp")
-        appendLine("Time: ${txDetails.confirmationTimestamp?.timestamp?.timestampToString()}")
+
+        appendLine("Confirmation time: ${txDetails.confirmationTimestamp?.timestamp?.timestampToString()}")
         appendLine("Received: ${txDetails.received} sat")
         appendLine("Sent: ${txDetails.sent} sat")
         appendLine("Total fee: ${txDetails.fee} sat")
