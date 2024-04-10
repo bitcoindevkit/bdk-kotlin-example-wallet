@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -92,7 +93,7 @@ internal fun WalletChoiceScreen(
                     text = "Create a\nNew Wallet",
                     // fontSize = 18.sp,
                     // fontFamily = jetBrainsMonoLight,
-                    // textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Center,
                     // lineHeight = 28.sp,
                 )
             }
@@ -115,7 +116,7 @@ internal fun WalletChoiceScreen(
                     text = "Recover an\nExisting Wallet",
                     // fontSize = 18.sp,
                     // fontFamily = jetBrainsMonoLight,
-                    // textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Center,
                     // lineHeight = 28.sp,
                 )
             }
