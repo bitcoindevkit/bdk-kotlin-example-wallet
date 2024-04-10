@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.goldenraven.devkitwallet"
+        applicationId = "org.bitcoindevkit.devkitwallet"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -39,7 +39,7 @@ android {
         kotlinCompilerExtensionVersion = "1.5.5"
     }
 
-    namespace = "com.goldenraven.devkitwallet"
+    namespace = "org.bitcoindevkit.devkitwallet"
 }
 
 dependencies {
