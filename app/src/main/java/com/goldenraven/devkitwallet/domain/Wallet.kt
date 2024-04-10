@@ -19,6 +19,8 @@ import org.bitcoindevkit.TxBuilder
 import org.bitcoindevkit.PartiallySignedTransaction
 import org.bitcoindevkit.AddressInfo
 import org.bitcoindevkit.AddressIndex
+import org.bitcoindevkit.CanonicalTx
+import org.bitcoindevkit.ChainPosition
 import org.bitcoindevkit.FeeRate
 import org.bitcoindevkit.Update
 import org.bitcoindevkit.EsploraClient
@@ -181,21 +183,21 @@ object Wallet {
         return signedPsbt.extractTx().txid()
     }
 
-    fun getAllTransactions(): List<Transaction>  = wallet.transactions()
+    fun getAllTransactions(): List<CanonicalTx>  = wallet.transactions()
 
-    fun getTxDetails(transactions: List<Transaction>): List<TxDetails> {
-        val details = transactions.map { tx ->
-            val txid = tx.txid()
-            // val received = tx.received()
-            // val sent = tx.sent()
-            // val fee = tx.fee()
-            // val feeRate = tx.feeRate()
-            // val block = tx.blockHeight()
-            // val pending = tx.pending()
-            TxDetails(tx, txid)
-        }.toList()
-
-        return details
+    fun getAllTxDetails(): List<TxDetails> {
+        val transactions = getAllTransactions()
+        return transactions.map { tx ->
+            val txid = tx.transaction.txid()
+            val (sent, received) = wallet.sentAndReceived(tx.transaction)
+            val fee = wallet.calculateFee(tx.transaction)
+            val feeRate = wallet.calculateFeeRate(tx.transaction)
+            val (confirmationBlock, confirmationTimestamp, pending) = when (val position = tx.chainPosition) {
+                is ChainPosition.Unconfirmed -> Triple(null, null, true)
+                is ChainPosition.Confirmed -> Triple(ConfirmationBlock(position.height), Timestamp(position.timestamp), false)
+            }
+            TxDetails(tx.transaction, txid, sent, received, fee, feeRate, pending, confirmationBlock, confirmationTimestamp)
+        }
     }
 
     // fun getTransaction(txid: String): TransactionDetails? {
@@ -238,13 +240,20 @@ object Wallet {
 data class TxDetails(
     val transaction: Transaction,
     val txid: String,
-    // val received: ULong,
-    // val sent: ULong,
-    // val fee: ULong,
-    // val feeRate: FeeRate,
-    // val block: Int?,
-    // val pending: Boolean,
+    val sent: ULong,
+    val received: ULong,
+    val fee: ULong,
+    val feeRate: FeeRate,
+    val pending: Boolean,
+    val confirmationBlock: ConfirmationBlock?,
+    val confirmationTimestamp: Timestamp?,
 )
+
+@JvmInline
+value class Timestamp(val timestamp: ULong)
+
+@JvmInline
+value class ConfirmationBlock(val height: UInt)
 
 enum class ElectrumSettings {
     DEFAULT,

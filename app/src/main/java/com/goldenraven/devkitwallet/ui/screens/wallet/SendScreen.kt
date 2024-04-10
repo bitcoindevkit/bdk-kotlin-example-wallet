@@ -545,7 +545,7 @@ fun Dialog(
                         if (checkRecipientList(recipientList = recipientList, feeRate = feeRate, context = context)) {
                             broadcastTransaction(
                                 recipientList = recipientList,
-                                feeRate = feeRate.value.toFloat(),
+                                feeRate = feeRate.value.toULong(),
                                 transactionType = transactionType,
                                 rbfEnabled = rbfEnabled,
                                 opReturnMsg = opReturnMsg
@@ -578,7 +578,7 @@ fun Dialog(
 
 private fun broadcastTransaction(
     recipientList: MutableList<Recipient>,
-    feeRate: Float = 1F,
+    feeRate: ULong = 1uL,
     transactionType: TransactionType,
     rbfEnabled: Boolean,
     opReturnMsg: String?
