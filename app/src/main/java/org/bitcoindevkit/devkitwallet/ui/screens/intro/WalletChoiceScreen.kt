@@ -47,7 +47,7 @@ internal fun WalletChoiceScreen(
                 .background(DevkitWalletColors.primary)
                 .padding(paddingValues)
         ) {
-            val (logo, create, recover) = createRefs()
+            val (logo, active, create, recover) = createRefs()
 
             Row(
                 modifier = Modifier
@@ -75,11 +75,35 @@ internal fun WalletChoiceScreen(
             }
 
             Button(
+                onClick = { navController.navigate(Screen.ActiveWalletsScreen.route) },
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
+                shape = RoundedCornerShape(16.dp),
+                enabled = true,
+                modifier = Modifier
+                    .size(width = 300.dp, height = 150.dp)
+                    .padding(vertical = 8.dp, horizontal = 8.dp)
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
+                    .constrainAs(active) {
+                        bottom.linkTo(create.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            ) {
+                Text(
+                    text = "Use an\nActive Wallet",
+                    // fontSize = 18.sp,
+                    // fontFamily = jetBrainsMonoLight,
+                    textAlign = TextAlign.Center,
+                    // lineHeight = 28.sp,
+                )
+            }
+
+            Button(
                 onClick = { onBuildWalletButtonClicked(WalletCreateType.FROMSCRATCH) },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .size(width = 300.dp, height = 170.dp)
+                    .size(width = 300.dp, height = 150.dp)
                     .padding(vertical = 8.dp, horizontal = 8.dp)
                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
                     .constrainAs(create) {
@@ -102,7 +126,7 @@ internal fun WalletChoiceScreen(
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .size(width = 300.dp, height = 170.dp)
+                    .size(width = 300.dp, height = 150.dp)
                     .padding(vertical = 8.dp, horizontal = 8.dp)
                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
                     .constrainAs(recover) {

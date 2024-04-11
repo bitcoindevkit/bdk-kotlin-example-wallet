@@ -8,6 +8,7 @@ package org.bitcoindevkit.devkitwallet.ui
 sealed class Screen(val route: String) {
     // create wallet screens
     object WalletChoiceScreen : Screen("wallet_choice_screen")
+    object ActiveWalletsScreen : Screen("active_wallets_screen")
     object WalletRecoveryScreen : Screen("wallet_recovery_screen")
 
     // home screens
