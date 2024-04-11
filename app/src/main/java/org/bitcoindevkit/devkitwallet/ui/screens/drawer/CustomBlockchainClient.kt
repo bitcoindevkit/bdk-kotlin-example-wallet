@@ -22,7 +22,7 @@ import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 
 @Composable
-internal fun ElectrumScreen(navController: NavController) {
+internal fun CustomBlockchainClient(navController: NavController) {
     val focusManager = LocalFocusManager.current
     // val isBlockChainCreated = Wallet.isBlockChainCreated()
     val electrumServer: MutableState<String> = remember { mutableStateOf("") }
@@ -35,7 +35,7 @@ internal fun ElectrumScreen(navController: NavController) {
     Scaffold(
         topBar = {
             SecondaryScreensAppBar(
-                title = "Custom Electrum Server",
+                title = "Custom Blockchain Client",
                 navigation = { navController.navigate(Screen.WalletScreen.route) }
             )
         },

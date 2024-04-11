@@ -22,7 +22,6 @@ import org.bitcoindevkit.CanonicalTx
 import org.bitcoindevkit.ChainPosition
 import org.bitcoindevkit.FeeRate
 import org.bitcoindevkit.Update
-import org.bitcoindevkit.EsploraClient
 import org.bitcoindevkit.Script
 import org.bitcoindevkit.Transaction
 import org.bitcoindevkit.Wallet as BdkWallet
@@ -32,9 +31,16 @@ private const val TAG = "Wallet"
 object Wallet {
     private lateinit var wallet: BdkWallet
     private lateinit var path: String
+    private var currentBlockchainClient: BlockchainClient? = null
+    private val blockchainClients: MutableMap<ClientRank, BlockchainClient> = mutableMapOf()
+
+    init {
+        blockchainClients.put(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
+        currentBlockchainClient = blockchainClients[ClientRank.DEFAULT]
+    }
     // private lateinit var electrumServer: ElectrumServer
     // private val esploraClient: EsploraClient = EsploraClient("http://10.0.2.2:3002")
-    private val esploraClient: EsploraClient = EsploraClient("https://esplora.testnet.kuutamo.cloud/")
+    // private val esploraClient: EsploraClient = EsploraClient("https://esplora.testnet.kuutamo.cloud/")
     // to use Esplora on regtest locally, use the following address
     // private const val regtestEsploraUrl: String = "http://10.0.2.2:3002"
 
@@ -162,7 +168,7 @@ object Wallet {
     }
 
     fun broadcast(signedPsbt: PartiallySignedTransaction): String {
-        esploraClient.broadcast(signedPsbt.extractTx())
+        currentBlockchainClient?.broadcast(signedPsbt.extractTx()) ?: throw IllegalStateException("Blockchain client not initialized")
         return signedPsbt.extractTx().txid()
     }
 
@@ -195,7 +201,7 @@ object Wallet {
 
     fun sync() {
         Log.i(TAG, "Wallet is syncing")
-        val update: Update = esploraClient.fullScan(wallet, 10u, 1u)
+        val update: Update = currentBlockchainClient?.fullScan(wallet, 10u, 1u) ?: throw IllegalStateException("Blockchain client not initialized")
         wallet.applyUpdate(update)
     }
 

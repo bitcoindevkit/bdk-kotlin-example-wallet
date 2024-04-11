@@ -107,9 +107,9 @@ internal fun WalletRoot(navController: NavController) {
                         colors = navigationItemColors
                     )
                     NavigationDrawerItem(
-                        label = { DrawerItemLabel("Custom Electrum Server") },
+                        label = { DrawerItemLabel("Custom Blockchain Client") },
                         selected = items[2] == selectedItem.value,
-                        onClick = { navController.navigate(Screen.ElectrumScreen.route) },
+                        onClick = { navController.navigate(Screen.CustomBlockchainClient.route) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         colors = navigationItemColors
                     )

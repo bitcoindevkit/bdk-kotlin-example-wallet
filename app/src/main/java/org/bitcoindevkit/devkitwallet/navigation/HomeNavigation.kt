@@ -13,7 +13,7 @@ import androidx.navigation.NavHostController
 import org.bitcoindevkit.devkitwallet.ui.Screen
 import org.bitcoindevkit.devkitwallet.ui.screens.WalletRoot
 import org.bitcoindevkit.devkitwallet.ui.screens.drawer.AboutScreen
-import org.bitcoindevkit.devkitwallet.ui.screens.drawer.ElectrumScreen
+import org.bitcoindevkit.devkitwallet.ui.screens.drawer.CustomBlockchainClient
 import org.bitcoindevkit.devkitwallet.ui.screens.drawer.RecoveryPhraseScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -73,7 +73,7 @@ fun HomeNavigation() {
         ) { RecoveryPhraseScreen(navController = navController) }
 
         composable(
-            route = Screen.ElectrumScreen.route,
+            route = Screen.CustomBlockchainClient.route,
             enterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
@@ -86,6 +86,6 @@ fun HomeNavigation() {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             }
-        ) { ElectrumScreen(navController = navController) }
+        ) { CustomBlockchainClient(navController = navController) }
     }
 }

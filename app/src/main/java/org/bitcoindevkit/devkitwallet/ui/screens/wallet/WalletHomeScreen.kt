@@ -71,15 +71,10 @@ internal fun WalletHomeScreen(
     drawerState: DrawerState,
     walletViewModel: WalletViewModel = viewModel(),
 ) {
-
     val networkAvailable: Boolean = isOnline(LocalContext.current)
     val syncing by walletViewModel.syncing.observeAsState(true)
     val balance by walletViewModel.balance.observeAsState()
     val unit by walletViewModel.unit.observeAsState()
-    // if (networkAvailable && !Wallet.isBlockChainCreated()) {
-    //     Log.i(TAG, "Creating new blockchain")
-    //     Wallet.createBlockchain()
-    // }
 
     val interactionSource = remember { MutableInteractionSource() }
     val scope: CoroutineScope = rememberCoroutineScope()
@@ -139,11 +134,13 @@ internal fun WalletHomeScreen(
                 }
             }
             Spacer(modifier = Modifier.padding(4.dp))
-            Row(
-                modifier = Modifier.height(40.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                if (syncing) LoadingAnimation()
+            if (networkAvailable) {
+                Row(
+                    modifier = Modifier.height(40.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (syncing) LoadingAnimation()
+                }
             }
 
             if (!networkAvailable) {
@@ -158,7 +155,7 @@ internal fun WalletHomeScreen(
                     Text(
                         text = "Network unavailable",
                         fontFamily = jetBrainsMonoLight,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         color = DevkitWalletColors.white
                     )
                 }
