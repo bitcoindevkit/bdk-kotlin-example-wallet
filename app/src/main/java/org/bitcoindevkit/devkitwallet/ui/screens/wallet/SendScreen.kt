@@ -9,24 +9,31 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetScaffoldState
-import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.*
-import androidx.compose.material.Icon
-import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +51,13 @@ import org.bitcoindevkit.devkitwallet.ui.Screen
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import org.bitcoindevkit.devkitwallet.R
@@ -56,7 +69,8 @@ import org.bitcoindevkit.PartiallySignedTransaction
 
 private const val TAG = "SendScreen"
 
-@OptIn(ExperimentalMaterialApi::class)
+// @OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SendScreen(
     navController: NavController,
@@ -72,9 +86,7 @@ internal fun SendScreen(
     val rbfEnabled: MutableState<Boolean> = remember { mutableStateOf(false) }
     val opReturnMsg: MutableState<String?> = remember { mutableStateOf(null) }
 
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
-    )
+    val bottomSheetScaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState()
 
     BottomSheetScaffold(
         topBar = {
@@ -83,11 +95,9 @@ internal fun SendScreen(
                 navigation = { navController.navigate(Screen.HomeScreen.route) }
             )
         },
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = { AdvancedOptions(sendAll, rbfEnabled, opReturnMsg, recipientList) },
         scaffoldState = bottomSheetScaffoldState,
-        sheetBackgroundColor = DevkitWalletColors.primaryDark,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetElevation = 12.dp,
         sheetPeekHeight = 0.dp,
     ) { paddingValues ->
         ConstraintLayout(
@@ -158,7 +168,6 @@ internal fun SendScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AdvancedOptions(
     sendAll: MutableState<Boolean>,
@@ -261,10 +270,10 @@ internal fun AdvancedOptions(
                 },
                 singleLine = true,
                 textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
+                colors = OutlinedTextFieldDefaults.colors(
+                    cursorColor = DevkitWalletColors.accent1,
                     focusedBorderColor = DevkitWalletColors.accent1,
                     unfocusedBorderColor = DevkitWalletColors.white,
-                    cursorColor = DevkitWalletColors.accent1,
                 ),
             )
         }
@@ -320,7 +329,6 @@ internal fun AdvancedOptions(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
     LazyColumn (modifier = Modifier
@@ -347,10 +355,10 @@ private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
                     },
                     singleLine = true,
                     textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                    colors = OutlinedTextFieldDefaults.colors(
+                        cursorColor = DevkitWalletColors.accent1,
                         focusedBorderColor = DevkitWalletColors.accent1,
                         unfocusedBorderColor = DevkitWalletColors.white,
-                        cursorColor = DevkitWalletColors.accent1,
                     ),
                 )
             }
@@ -380,7 +388,6 @@ fun checkRecipientList(
     return true
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transactionType: TransactionType) {
     LazyColumn (modifier = Modifier
@@ -417,10 +424,10 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
                     },
                     singleLine = true,
                     textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                    colors = OutlinedTextFieldDefaults.colors(
+                        cursorColor = DevkitWalletColors.accent1,
                         focusedBorderColor = DevkitWalletColors.accent1,
                         unfocusedBorderColor = DevkitWalletColors.white,
-                        cursorColor = DevkitWalletColors.accent1,
                     ),
                     enabled = (
                             when (transactionType) {
@@ -434,7 +441,6 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionFeeInput(feeRate: MutableState<String>) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -454,16 +460,16 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
                     color = DevkitWalletColors.white,
                 )
             },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
+            colors = OutlinedTextFieldDefaults.colors(
+                cursorColor = DevkitWalletColors.accent1,
                 focusedBorderColor = DevkitWalletColors.accent1,
                 unfocusedBorderColor = DevkitWalletColors.white,
-                cursorColor = DevkitWalletColors.accent1,
             ),
         )
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: BottomSheetScaffoldState) {
     Column(
@@ -475,10 +481,10 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
         Button(
             onClick = {
                 coroutineScope.launch {
-                    if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                    if (!bottomSheetScaffoldState.bottomSheetState.isVisible) {
                         bottomSheetScaffoldState.bottomSheetState.expand()
                     } else {
-                        bottomSheetScaffoldState.bottomSheetState.collapse()
+                        bottomSheetScaffoldState.bottomSheetState.hide()
                     }
                 }
             },
@@ -591,7 +597,7 @@ private fun broadcastTransaction(
             // TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, FeeRate.fromSatPerVb(feeRate), rbfEnabled, opReturnMsg)
             TransactionType.SEND_ALL -> throw NotImplementedError("Send all not implemented")
         }
-        var isSigned = Wallet.sign(psbt)
+        val isSigned = Wallet.sign(psbt)
         if (isSigned) {
             val txid: String = Wallet.broadcast(psbt)
             Log.i(TAG, "Transaction was broadcast! txid: $txid")

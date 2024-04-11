@@ -40,7 +40,6 @@ internal fun WalletChoiceScreen(
     navController: NavController,
     onBuildWalletButtonClicked: (WalletCreateType) -> Unit
 ) {
-
     Scaffold { paddingValues ->
         ConstraintLayout(
             modifier = Modifier

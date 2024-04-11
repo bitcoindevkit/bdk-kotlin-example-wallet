@@ -6,7 +6,7 @@
 package org.bitcoindevkit.devkitwallet.ui.screens.wallet
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 

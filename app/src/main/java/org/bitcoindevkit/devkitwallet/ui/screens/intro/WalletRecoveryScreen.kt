@@ -6,15 +6,21 @@
 package org.bitcoindevkit.devkitwallet.ui.screens.intro
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.*
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -130,7 +136,7 @@ fun MyList(
             colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
-                .size(width = 300.dp, height = 100.dp)
+                // .size(width = 300.dp, height = 100.dp)
                 .padding(vertical = 8.dp, horizontal = 8.dp)
                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
         ) {
@@ -170,10 +176,10 @@ fun WordField(
             fontSize = 18.sp,
             color = DevkitWalletColors.white
         ),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
+        colors = OutlinedTextFieldDefaults.colors(
+            cursorColor = DevkitWalletColors.accent1,
             focusedBorderColor = DevkitWalletColors.accent1,
             unfocusedBorderColor = DevkitWalletColors.white,
-            cursorColor = DevkitWalletColors.accent1,
         ),
         modifier = Modifier
             .padding(8.dp),

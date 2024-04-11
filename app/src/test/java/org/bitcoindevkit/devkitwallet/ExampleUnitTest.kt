@@ -1,8 +1,8 @@
-package com.goldenraven.devkitwallet
+package org.bitcoindevkit.devkitwallet
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
-import org.junit.Assert.*
 
 class ExampleUnitTest {
     @Test
