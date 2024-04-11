@@ -11,7 +11,6 @@ import org.bitcoindevkit.Network
 import org.bitcoindevkit.Address
 import org.bitcoindevkit.Descriptor
 import org.bitcoindevkit.DescriptorSecretKey
-import org.bitcoindevkit.DerivationPath
 import org.bitcoindevkit.KeychainKind
 import org.bitcoindevkit.Mnemonic
 import org.bitcoindevkit.WordCount
@@ -31,7 +30,6 @@ import org.bitcoindevkit.Wallet as BdkWallet
 private const val TAG = "Wallet"
 
 object Wallet {
-
     private lateinit var wallet: BdkWallet
     private lateinit var path: String
     // private lateinit var electrumServer: ElectrumServer
@@ -40,7 +38,7 @@ object Wallet {
     // to use Esplora on regtest locally, use the following address
     // private const val regtestEsploraUrl: String = "http://10.0.2.2:3002"
 
-    // Setting the path requires the application context and is done once by the BdkSampleApplication class
+    // setting the path requires the application context and is done once by the DevkitWalletApplication class
     fun setPath(path: String) {
         Wallet.path = path
     }
@@ -78,21 +76,6 @@ object Wallet {
             changeDescriptor = changeDescriptor,
         )
         Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate(), mnemonic.asString())
-    }
-
-    // only create BIP84 compatible wallets
-    private fun createExternalDescriptor(rootKey: DescriptorSecretKey): String {
-        val externalPath: DerivationPath = DerivationPath("m/84h/1h/0h/0")
-        val externalDescriptor = "wpkh(${rootKey.extend(externalPath).asString()})"
-        Log.i(TAG, "Descriptor for receive addresses is $externalDescriptor")
-        return externalDescriptor
-    }
-
-    private fun createInternalDescriptor(rootKey: DescriptorSecretKey): String {
-        val internalPath: DerivationPath = DerivationPath("m/84h/1h/0h/1")
-        val internalDescriptor = "wpkh(${rootKey.extend(internalPath).asString()})"
-        Log.i(TAG, "Descriptor for change addresses is $internalDescriptor")
-        return internalDescriptor
     }
 
     // if the wallet already exists, its descriptors are stored in shared preferences

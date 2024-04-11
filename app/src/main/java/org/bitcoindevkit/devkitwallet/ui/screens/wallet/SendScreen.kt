@@ -29,7 +29,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SwitchDefaults
@@ -59,8 +58,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -69,7 +66,6 @@ import org.bitcoindevkit.PartiallySignedTransaction
 
 private const val TAG = "SendScreen"
 
-// @OptIn(ExperimentalMaterialApi::class)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SendScreen(
@@ -97,6 +93,7 @@ internal fun SendScreen(
         },
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = { AdvancedOptions(sendAll, rbfEnabled, opReturnMsg, recipientList) },
+        sheetContainerColor = DevkitWalletColors.primaryDark,
         scaffoldState = bottomSheetScaffoldState,
         sheetPeekHeight = 0.dp,
     ) { paddingValues ->
@@ -322,10 +319,9 @@ internal fun AdvancedOptions(
             ) {
                 Text(text = "+")
             }
-
-
         }
 
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -481,30 +477,21 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
         Button(
             onClick = {
                 coroutineScope.launch {
-                    if (!bottomSheetScaffoldState.bottomSheetState.isVisible) {
-                        bottomSheetScaffoldState.bottomSheetState.expand()
-                    } else {
-                        bottomSheetScaffoldState.bottomSheetState.hide()
-                    }
+                    bottomSheetScaffoldState.bottomSheetState.expand()
                 }
             },
             colors = ButtonDefaults.buttonColors(Color.Transparent),
             modifier = Modifier
-                .height(50.dp)
+                .height(60.dp)
                 .fillMaxWidth(fraction = 0.9f)
                 .padding(vertical = 8.dp)
         ) {
             Text(
-                text = "more options",
+                text = "advanced options",
                 fontSize = 14.sp,
                 fontFamily = jetBrainsMonoLight,
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_round_expand_more_24),
-                tint = DevkitWalletColors.white,
-                contentDescription = "More options"
             )
         }
     }
