@@ -17,7 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import org.bitcoindevkit.devkitwallet.domain.Repository
+// import org.bitcoindevkit.devkitwallet.domain.Repository
+import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.ui.Screen
 import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
@@ -26,7 +27,7 @@ import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
 @Composable
 internal fun RecoveryPhraseScreen(navController: NavController) {
 
-    val seedPhrase: String = Repository.getMnemonic()
+    val seedPhrase: String = Wallet.getRecoveryPhrase()
     val wordList: List<String> = seedPhrase.split(" ")
 
     Scaffold(

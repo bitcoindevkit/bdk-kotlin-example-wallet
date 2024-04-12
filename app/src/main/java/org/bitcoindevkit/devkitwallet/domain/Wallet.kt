@@ -6,6 +6,7 @@
 package org.bitcoindevkit.devkitwallet.domain
 
 import android.util.Log
+import kotlinx.coroutines.runBlocking
 import org.bitcoindevkit.devkitwallet.ui.screens.wallet.Recipient
 import org.bitcoindevkit.Network
 import org.bitcoindevkit.Address
@@ -24,6 +25,11 @@ import org.bitcoindevkit.FeeRate
 import org.bitcoindevkit.Update
 import org.bitcoindevkit.Script
 import org.bitcoindevkit.Transaction
+import org.bitcoindevkit.devkitwallet.NewWalletConfig
+import org.bitcoindevkit.devkitwallet.RecoverWalletConfig
+import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
+import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
+import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.Wallet as BdkWallet
 
 private const val TAG = "Wallet"
@@ -31,6 +37,7 @@ private const val TAG = "Wallet"
 object Wallet {
     private lateinit var wallet: BdkWallet
     private lateinit var path: String
+    private lateinit var recoveryPhrase: String
     private var currentBlockchainClient: BlockchainClient? = null
     private val blockchainClients: MutableMap<ClientRank, BlockchainClient> = mutableMapOf()
 
@@ -72,31 +79,40 @@ object Wallet {
     //     wallet.sync(electrumServer.server, LogProgress)
     // }
 
-    fun createWallet() {
+    fun createWallet(activeWalletsRepository: ActiveWalletsRepository) {
         val mnemonic = Mnemonic(WordCount.WORDS12)
-        val bip32ExtendedRootKey = DescriptorSecretKey(Network.REGTEST, mnemonic, null)
+        val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
         val descriptor: Descriptor = Descriptor.newBip86(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
         val changeDescriptor: Descriptor = Descriptor.newBip86(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
             descriptor = descriptor,
             changeDescriptor = changeDescriptor,
         )
-        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate(), mnemonic.asString())
+        recoveryPhrase = mnemonic.asString()
+        val newWallet: SingleWallet = SingleWallet.newBuilder()
+            .setName("Wallet")
+            .setNetwork(ActiveWalletNetwork.TESTNET)
+            .setScriptType(ActiveWalletScriptType.P2TR)
+            .setDescriptor(descriptor.asStringPrivate())
+            .setChangeDescriptor(changeDescriptor.asStringPrivate())
+            .setRecoveryPhrase(mnemonic.asString())
+            .build()
+        // TODO: launch this correctly, not on the main thread
+        runBlocking { activeWalletsRepository.updateActiveWallets(newWallet) }
     }
 
-    // if the wallet already exists, its descriptors are stored in shared preferences
-    fun loadExistingWallet() {
-        val initialWalletData: RequiredInitialWalletData = Repository.getInitialWalletData()
-        Log.i(TAG, "Loading existing wallet with descriptor: ${initialWalletData.descriptor}")
-        Log.i(TAG, "Loading existing wallet with change descriptor: ${initialWalletData.changeDescriptor}")
+    fun loadActiveWallet(activeWallet: SingleWallet) {
+        Log.i(TAG, "Loading existing wallet with descriptor: ${activeWallet.descriptor}")
+        Log.i(TAG, "Loading existing wallet with change descriptor: ${activeWallet.changeDescriptor}")
+        recoveryPhrase = activeWallet.recoveryPhrase
         initialize(
-            descriptor = Descriptor(initialWalletData.descriptor, Network.TESTNET),
-            changeDescriptor = Descriptor(initialWalletData.changeDescriptor, Network.TESTNET),
+            descriptor = Descriptor(activeWallet.descriptor, Network.TESTNET),
+            changeDescriptor = Descriptor(activeWallet.changeDescriptor, Network.TESTNET),
         )
     }
 
-    fun recoverWallet(recoveryPhrase: String) {
-        val mnemonic = Mnemonic.fromString(recoveryPhrase)
+    fun recoverWallet(recoverWalletConfig: RecoverWalletConfig, activeWalletsRepository: ActiveWalletsRepository) {
+        val mnemonic = Mnemonic.fromString(recoverWalletConfig.recoveryPhrase)
         val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
         val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
         val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
@@ -104,7 +120,21 @@ object Wallet {
             descriptor = descriptor,
             changeDescriptor = changeDescriptor,
         )
-        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate(), mnemonic.asString())
+        recoveryPhrase = mnemonic.asString()
+        val newWallet: SingleWallet = SingleWallet.newBuilder()
+            .setName(recoverWalletConfig.name)
+            .setNetwork(ActiveWalletNetwork.TESTNET)
+            .setScriptType(ActiveWalletScriptType.P2TR)
+            .setDescriptor(descriptor.asStringPrivate())
+            .setChangeDescriptor(changeDescriptor.asStringPrivate())
+            .setRecoveryPhrase(mnemonic.asString())
+            .build()
+        // TODO: launch this correctly, not on the main thread
+        runBlocking { activeWalletsRepository.updateActiveWallets(newWallet) }
+    }
+
+    fun getRecoveryPhrase(): String {
+        return recoveryPhrase
     }
 
     fun createTransaction(

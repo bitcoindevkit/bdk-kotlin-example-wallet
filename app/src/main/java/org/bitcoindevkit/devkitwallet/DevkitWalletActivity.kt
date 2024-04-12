@@ -5,52 +5,66 @@
 
 package org.bitcoindevkit.devkitwallet
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
-import org.bitcoindevkit.devkitwallet.domain.Repository
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
+import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
+import org.bitcoindevkit.devkitwallet.data.ActiveWallets
+import org.bitcoindevkit.devkitwallet.data.ActiveWalletsSerializer
+import org.bitcoindevkit.devkitwallet.data.SingleWallet
+import org.bitcoindevkit.devkitwallet.domain.ActiveWalletsRepository
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.navigation.HomeNavigation
 import org.bitcoindevkit.devkitwallet.navigation.CreateWalletNavigation
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitTheme
 
 private const val TAG = "DevkitWalletActivity"
+private val Context.activeWalletsStore: DataStore<ActiveWallets> by dataStore(
+    fileName = "wallets_preferences.pb",
+    serializer = ActiveWalletsSerializer
+)
 
 class DevkitWalletActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val activeWalletsRepository = ActiveWalletsRepository(activeWalletsStore)
+        lifecycleScope.launch {
+            val activeWallets =
+                async { activeWalletsRepository.fetchActiveWallets().walletsList }.await()
 
-        val onBuildWalletButtonClicked: (WalletCreateType) -> Unit = { walletCreateType ->
-            try {
-                // load up a wallet either from scratch or using a BIP39 recovery phrase
-                when (walletCreateType) {
-                    // if we create a wallet from scratch we don't need a recovery phrase
-                    is WalletCreateType.FROMSCRATCH -> Wallet.createWallet()
-
-                    is WalletCreateType.RECOVER -> Wallet.recoverWallet(walletCreateType.recoveryPhrase)
-                }
-                setContent {
-                    DevkitTheme {
-                        HomeNavigation()
+            val onBuildWalletButtonClicked: (WalletCreateType) -> Unit = { walletCreateType ->
+                try {
+                    when (walletCreateType) {
+                        is WalletCreateType.FROMSCRATCH -> Wallet.createWallet(
+                            activeWalletsRepository
+                        )
+                        is WalletCreateType.LOADEXISTING -> Wallet.loadActiveWallet(walletCreateType.activeWallet)
+                        is WalletCreateType.RECOVER -> Wallet.recoverWallet(
+                            walletCreateType.recoverWalletConfig,
+                            activeWalletsRepository
+                        )
                     }
+                    setContent {
+                        DevkitTheme {
+                            HomeNavigation()
+                        }
+                    }
+                } catch (e: Throwable) {
+                    Log.i(TAG, "Could not build wallet: $e")
                 }
-            } catch(e: Throwable) {
-                Log.i(TAG, "Could not build wallet: $e")
             }
-        }
 
-        if (Repository.doesWalletExist()) {
-            Wallet.loadExistingWallet()
             setContent {
                 DevkitTheme {
-                    HomeNavigation()
-                }
-            }
-        } else {
-            setContent {
-                DevkitTheme {
-                    CreateWalletNavigation(onBuildWalletButtonClicked)
+                    CreateWalletNavigation(onBuildWalletButtonClicked, activeWallets)
                 }
             }
         }
@@ -58,6 +72,20 @@ class DevkitWalletActivity : AppCompatActivity() {
 }
 
 sealed class WalletCreateType {
-    object FROMSCRATCH : WalletCreateType()
-    class RECOVER(val recoveryPhrase: String) : WalletCreateType()
+    data class FROMSCRATCH(val newWalletConfig: NewWalletConfig) : WalletCreateType()
+    data class LOADEXISTING(val activeWallet: SingleWallet) : WalletCreateType()
+    data class RECOVER(val recoverWalletConfig: RecoverWalletConfig) : WalletCreateType()
 }
+
+data class NewWalletConfig(
+    val name: String,
+    val network: ActiveWalletNetwork,
+    val scriptType: ActiveWalletScriptType,
+)
+
+data class RecoverWalletConfig(
+    val name: String,
+    val network: ActiveWalletNetwork,
+    val scriptType: ActiveWalletScriptType,
+    val recoveryPhrase: String,
+)

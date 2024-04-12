@@ -38,7 +38,10 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
+import org.bitcoindevkit.devkitwallet.RecoverWalletConfig
 import org.bitcoindevkit.devkitwallet.WalletCreateType
+import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
+import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
@@ -63,6 +66,7 @@ internal fun WalletRecoveryScreen(
 
             val (screenTitle, body) = createRefs()
 
+            val walletName = remember { mutableStateOf("") }
             val emptyRecoveryPhrase: Map<Int, String> = mapOf(
                 1 to "", 2 to "", 3 to "", 4 to "", 5 to "", 6 to "",
                 7 to "", 8 to "", 9 to "", 10 to "", 11 to "", 12 to ""
@@ -105,7 +109,13 @@ internal fun WalletRecoveryScreen(
                         height = Dimension.fillToConstraints
                     },
                 onClick = {
-                    onBuildWalletButtonClicked(WalletCreateType.RECOVER(buildRecoveryPhrase(recoveryPhraseWordMap)))
+                    val recoverWalletConfig = RecoverWalletConfig(
+                        name = "Recovered wallet",
+                        network = ActiveWalletNetwork.TESTNET,
+                        scriptType = ActiveWalletScriptType.P2TR,
+                        recoveryPhrase = buildRecoveryPhrase(recoveryPhraseWordMap),
+                    )
+                    onBuildWalletButtonClicked(WalletCreateType.RECOVER(recoverWalletConfig))
                 }
             )
         }

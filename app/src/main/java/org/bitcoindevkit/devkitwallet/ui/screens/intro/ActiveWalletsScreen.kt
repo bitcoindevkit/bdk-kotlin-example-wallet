@@ -6,19 +6,33 @@
 package org.bitcoindevkit.devkitwallet.ui.screens.intro
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import org.bitcoindevkit.devkitwallet.WalletCreateType
+import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @Composable
 internal fun ActiveWalletsScreen(
+    activeWallets: List<SingleWallet>,
     navController: NavController,
+    onBuildWalletButtonClicked: (WalletCreateType) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -28,9 +42,37 @@ internal fun ActiveWalletsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues)
                 .background(color = DevkitWalletColors.primary),
         ) {
-            Text(text = "Your Active Wallets")
+            activeWallets.forEach {
+                ActiveWalletCard(wallet = it, onBuildWalletButtonClicked)
+            }
         }
+    }
+}
+
+@Composable
+fun ActiveWalletCard(wallet: SingleWallet, onBuildWalletButtonClicked: (WalletCreateType) -> Unit) {
+    Row(
+        Modifier
+            .padding(horizontal = 8.dp, vertical = 6.dp)
+            .fillMaxWidth()
+            .background(
+                color = DevkitWalletColors.primaryLight,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clickable { onBuildWalletButtonClicked(WalletCreateType.LOADEXISTING(wallet)) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Absolute.SpaceBetween
+    ) {
+        Text(
+            "Name: ${wallet.name}\nNetwork: ${wallet.network}\nScript Type: ${wallet.scriptType}",
+            fontFamily = jetBrainsMonoLight,
+            fontSize = 12.sp,
+            lineHeight = 20.sp,
+            color = DevkitWalletColors.white,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }

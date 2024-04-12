@@ -6,8 +6,8 @@
 package org.bitcoindevkit.devkitwallet
 
 import android.app.Application
-import org.bitcoindevkit.devkitwallet.utils.SharedPreferencesManager
-import org.bitcoindevkit.devkitwallet.domain.Repository
+// import org.bitcoindevkit.devkitwallet.utils.SharedPreferencesManager
+// import org.bitcoindevkit.devkitwallet.domain.Repository
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 
 class DevkitWalletApplication : Application() {
@@ -18,11 +18,10 @@ class DevkitWalletApplication : Application() {
         Wallet.setPath(applicationContext.filesDir.toString())
 
         // initialize shared preferences manager object (singleton)
-        val sharedPreferencesManager = SharedPreferencesManager(
-            sharedPreferences = applicationContext.getSharedPreferences("current_wallet", MODE_PRIVATE)
-        )
-
+        // val sharedPreferencesManager = SharedPreferencesManager(
+        //     sharedPreferences = applicationContext.getSharedPreferences("current_wallet", MODE_PRIVATE)
+        // )
         // initialize Repository object with shared preferences
-        Repository.setSharedPreferences(sharedPreferencesManager)
+        // Repository.setSharedPreferences(sharedPreferencesManager)
     }
 }

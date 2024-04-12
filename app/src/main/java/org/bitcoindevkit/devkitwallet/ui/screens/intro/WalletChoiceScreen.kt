@@ -99,7 +99,7 @@ internal fun WalletChoiceScreen(
             }
 
             Button(
-                onClick = { onBuildWalletButtonClicked(WalletCreateType.FROMSCRATCH) },
+                onClick = { navController.navigate(Screen.CreateNewWalletScreen.route) },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier

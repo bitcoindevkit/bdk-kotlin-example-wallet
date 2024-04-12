@@ -17,11 +17,17 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import org.bitcoindevkit.devkitwallet.WalletCreateType
+import org.bitcoindevkit.devkitwallet.data.SingleWallet
+import org.bitcoindevkit.devkitwallet.domain.ActiveWalletsRepository
 import org.bitcoindevkit.devkitwallet.ui.screens.intro.ActiveWalletsScreen
+import org.bitcoindevkit.devkitwallet.ui.screens.intro.CreateNewWalletScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun CreateWalletNavigation(onBuildWalletButtonClicked: (WalletCreateType) -> Unit) {
+fun CreateWalletNavigation(
+    onBuildWalletButtonClicked: (WalletCreateType) -> Unit,
+    activeWallets: List<SingleWallet>,
+) {
     val navController: NavHostController = rememberAnimatedNavController()
     val animationDuration = 400
 
@@ -54,7 +60,23 @@ fun CreateWalletNavigation(onBuildWalletButtonClicked: (WalletCreateType) -> Uni
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { ActiveWalletsScreen(navController = navController) }
+        ) { ActiveWalletsScreen(activeWallets = activeWallets, navController = navController, onBuildWalletButtonClicked) }
+
+        composable(
+            route = Screen.CreateNewWalletScreen.route,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            }
+        ) { CreateNewWalletScreen(navController = navController, onBuildWalletButtonClicked) }
 
         composable(
             route = Screen.WalletRecoveryScreen.route,
