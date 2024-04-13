@@ -7,23 +7,24 @@ package org.bitcoindevkit.devkitwallet.ui.screens.intro
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -32,16 +33,16 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
+import org.bitcoindevkit.Network
 import org.bitcoindevkit.devkitwallet.RecoverWalletConfig
 import org.bitcoindevkit.devkitwallet.WalletCreateType
-import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
+import org.bitcoindevkit.devkitwallet.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
@@ -66,13 +67,16 @@ internal fun WalletRecoveryScreen(
 
             val (screenTitle, body) = createRefs()
 
-            val walletName = remember { mutableStateOf("") }
             val emptyRecoveryPhrase: Map<Int, String> = mapOf(
                 1 to "", 2 to "", 3 to "", 4 to "", 5 to "", 6 to "",
                 7 to "", 8 to "", 9 to "", 10 to "", 11 to "", 12 to ""
             )
             val (recoveryPhraseWordMap, setRecoveryPhraseWordMap) = remember { mutableStateOf(emptyRecoveryPhrase) }
-
+            val walletName: MutableState<String> = remember { mutableStateOf("") }
+            var selectedNetwork: Network by remember { mutableStateOf(Network.TESTNET) }
+            val network = listOf(Network.TESTNET)
+            var selectedScriptType: ActiveWalletScriptType by remember { mutableStateOf(ActiveWalletScriptType.P2TR) }
+            val scriptTypes = listOf(ActiveWalletScriptType.P2TR)
 
             // the app name
             Column(
@@ -85,15 +89,42 @@ internal fun WalletRecoveryScreen(
                     }
             ) {
                 Column {
-                    Text(
-                        text = "Enter your 12-word recovery phrase to recover an existing wallet.",
-                        color = DevkitWalletColors.white,
-                        fontSize = 14.sp,
-                        fontFamily = jetBrainsMonoLight,
+                    OutlinedTextField(
                         modifier = Modifier
-                            .padding(top = 70.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
-                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 8.dp),
+                        value = "",
+                        onValueChange = { walletName.value = it },
+                        label = {
+                            Text(
+                                text = "Wallet Name",
+                                color = DevkitWalletColors.white,
+                            )
+                        },
+                        singleLine = true,
+                        textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            cursorColor = DevkitWalletColors.accent1,
+                            focusedBorderColor = DevkitWalletColors.accent1,
+                            unfocusedBorderColor = DevkitWalletColors.white,
+                        ),
                     )
+
+                    network.forEach {
+                        RadioButtonWithLabel(
+                            label = it.name,
+                            isSelected = selectedNetwork == it,
+                            onSelect = { selectedNetwork = it }
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(8.dp))
+
+                    scriptTypes.forEach {
+                        RadioButtonWithLabel(
+                            label = it.name,
+                            isSelected = selectedScriptType == it,
+                            onSelect = { selectedScriptType = it }
+                        )
+                    }
                 }
             }
 
@@ -105,14 +136,13 @@ internal fun WalletRecoveryScreen(
                     .constrainAs(body) {
                         top.linkTo(screenTitle.bottom)
                         bottom.linkTo(parent.bottom)
-                        // bottom.linkTo(button.top)
                         height = Dimension.fillToConstraints
                     },
                 onClick = {
                     val recoverWalletConfig = RecoverWalletConfig(
-                        name = "Recovered wallet",
-                        network = ActiveWalletNetwork.TESTNET,
-                        scriptType = ActiveWalletScriptType.P2TR,
+                        name = walletName.value,
+                        network = selectedNetwork,
+                        scriptType = selectedScriptType,
                         recoveryPhrase = buildRecoveryPhrase(recoveryPhraseWordMap),
                     )
                     onBuildWalletButtonClicked(WalletCreateType.RECOVER(recoverWalletConfig))
@@ -141,22 +171,12 @@ fun MyList(
         for (i in 1..12) {
             WordField(wordNumber = i, recoveryPhraseWordMap, setRecoveryPhraseWordMap, focusManager)
         }
-        Button(
-            onClick = onClick,
-            colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier
-                // .size(width = 300.dp, height = 100.dp)
-                .padding(vertical = 8.dp, horizontal = 8.dp)
-                .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
-        ) {
-            Text(
-                text = "Recover Wallet",
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                lineHeight = 28.sp,
-            )
-        }
+
+        NeutralButton(
+            text = "Recover Wallet",
+            enabled = true,
+            onClick = { onClick() }
+        )
     }
 }
 

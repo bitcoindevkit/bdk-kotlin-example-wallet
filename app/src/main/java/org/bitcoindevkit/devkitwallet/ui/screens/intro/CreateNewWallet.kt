@@ -28,10 +28,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import org.bitcoindevkit.Network
+import org.bitcoindevkit.devkitwallet.NewWalletConfig
 import org.bitcoindevkit.devkitwallet.WalletCreateType
-import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
@@ -55,15 +55,14 @@ internal fun CreateNewWalletScreen(
                 .background(color = DevkitWalletColors.primary),
         ) {
             val walletName: MutableState<String> = remember { mutableStateOf("") }
-            var selectedNetwork: ActiveWalletNetwork by remember { mutableStateOf(ActiveWalletNetwork.TESTNET) }
-            val network = listOf(ActiveWalletNetwork.TESTNET)
+            var selectedNetwork: Network by remember { mutableStateOf(Network.TESTNET) }
+            val network = listOf(Network.TESTNET)
             var selectedScriptType: ActiveWalletScriptType by remember { mutableStateOf(ActiveWalletScriptType.P2TR) }
             val scriptTypes = listOf(ActiveWalletScriptType.P2TR)
 
             OutlinedTextField(
                 modifier = Modifier
                     .padding(vertical = 8.dp),
-                    // .weight(0.5f),
                 value = "",
                 onValueChange = { walletName.value = it },
                 label = {
@@ -101,7 +100,16 @@ internal fun CreateNewWalletScreen(
             NeutralButton(
                 text = "Create Wallet",
                 enabled = true,
-                onClick = { }
+                onClick = {
+                    val newWalletConfig = NewWalletConfig(
+                        name = walletName.value,
+                        network = selectedNetwork,
+                        scriptType = selectedScriptType
+                    )
+                    onBuildWalletButtonClicked(
+                        WalletCreateType.FROMSCRATCH(newWalletConfig)
+                    )
+                }
             )
         }
     }

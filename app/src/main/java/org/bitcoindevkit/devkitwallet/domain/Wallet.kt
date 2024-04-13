@@ -25,11 +25,11 @@ import org.bitcoindevkit.FeeRate
 import org.bitcoindevkit.Update
 import org.bitcoindevkit.Script
 import org.bitcoindevkit.Transaction
-import org.bitcoindevkit.devkitwallet.NewWalletConfig
 import org.bitcoindevkit.devkitwallet.RecoverWalletConfig
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
+import org.bitcoindevkit.devkitwallet.utils.intoProto
 import org.bitcoindevkit.Wallet as BdkWallet
 
 private const val TAG = "Wallet"
@@ -113,9 +113,9 @@ object Wallet {
 
     fun recoverWallet(recoverWalletConfig: RecoverWalletConfig, activeWalletsRepository: ActiveWalletsRepository) {
         val mnemonic = Mnemonic.fromString(recoverWalletConfig.recoveryPhrase)
-        val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
+        val bip32ExtendedRootKey = DescriptorSecretKey(recoverWalletConfig.network, mnemonic, null)
         val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
-        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
+        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, recoverWalletConfig.network)
         initialize(
             descriptor = descriptor,
             changeDescriptor = changeDescriptor,
@@ -123,7 +123,7 @@ object Wallet {
         recoveryPhrase = mnemonic.asString()
         val newWallet: SingleWallet = SingleWallet.newBuilder()
             .setName(recoverWalletConfig.name)
-            .setNetwork(ActiveWalletNetwork.TESTNET)
+            .setNetwork(recoverWalletConfig.network.intoProto())
             .setScriptType(ActiveWalletScriptType.P2TR)
             .setDescriptor(descriptor.asStringPrivate())
             .setChangeDescriptor(changeDescriptor.asStringPrivate())

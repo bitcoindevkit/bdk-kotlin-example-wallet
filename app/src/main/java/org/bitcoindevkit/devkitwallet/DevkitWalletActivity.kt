@@ -15,7 +15,7 @@ import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
+import org.bitcoindevkit.Network
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.ActiveWallets
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletsSerializer
@@ -79,13 +79,13 @@ sealed class WalletCreateType {
 
 data class NewWalletConfig(
     val name: String,
-    val network: ActiveWalletNetwork,
+    val network: Network,
     val scriptType: ActiveWalletScriptType,
 )
 
 data class RecoverWalletConfig(
     val name: String,
-    val network: ActiveWalletNetwork,
+    val network: Network,
     val scriptType: ActiveWalletScriptType,
     val recoveryPhrase: String,
 )
