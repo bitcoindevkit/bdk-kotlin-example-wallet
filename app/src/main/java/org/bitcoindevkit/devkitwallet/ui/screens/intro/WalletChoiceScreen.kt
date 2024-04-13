@@ -31,14 +31,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.ui.Screen
-import org.bitcoindevkit.devkitwallet.WalletCreateType
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
 
 @Composable
 internal fun WalletChoiceScreen(
     navController: NavController,
-    onBuildWalletButtonClicked: (WalletCreateType) -> Unit
 ) {
     Scaffold { paddingValues ->
         ConstraintLayout(
@@ -130,7 +128,7 @@ internal fun WalletChoiceScreen(
                     .padding(vertical = 8.dp, horizontal = 8.dp)
                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
                     .constrainAs(recover) {
-                        bottom.linkTo(parent.bottom, margin = 100.dp)
+                        bottom.linkTo(parent.bottom, margin = 70.dp)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }

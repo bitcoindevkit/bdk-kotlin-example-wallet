@@ -11,14 +11,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -30,9 +28,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.bitcoindevkit.Network
-import org.bitcoindevkit.devkitwallet.NewWalletConfig
 import org.bitcoindevkit.devkitwallet.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
+import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
 import org.bitcoindevkit.devkitwallet.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors

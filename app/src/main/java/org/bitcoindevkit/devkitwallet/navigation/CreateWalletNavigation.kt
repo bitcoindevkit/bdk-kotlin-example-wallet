@@ -44,7 +44,7 @@ fun CreateWalletNavigation(
             popEnterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             },
-        ) { WalletChoiceScreen(navController = navController, onBuildWalletButtonClicked) }
+        ) { WalletChoiceScreen(navController = navController) }
 
         composable(
             route = Screen.ActiveWalletsScreen.route,

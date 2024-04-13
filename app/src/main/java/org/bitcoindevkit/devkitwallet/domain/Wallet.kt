@@ -24,11 +24,13 @@ import org.bitcoindevkit.ChainPosition
 import org.bitcoindevkit.FeeRate
 import org.bitcoindevkit.Update
 import org.bitcoindevkit.Script
-import org.bitcoindevkit.Transaction
-import org.bitcoindevkit.devkitwallet.RecoverWalletConfig
+import org.bitcoindevkit.devkitwallet.data.RecoverWalletConfig
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
+import org.bitcoindevkit.devkitwallet.data.ConfirmationBlock
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
+import org.bitcoindevkit.devkitwallet.data.Timestamp
+import org.bitcoindevkit.devkitwallet.data.TxDetails
 import org.bitcoindevkit.devkitwallet.utils.intoProto
 import org.bitcoindevkit.Wallet as BdkWallet
 
@@ -239,7 +241,7 @@ object Wallet {
 
     fun getNewAddress(): AddressInfo = wallet.getAddress(AddressIndex.New)
 
-    fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LastUnused)
+    // fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LastUnused)
 
     // fun isBlockChainCreated() = ::electrumServer.isInitialized
 
@@ -255,26 +257,7 @@ object Wallet {
     // }
 }
 
-
-data class TxDetails(
-    val transaction: Transaction,
-    val txid: String,
-    val sent: ULong,
-    val received: ULong,
-    val fee: ULong,
-    val feeRate: FeeRate,
-    val pending: Boolean,
-    val confirmationBlock: ConfirmationBlock?,
-    val confirmationTimestamp: Timestamp?,
-)
-
-@JvmInline
-value class Timestamp(val timestamp: ULong)
-
-@JvmInline
-value class ConfirmationBlock(val height: UInt)
-
-enum class ElectrumSettings {
-    DEFAULT,
-    CUSTOM
-}
+// enum class ElectrumSettings {
+//     DEFAULT,
+//     CUSTOM
+// }
