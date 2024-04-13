@@ -17,6 +17,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.data.ActiveWallets
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletsSerializer
+import org.bitcoindevkit.devkitwallet.data.IntroDone
+import org.bitcoindevkit.devkitwallet.data.IntroDoneSerializer
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
 import org.bitcoindevkit.devkitwallet.data.RecoverWalletConfig
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
@@ -24,6 +26,7 @@ import org.bitcoindevkit.devkitwallet.domain.ActiveWalletsRepository
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.navigation.HomeNavigation
 import org.bitcoindevkit.devkitwallet.navigation.CreateWalletNavigation
+import org.bitcoindevkit.devkitwallet.ui.screens.intro.OnboardingScreen
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitTheme
 
 private const val TAG = "DevkitWalletActivity"
@@ -31,14 +34,24 @@ private val Context.activeWalletsStore: DataStore<ActiveWallets> by dataStore(
     fileName = "wallets_preferences.pb",
     serializer = ActiveWalletsSerializer
 )
+private val Context.introDoneStore: DataStore<IntroDone> by dataStore(
+    fileName = "intro_done.pb",
+    serializer = IntroDoneSerializer
+)
 
 class DevkitWalletActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val activeWalletsRepository = ActiveWalletsRepository(activeWalletsStore)
+        val activeWalletsRepository = ActiveWalletsRepository(activeWalletsStore, introDoneStore)
+
         lifecycleScope.launch {
-            val activeWallets =
-                async { activeWalletsRepository.fetchActiveWallets().walletsList }.await()
+            val activeWallets = async {
+                activeWalletsRepository.fetchActiveWallets().walletsList
+            }.await()
+
+            val onboardingDone = async {
+                activeWalletsRepository.fetchIntroDone().introDone
+            }.await()
 
             val onBuildWalletButtonClicked: (WalletCreateType) -> Unit = { walletCreateType ->
                 try {
@@ -62,9 +75,22 @@ class DevkitWalletActivity : AppCompatActivity() {
                 }
             }
 
+            val onFinishOnboarding: () -> Unit = {
+                lifecycleScope.launch { activeWalletsRepository.setIntroDone() }
+                setContent {
+                    DevkitTheme {
+                        CreateWalletNavigation(onBuildWalletButtonClicked, activeWallets)
+                    }
+                }
+            }
+
             setContent {
-                DevkitTheme {
-                    CreateWalletNavigation(onBuildWalletButtonClicked, activeWallets)
+                if (!onboardingDone) {
+                    OnboardingScreen(onFinishOnboarding)
+                } else {
+                    DevkitTheme {
+                        CreateWalletNavigation(onBuildWalletButtonClicked, activeWallets)
+                    }
                 }
             }
         }

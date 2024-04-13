@@ -42,3 +42,19 @@ object SingleWalletSerializer : Serializer<SingleWallet> {
         t.writeTo(output)
     }
 }
+
+object IntroDoneSerializer : Serializer<IntroDone> {
+    override val defaultValue: IntroDone = IntroDone.getDefaultInstance()
+
+    override suspend fun readFrom(input: InputStream): IntroDone {
+        try {
+            return IntroDone.parseFrom(input)
+        } catch (exception: InvalidProtocolBufferException) {
+            throw CorruptionException("Cannot read proto.", exception)
+        }
+    }
+
+    override suspend fun writeTo(t: IntroDone, output: OutputStream) {
+        t.writeTo(output)
+    }
+}

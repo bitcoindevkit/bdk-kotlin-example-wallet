@@ -9,10 +9,22 @@ import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.data.ActiveWallets
+import org.bitcoindevkit.devkitwallet.data.IntroDone
 
 class ActiveWalletsRepository(
     private val walletsPreferencesStore: DataStore<ActiveWallets>,
+    private val introDonePreferencesStore: DataStore<IntroDone>
 ) {
+    suspend fun fetchIntroDone(): IntroDone {
+        return introDonePreferencesStore.data.first()
+    }
+
+    suspend fun setIntroDone() {
+        introDonePreferencesStore.updateData { currentPreferences ->
+            currentPreferences.toBuilder().setIntroDone(true).build()
+        }
+    }
+
     suspend fun fetchActiveWallets(): ActiveWallets {
         return walletsPreferencesStore.data.first()
     }
