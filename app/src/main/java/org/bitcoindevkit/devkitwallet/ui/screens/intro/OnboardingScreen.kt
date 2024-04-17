@@ -12,16 +12,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -44,7 +48,7 @@ fun OnboardingScreen(onFinishOnboarding: () -> Unit) {
             .fillMaxSize()
             .background(DevkitWalletColors.primary)
     ) {
-        val (logo, intro, buttons) = createRefs()
+        val (logo, intro, progress, buttons) = createRefs()
 
         Image(
             painter = painterResource(id = R.drawable.bdk_logo),
@@ -77,6 +81,43 @@ fun OnboardingScreen(onFinishOnboarding: () -> Unit) {
                 2 -> IntroTextPart(messages[2])
                 3 -> IntroTextPart(messages[3])
             }
+        }
+
+        Row(
+            modifier = Modifier.constrainAs(progress) {
+                bottom.linkTo(buttons.top, margin = 32.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .size(size = 16.dp)
+                    .clip(shape = CircleShape)
+                    .background(
+                        if (currentIndex == 1) Color(0xffE9C46A) else Color(0xffE9C46A).copy(alpha = 0.3f)
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .size(size = 16.dp)
+                    .clip(shape = CircleShape)
+                    .background(
+                        if (currentIndex == 2) Color(0xffE9C46A) else Color(0xffE9C46A).copy(alpha = 0.3f)
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .size(size = 16.dp)
+                    .clip(shape = CircleShape)
+                    .background(
+                        if (currentIndex == 3) Color(0xffE9C46A) else Color(0xffE9C46A).copy(alpha = 0.3f)
+                    )
+            )
         }
 
         Row(
