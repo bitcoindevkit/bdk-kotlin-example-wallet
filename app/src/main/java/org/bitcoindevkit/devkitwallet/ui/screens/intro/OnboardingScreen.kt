@@ -5,16 +5,123 @@
 
 package org.bitcoindevkit.devkitwallet.ui.screens.intro
 
-import androidx.compose.material3.Button
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import org.bitcoindevkit.devkitwallet.R
+import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.ui.theme.devkitTypography
 
 @Composable
 fun OnboardingScreen(onFinishOnboarding: () -> Unit) {
-    Text(text = "Onboarding Screen")
-    Button(
-        onClick = { onFinishOnboarding() }
+    val (currentIndex, setCurrentIndex) = remember { mutableStateOf(1) }
+    val messages = listOf(
+        "Easter egg #1: \uD83E\uDD5A",
+        "Welcome to the Devkit Wallet! This app is a playground for developers and bitcoin enthusiasts to experiment with Bitcoin.",
+        "It is developed with the Bitcoin Dev Kit, a powerful library produced and maintained by the Bitcoin Dev Kit Foundation.",
+        "The Foundation maintains this app as a way to showcase the capabilities of the Bitcoin Dev Kit and to provide a starting point for developers to build their own apps.\nIt is not a production application, and only works for testnet, signet, and regtest. Have fun!"
+    )
+
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(DevkitWalletColors.primary)
     ) {
-        Text(text = "Finish Onboarding")
+        val (logo, intro, buttons) = createRefs()
+
+        Image(
+            painter = painterResource(id = R.drawable.bdk_logo),
+            contentDescription = "Bitcoin Dev Kit logo",
+            Modifier
+                .size(180.dp)
+                .constrainAs(logo) {
+                    top.linkTo(parent.top, margin = 90.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+        )
+
+        Crossfade(
+            modifier = Modifier.constrainAs(intro) {
+                top.linkTo(logo.bottom, margin = 90.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            targetState = currentIndex,
+            label = "",
+            animationSpec = tween(
+                durationMillis = 1000,
+                delayMillis = 200,
+            )
+        ) { screen ->
+            when (screen) {
+                0 -> IntroTextPart(messages[0])
+                1 -> IntroTextPart(messages[1])
+                2 -> IntroTextPart(messages[2])
+                3 -> IntroTextPart(messages[3])
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp)
+                .constrainAs(buttons) {
+                    bottom.linkTo(parent.bottom, margin = 32.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = "Previous",
+                modifier = Modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                ) { setCurrentIndex((currentIndex - 1).coerceIn(0, 3)) },
+                color = DevkitWalletColors.white,
+                style = devkitTypography.labelLarge
+            )
+            Text(
+                text = if (currentIndex < 3) "Next" else "Awesome!",
+                modifier = Modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        if (currentIndex < 3) setCurrentIndex((currentIndex + 1).coerceIn(0, 3)) else onFinishOnboarding()
+                    },
+                color = DevkitWalletColors.white,
+                style = devkitTypography.labelLarge
+            )
+        }
     }
+}
+
+@Composable
+fun IntroTextPart(message: String) {
+    Text(
+        text = message,
+        modifier = Modifier.padding(horizontal = 32.dp),
+        color = DevkitWalletColors.white,
+        style = devkitTypography.labelLarge
+    )
 }
