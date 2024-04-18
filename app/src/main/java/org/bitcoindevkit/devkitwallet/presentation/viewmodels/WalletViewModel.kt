@@ -13,6 +13,7 @@ import org.bitcoindevkit.devkitwallet.domain.Wallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
 
 internal class WalletViewModel : ViewModel() {
 
@@ -46,9 +47,4 @@ internal class WalletViewModel : ViewModel() {
             }
         }
     }
-}
-
-enum class CurrencyUnit {
-    Bitcoin,
-    Satoshi
 }
