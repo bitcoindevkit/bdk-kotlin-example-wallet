@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package org.bitcoindevkit.devkitwallet.ui.screens.wallet
+package org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable

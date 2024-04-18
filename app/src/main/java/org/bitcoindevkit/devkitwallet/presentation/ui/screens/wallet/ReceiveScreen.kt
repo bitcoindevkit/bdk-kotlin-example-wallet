@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package org.bitcoindevkit.devkitwallet.ui.screens.wallet
+package org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -36,8 +36,8 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.core.graphics.createBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.ui.Screen
-import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
+import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoRegular
 import com.google.zxing.BarcodeFormat

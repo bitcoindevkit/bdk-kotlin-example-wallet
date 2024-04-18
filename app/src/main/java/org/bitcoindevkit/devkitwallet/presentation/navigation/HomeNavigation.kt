@@ -10,11 +10,11 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import org.bitcoindevkit.devkitwallet.ui.Screen
+import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
 import org.bitcoindevkit.devkitwallet.ui.screens.WalletRoot
-import org.bitcoindevkit.devkitwallet.ui.screens.drawer.AboutScreen
-import org.bitcoindevkit.devkitwallet.ui.screens.drawer.CustomBlockchainClient
-import org.bitcoindevkit.devkitwallet.ui.screens.drawer.RecoveryPhraseScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.AboutScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.CustomBlockchainClient
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.RecoveryPhraseScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController

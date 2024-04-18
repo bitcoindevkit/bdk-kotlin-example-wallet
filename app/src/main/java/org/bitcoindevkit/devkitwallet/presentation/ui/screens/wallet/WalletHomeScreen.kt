@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package org.bitcoindevkit.devkitwallet.ui.screens.wallet
+package org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -50,18 +50,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import org.bitcoindevkit.devkitwallet.ui.Screen
-import org.bitcoindevkit.devkitwallet.ui.components.LoadingAnimation
-import org.bitcoindevkit.devkitwallet.ui.components.NeutralButton
+import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.LoadingAnimation
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoSemiBold
 import org.bitcoindevkit.devkitwallet.domain.utils.formatInBtc
-import org.bitcoindevkit.devkitwallet.presentation.viewmodels.CurrencyUnit
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.R
+import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
 
 private const val TAG = "WalletHomeScreen"
 

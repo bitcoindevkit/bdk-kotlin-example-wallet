@@ -10,17 +10,16 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import org.bitcoindevkit.devkitwallet.ui.Screen
-import org.bitcoindevkit.devkitwallet.ui.screens.intro.WalletChoiceScreen
-import org.bitcoindevkit.devkitwallet.ui.screens.intro.WalletRecoveryScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.WalletChoiceScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.WalletRecoveryScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import org.bitcoindevkit.devkitwallet.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
-import org.bitcoindevkit.devkitwallet.domain.ActiveWalletsRepository
-import org.bitcoindevkit.devkitwallet.ui.screens.intro.ActiveWalletsScreen
-import org.bitcoindevkit.devkitwallet.ui.screens.intro.CreateNewWalletScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.ActiveWalletsScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.CreateNewWalletScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

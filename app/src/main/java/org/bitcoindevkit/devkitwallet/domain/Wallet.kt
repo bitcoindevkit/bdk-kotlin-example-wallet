@@ -7,7 +7,7 @@ package org.bitcoindevkit.devkitwallet.domain
 
 import android.util.Log
 import kotlinx.coroutines.runBlocking
-import org.bitcoindevkit.devkitwallet.ui.screens.wallet.Recipient
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.Recipient
 import org.bitcoindevkit.Network
 import org.bitcoindevkit.Address
 import org.bitcoindevkit.Descriptor

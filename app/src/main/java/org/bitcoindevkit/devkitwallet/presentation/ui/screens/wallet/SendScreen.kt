@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package org.bitcoindevkit.devkitwallet.ui.screens.wallet
+package org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet
 
 import android.content.Context
 import android.util.Log
@@ -46,7 +46,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.domain.Wallet
-import org.bitcoindevkit.devkitwallet.ui.Screen
+import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
 import androidx.compose.material3.TextButton
@@ -58,7 +58,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
-import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.FeeRate

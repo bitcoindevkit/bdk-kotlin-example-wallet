@@ -11,17 +11,16 @@ import androidx.compose.animation.core.tween
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import org.bitcoindevkit.devkitwallet.ui.Screen
-import org.bitcoindevkit.devkitwallet.ui.screens.wallet.RBFScreen
-import org.bitcoindevkit.devkitwallet.ui.screens.wallet.ReceiveScreen
-import org.bitcoindevkit.devkitwallet.ui.screens.wallet.SendScreen
-import org.bitcoindevkit.devkitwallet.ui.screens.wallet.TransactionScreen
-import org.bitcoindevkit.devkitwallet.ui.screens.wallet.TransactionHistoryScreen
-import org.bitcoindevkit.devkitwallet.ui.screens.wallet.WalletHomeScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.RBFScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.ReceiveScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.SendScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.TransactionScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.TransactionHistoryScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.WalletHomeScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import org.bitcoindevkit.devkitwallet.presentation.viewmodels.AddressViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
