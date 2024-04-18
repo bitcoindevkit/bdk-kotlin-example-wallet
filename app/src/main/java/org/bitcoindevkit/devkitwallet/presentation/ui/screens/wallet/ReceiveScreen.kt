@@ -23,8 +23,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -42,21 +40,22 @@ import org.bitcoindevkit.devkitwallet.ui.Screen
 import org.bitcoindevkit.devkitwallet.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoRegular
-import org.bitcoindevkit.devkitwallet.viewmodels.AddressViewModel
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.ReceiveScreenAction
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.AddressViewModel
 
 private const val TAG = "ReceiveScreen"
 
 @Composable
 internal fun ReceiveScreen(
     navController: NavController,
-    addressViewModel: AddressViewModel = viewModel()
+    addressViewModel: AddressViewModel = viewModel<AddressViewModel>()
 ) {
-
-    val address by addressViewModel.address.observeAsState(null)
-    val addressIndex by addressViewModel.addressIndex.observeAsState("")
+    Log.i(TAG, "We are recomposing the ReceiveScreen")
+    val state = addressViewModel.state
+    val onAction = addressViewModel::onAction
 
     Scaffold(
         topBar = {
@@ -85,8 +84,8 @@ internal fun ReceiveScreen(
                     height = Dimension.fillToConstraints
                 }
             ) {
-                val QR: ImageBitmap? = address?.let { addressToQR(it) }
-                Log.i("ReceiveScreen", "New receive address is $address")
+                val QR: ImageBitmap? = state.address?.let { addressToQR(it) }
+                Log.i("ReceiveScreen", "New receive address is ${state.address}")
                 if (QR != null) {
                     Image(
                         bitmap = QR,
@@ -96,14 +95,14 @@ internal fun ReceiveScreen(
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
                     SelectionContainer {
                         Text(
-                            text = address!!,
+                            text = state.address,
                             fontFamily = jetBrainsMonoRegular,
                             color = DevkitWalletColors.white
                         )
                     }
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
                     Text(
-                        text = "m/84h/1h/0h/0/$addressIndex",
+                        text = "m/84h/1h/0h/0/${state.addressIndex}",
                         fontFamily = jetBrainsMonoRegular,
                         color = DevkitWalletColors.white
                     )
@@ -120,7 +119,7 @@ internal fun ReceiveScreen(
                     .padding(bottom = 24.dp)
             ) {
                 Button(
-                    onClick = { addressViewModel.updateAddress() },
+                    onClick = { onAction(ReceiveScreenAction.UpdateAddress) },
                     colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier

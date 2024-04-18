@@ -31,7 +31,7 @@ import org.bitcoindevkit.devkitwallet.data.ConfirmationBlock
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.data.Timestamp
 import org.bitcoindevkit.devkitwallet.data.TxDetails
-import org.bitcoindevkit.devkitwallet.utils.intoProto
+import org.bitcoindevkit.devkitwallet.domain.utils.intoProto
 import org.bitcoindevkit.Wallet as BdkWallet
 
 private const val TAG = "Wallet"

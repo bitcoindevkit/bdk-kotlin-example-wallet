@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package org.bitcoindevkit.devkitwallet.navigation
+package org.bitcoindevkit.devkitwallet.presentation.navigation
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -21,6 +21,7 @@ import org.bitcoindevkit.devkitwallet.ui.screens.wallet.WalletHomeScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.AddressViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -57,7 +58,7 @@ fun WalletNavigation(drawerState: DrawerState) {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { ReceiveScreen(navController) }
+        ) { ReceiveScreen(navController, ) }
 
         composable(
             route = Screen.SendScreen.route,

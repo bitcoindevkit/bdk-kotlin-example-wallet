@@ -56,9 +56,9 @@ import org.bitcoindevkit.devkitwallet.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoSemiBold
-import org.bitcoindevkit.devkitwallet.utils.formatInBtc
-import org.bitcoindevkit.devkitwallet.viewmodels.CurrencyUnit
-import org.bitcoindevkit.devkitwallet.viewmodels.WalletViewModel
+import org.bitcoindevkit.devkitwallet.domain.utils.formatInBtc
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.CurrencyUnit
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.R

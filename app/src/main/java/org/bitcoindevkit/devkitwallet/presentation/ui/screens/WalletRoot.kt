@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.ui.Screen
 import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.navigation.WalletNavigation
+import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletNavigation
 import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
 import org.bitcoindevkit.devkitwallet.R
 
