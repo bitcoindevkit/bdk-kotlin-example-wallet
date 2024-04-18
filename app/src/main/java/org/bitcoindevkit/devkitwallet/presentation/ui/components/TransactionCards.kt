@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.data.TxDetails
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.viewTransaction
-import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
 import org.bitcoindevkit.devkitwallet.domain.utils.timestampToString
 
 private const val TAG = "TransactionCards"

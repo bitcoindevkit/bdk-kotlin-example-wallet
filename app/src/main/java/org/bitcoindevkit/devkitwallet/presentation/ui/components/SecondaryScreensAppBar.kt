@@ -15,8 +15,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.sp
-import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoRegular
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoRegular
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

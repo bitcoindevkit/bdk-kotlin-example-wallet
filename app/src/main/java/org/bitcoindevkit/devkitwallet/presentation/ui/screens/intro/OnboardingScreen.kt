@@ -30,8 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import org.bitcoindevkit.devkitwallet.R
-import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.ui.theme.devkitTypography
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.devkitTypography
 
 @Composable
 fun OnboardingScreen(onFinishOnboarding: () -> Unit) {

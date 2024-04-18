@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme -->
-    <style name="Theme.BitcoindevkitSampleApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.BitcoindevkitSampleApp" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Status bar color -->
         <item name="android:statusBarColor">@color/primary_dark</item>
     </style>

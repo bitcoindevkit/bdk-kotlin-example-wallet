@@ -44,17 +44,17 @@ android {
 }
 
 dependencies {
-    // basic android dependencies
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
-    implementation("androidx.core:core-ktx:1.12.0")
+    // Basic android dependencies
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("androidx.datastore:datastore:1.1.0")
     implementation("com.google.protobuf:protobuf-javalite:3.18.0")
 
-    // compose
+    // Jetpack Compose
     // Adding the Bill of Materials synchronizes dependencies in the androidx.compose namespace
     // You can remove the library version in your dependency declarations
-    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
+    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
     // implementation("androidx.compose.material:material")
     implementation("androidx.compose.animation:animation")
     implementation("androidx.compose.ui:ui-tooling")
@@ -62,22 +62,22 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.activity:activity-compose")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-    // implementation("androidx.navigation:navigation-compose:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.23.1")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    // implementation("com.google.accompanist:accompanist-navigation-animation:0.23.1")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.23.1")
 
-    // toolbar
+    // Toolbar
     implementation("androidx.appcompat:appcompat:1.6.1")
 
-    // bitcoindevkit
+    // Bitcoin Development Kit
     implementation("org.bitcoindevkit:bdk-android:1.0.0-alpha.8-SNAPSHOT")
 
-    // qr codes
+    // QR codes
     implementation("com.google.zxing:core:3.4.1")
 
-    // tests
+    // Tests
     testImplementation ("junit:junit:4.13.2")
     androidTestImplementation ("androidx.test.ext:junit:1.1.5")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")

@@ -27,7 +27,7 @@ import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.navigation.HomeNavigation
 import org.bitcoindevkit.devkitwallet.presentation.navigation.CreateWalletNavigation
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.OnboardingScreen
-import org.bitcoindevkit.devkitwallet.ui.theme.DevkitTheme
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitTheme
 
 private const val TAG = "DevkitWalletActivity"
 private val Context.activeWalletsStore: DataStore<ActiveWallets> by dataStore(

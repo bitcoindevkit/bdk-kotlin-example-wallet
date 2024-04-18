@@ -30,8 +30,8 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
-import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
 
 @Composable
 internal fun TransactionScreen(

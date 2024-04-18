@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
-import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 
 @Composable
 internal fun CustomBlockchainClient(navController: NavController) {

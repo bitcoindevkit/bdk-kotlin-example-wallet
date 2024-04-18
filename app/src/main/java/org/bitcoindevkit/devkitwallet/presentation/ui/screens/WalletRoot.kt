@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package org.bitcoindevkit.devkitwallet.ui.screens
+package org.bitcoindevkit.devkitwallet.presentation.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,9 +36,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
-import org.bitcoindevkit.devkitwallet.ui.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletNavigation
-import org.bitcoindevkit.devkitwallet.ui.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
 import org.bitcoindevkit.devkitwallet.R
 
 @OptIn(androidx.compose.animation.ExperimentalAnimationApi::class)
