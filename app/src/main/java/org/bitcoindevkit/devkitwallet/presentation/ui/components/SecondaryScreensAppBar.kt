@@ -6,6 +6,7 @@
 package org.bitcoindevkit.devkitwallet.presentation.ui.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,7 +37,7 @@ internal fun SecondaryScreensAppBar(
         navigationIcon = {
             IconButton(onClick = navigation) {
                 Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = "Back",
                     tint = DevkitWalletColors.white
                 )
