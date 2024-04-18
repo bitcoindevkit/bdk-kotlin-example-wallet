@@ -35,8 +35,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -62,6 +60,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
 private const val TAG = "WalletHomeScreen"
 
@@ -69,12 +69,11 @@ private const val TAG = "WalletHomeScreen"
 internal fun WalletHomeScreen(
     navController: NavHostController,
     drawerState: DrawerState,
-    walletViewModel: WalletViewModel = viewModel(),
+    walletViewModel: WalletViewModel = viewModel<WalletViewModel>(),
 ) {
     val networkAvailable: Boolean = isOnline(LocalContext.current)
-    val syncing by walletViewModel.syncing.observeAsState(true)
-    val balance by walletViewModel.balance.observeAsState()
-    val unit by walletViewModel.unit.observeAsState()
+    val state: WalletScreenState = walletViewModel.state
+    val onAction = walletViewModel::onAction
 
     val interactionSource = remember { MutableInteractionSource() }
     val scope: CoroutineScope = rememberCoroutineScope()
@@ -95,7 +94,7 @@ internal fun WalletHomeScreen(
                     .clickable(
                         interactionSource,
                         indication = null,
-                        onClick = { walletViewModel.switchUnit() }
+                        onClick = { onAction(WalletScreenAction.SwitchUnit) }
                     )
                     .fillMaxWidth(0.9f)
                     .padding(horizontal = 8.dp)
@@ -107,8 +106,8 @@ internal fun WalletHomeScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                when(unit) {
-                    CurrencyUnit.Bitcoin, null -> {
+                when(state.unit) {
+                    CurrencyUnit.Bitcoin -> {
                         Image(
                             painter = painterResource(id = R.drawable.ic_bitcoin_logo),
                             contentDescription = "Bitcoin testnet logo",
@@ -117,7 +116,7 @@ internal fun WalletHomeScreen(
                                 .rotate(-13f)
                         )
                         Text(
-                            text = balance.formatInBtc(),
+                            text = state.balance.formatInBtc(),
                             fontFamily = jetBrainsMonoSemiBold,
                             fontSize = 32.sp,
                             color = DevkitWalletColors.white
@@ -125,7 +124,7 @@ internal fun WalletHomeScreen(
                     }
                     CurrencyUnit.Satoshi -> {
                         Text(
-                            text = "$balance sat",
+                            text = "${state.balance} sat",
                             fontFamily = jetBrainsMonoSemiBold,
                             fontSize = 32.sp,
                             color = DevkitWalletColors.white
@@ -139,7 +138,7 @@ internal fun WalletHomeScreen(
                     modifier = Modifier.height(40.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (syncing) LoadingAnimation()
+                    if (state.syncing) LoadingAnimation()
                 }
             }
 
@@ -164,7 +163,7 @@ internal fun WalletHomeScreen(
             NeutralButton(
                 text = "sync",
                 enabled = networkAvailable,
-                onClick = { walletViewModel.updateBalance() }
+                onClick = { onAction(WalletScreenAction.UpdateBalance) }
             )
 
             NeutralButton(

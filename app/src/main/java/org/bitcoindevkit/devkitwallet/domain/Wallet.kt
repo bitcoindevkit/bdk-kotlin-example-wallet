@@ -45,6 +45,7 @@ object Wallet {
 
     init {
         blockchainClients.put(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
+        // blockchainClients.put(ClientRank.DEFAULT, EsploraClient("https://blockstream.info/testnet/api/"))
         currentBlockchainClient = blockchainClients[ClientRank.DEFAULT]
     }
     // private lateinit var electrumServer: ElectrumServer
@@ -84,8 +85,8 @@ object Wallet {
     fun createWallet(activeWalletsRepository: ActiveWalletsRepository) {
         val mnemonic = Mnemonic(WordCount.WORDS12)
         val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
-        val descriptor: Descriptor = Descriptor.newBip86(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
-        val changeDescriptor: Descriptor = Descriptor.newBip86(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
+        val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
             descriptor = descriptor,
             changeDescriptor = changeDescriptor,

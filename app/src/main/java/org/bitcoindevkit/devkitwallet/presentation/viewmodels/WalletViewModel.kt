@@ -5,8 +5,10 @@
 
 package org.bitcoindevkit.devkitwallet.presentation.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import org.bitcoindevkit.devkitwallet.domain.Wallet
@@ -14,36 +16,38 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
+
+private const val TAG = "WalletViewModel"
 
 internal class WalletViewModel : ViewModel() {
 
-    private var _balance: MutableLiveData<ULong> = MutableLiveData(0u)
-    val balance: LiveData<ULong>
-        get() = _balance
+    var state: WalletScreenState by mutableStateOf(WalletScreenState())
+        private set
 
-    private var _syncing: MutableLiveData<Boolean> = MutableLiveData(false)
-    val syncing: LiveData<Boolean>
-        get() = _syncing
-
-    private var _unit: MutableLiveData<CurrencyUnit> = MutableLiveData(CurrencyUnit.Bitcoin)
-    val unit: LiveData<CurrencyUnit>
-        get() = _unit
-
-    fun switchUnit() {
-        _unit.value = when (_unit.value) {
-            CurrencyUnit.Bitcoin -> CurrencyUnit.Satoshi
-            CurrencyUnit.Satoshi -> CurrencyUnit.Bitcoin
-            null -> CurrencyUnit.Bitcoin
+    fun onAction(action: WalletScreenAction) {
+        when (action) {
+            WalletScreenAction.UpdateBalance -> updateBalance()
+            WalletScreenAction.SwitchUnit    -> switchUnit()
         }
     }
 
-    fun updateBalance() {
-        _syncing.value = true
+    private fun switchUnit() {
+        state = when (state.unit) {
+            CurrencyUnit.Bitcoin -> state.copy(unit = CurrencyUnit.Satoshi)
+            CurrencyUnit.Satoshi -> state.copy(unit = CurrencyUnit.Bitcoin)
+        }
+    }
+
+    private fun updateBalance() {
+        state = state.copy(syncing = true)
         viewModelScope.launch(Dispatchers.IO) {
             Wallet.sync()
             withContext(Dispatchers.Main) {
-                _balance.value = Wallet.getBalance()
-                _syncing.value = false
+                val newBalance = Wallet.getBalance()
+                Log.i(TAG, "New balance: $newBalance")
+                state = state.copy(balance = newBalance, syncing = false)
             }
         }
     }

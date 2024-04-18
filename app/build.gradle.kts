@@ -58,7 +58,7 @@ dependencies {
     // implementation("androidx.compose.material:material")
     implementation("androidx.compose.animation:animation")
     implementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.compose.runtime:runtime-livedata")
+    // implementation("androidx.compose.runtime:runtime-livedata")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.activity:activity-compose")
