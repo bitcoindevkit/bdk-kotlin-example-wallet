@@ -13,7 +13,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.material3.DrawerState
-import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.RBFScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.ReceiveScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.SendScreen

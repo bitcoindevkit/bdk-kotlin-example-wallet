@@ -12,7 +12,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.WalletRoot
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.AboutScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.CustomBlockchainClient

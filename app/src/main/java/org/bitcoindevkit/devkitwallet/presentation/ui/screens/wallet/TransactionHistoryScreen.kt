@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.domain.Wallet
-import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.ConfirmedTransactionCard
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.PendingTransactionCard
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar

@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 // import org.bitcoindevkit.devkitwallet.domain.Repository
 import org.bitcoindevkit.devkitwallet.domain.Wallet
-import org.bitcoindevkit.devkitwallet.presentation.ui.Screen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
