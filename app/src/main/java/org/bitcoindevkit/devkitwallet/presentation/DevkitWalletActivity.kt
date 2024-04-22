@@ -58,11 +58,15 @@ class DevkitWalletActivity : AppCompatActivity() {
                     val activeWallet = when (walletCreateType) {
                         is WalletCreateType.FROMSCRATCH -> Wallet.createWallet(
                             newWalletConfig = walletCreateType.newWalletConfig,
+                            internalAppFilesPath = filesDir.absolutePath,
                             activeWalletsRepository = activeWalletsRepository,
-                            internalAppFilesPath = filesDir.absolutePath
                         )
-                        is WalletCreateType.RECOVER -> throw NotImplementedError("Recover wallet not implemented")
-                        is WalletCreateType.LOADEXISTING -> throw NotImplementedError("Load existing wallet not implemented")
+                        is WalletCreateType.RECOVER -> Wallet.recoverWallet(
+                            recoverWalletConfig = walletCreateType.recoverWalletConfig,
+                            internalAppFilesPath = filesDir.absolutePath,
+                            activeWalletsRepository = activeWalletsRepository,
+                        )
+                        is WalletCreateType.LOADEXISTING -> throw IllegalStateException("Load existing not implemented yet")
                         // is WalletCreateType.LOADEXISTING -> Wallet.loadActiveWallet(walletCreateType.activeWallet)
                         // is WalletCreateType.RECOVER -> Wallet.recoverWallet(
                         //     walletCreateType.recoverWalletConfig,

@@ -27,10 +27,12 @@ import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.ConfirmationBlock
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
+import org.bitcoindevkit.devkitwallet.data.RecoverWalletConfig
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.data.Timestamp
 import org.bitcoindevkit.devkitwallet.data.TxDetails
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.Recipient
+import java.util.UUID
 import org.bitcoindevkit.Wallet as BdkWallet
 
 private const val TAG = "Wallet"
@@ -253,16 +255,18 @@ class Wallet private constructor(
 
         fun createWallet(
             newWalletConfig: NewWalletConfig,
+            internalAppFilesPath: String,
             activeWalletsRepository: ActiveWalletsRepository,
-            internalAppFilesPath: String
         ): Wallet {
             val mnemonic = Mnemonic(WordCount.WORDS12)
             val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
             val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
             val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
+            val walletId = UUID.randomUUID().toString()
 
             // Create SingleWallet object for saving to datastore
             val newWalletForDatastore: SingleWallet = SingleWallet.newBuilder()
+                .setId(walletId)
                 .setName(newWalletConfig.name)
                 .setNetwork(ActiveWalletNetwork.TESTNET)
                 .setScriptType(ActiveWalletScriptType.P2TR)
@@ -270,14 +274,57 @@ class Wallet private constructor(
                 .setChangeDescriptor(changeDescriptor.asStringPrivate())
                 .setRecoveryPhrase(mnemonic.asString())
                 .build()
-            // Save the new wallet to the datastore
+
             // TODO: launch this correctly, not on the main thread
+            // Save the new wallet to the datastore
             runBlocking { activeWalletsRepository.updateActiveWallets(newWalletForDatastore) }
 
             val bdkWallet = BdkWallet(
                 descriptor = descriptor,
                 changeDescriptor = changeDescriptor,
-                persistenceBackendPath = "$internalAppFilesPath/wallet.db",
+                persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.db",
+                network = Network.TESTNET,
+            )
+
+            return Wallet(
+                wallet = bdkWallet,
+                recoveryPhrase = mnemonic.asString(),
+                blockchainClients = mutableMapOf(
+                    Pair(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
+                )
+            )
+        }
+
+        fun recoverWallet(
+            recoverWalletConfig: RecoverWalletConfig,
+            internalAppFilesPath: String,
+            activeWalletsRepository: ActiveWalletsRepository,
+        ): Wallet {
+            val mnemonic = Mnemonic.fromString(recoverWalletConfig.recoveryPhrase)
+            val bip32ExtendedRootKey = DescriptorSecretKey(recoverWalletConfig.network, mnemonic, null)
+            val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+            val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, recoverWalletConfig.network)
+            val walletId = UUID.randomUUID().toString()
+
+            // Create SingleWallet object for saving to datastore
+            val newWalletForDatastore: SingleWallet = SingleWallet.newBuilder()
+                .setId(walletId)
+                .setName(recoverWalletConfig.name)
+                .setNetwork(ActiveWalletNetwork.TESTNET)
+                .setScriptType(ActiveWalletScriptType.P2TR)
+                .setDescriptor(descriptor.asStringPrivate())
+                .setChangeDescriptor(changeDescriptor.asStringPrivate())
+                .setRecoveryPhrase(mnemonic.asString())
+                .build()
+
+            // TODO: launch this correctly, not on the main thread
+            // Save the new wallet to the datastore
+            runBlocking { activeWalletsRepository.updateActiveWallets(newWalletForDatastore) }
+
+            val bdkWallet = BdkWallet(
+                descriptor = descriptor,
+                changeDescriptor = changeDescriptor,
+                persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.db",
                 network = Network.TESTNET,
             )
 

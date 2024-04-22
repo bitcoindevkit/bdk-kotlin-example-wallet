@@ -12,12 +12,13 @@ message ActiveWallets {
 }
 
 message SingleWallet {
-  string name = 1;
-  ActiveWalletNetwork network = 2;
-  ActiveWalletScriptType scriptType = 3;
-  string descriptor = 4;
-  string changeDescriptor = 5;
-  string recoveryPhrase = 6;
+  string id = 1;
+  string name = 2;
+  ActiveWalletNetwork network = 3;
+  ActiveWalletScriptType scriptType = 4;
+  string descriptor = 5;
+  string changeDescriptor = 6;
+  string recoveryPhrase = 7;
 }
 
 enum ActiveWalletNetwork {
