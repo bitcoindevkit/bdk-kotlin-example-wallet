@@ -44,81 +44,10 @@ class Wallet private constructor(
 ) {
     private var currentBlockchainClient: BlockchainClient? = blockchainClients[ClientRank.DEFAULT]
 
-    // private lateinit var wallet: BdkWallet
-    // private lateinit var path: String
-    // private lateinit var recoveryPhrase: String
-    // private val blockchainClients: MutableMap<ClientRank, BlockchainClient> = mutableMapOf()
-
-    init {
-        // blockchainClients.put(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
-        // blockchainClients.put(ClientRank.DEFAULT, EsploraClient("https://blockstream.info/testnet/api/"))
-        // currentBlockchainClient = blockchainClients[ClientRank.DEFAULT]
-    }
-    // private lateinit var electrumServer: ElectrumServer
     // private val esploraClient: EsploraClient = EsploraClient("http://10.0.2.2:3002")
     // private val esploraClient: EsploraClient = EsploraClient("https://esplora.testnet.kuutamo.cloud/")
     // to use Esplora on regtest locally, use the following address
     // private const val regtestEsploraUrl: String = "http://10.0.2.2:3002"
-
-    // setting the path requires the application context and is done once by the DevkitWalletApplication class
-    // fun setPath(path: String) {
-    //     this.path = path
-    // }
-
-    // private fun initialize(
-    //     descriptor: Descriptor,
-    //     changeDescriptor: Descriptor?,
-    // ) {
-    //     val databasePath = "$path/wallet.db"
-    //     wallet = BdkWallet(
-    //         descriptor,
-    //         changeDescriptor,
-    //         databasePath,
-    //         Network.TESTNET,
-    //     )
-    // }
-
-    // fun createBlockchain() {
-        // electrumServer = ElectrumServer()
-        // Log.i(TAG, "Current electrum URL : ${electrumServer.getElectrumURL()}")
-    // }
-
-    // fun changeElectrumServer(electrumURL: String) {
-    //     electrumServer.createCustomElectrum(electrumURL = electrumURL)
-    //     wallet.sync(electrumServer.server, LogProgress)
-    // }
-
-    // fun loadActiveWallet(activeWallet: SingleWallet) {
-    //     Log.i(TAG, "Loading existing wallet with descriptor: ${activeWallet.descriptor}")
-    //     Log.i(TAG, "Loading existing wallet with change descriptor: ${activeWallet.changeDescriptor}")
-    //     // recoveryPhrase = activeWallet.recoveryPhrase
-    //     initialize(
-    //         descriptor = Descriptor(activeWallet.descriptor, Network.TESTNET),
-    //         changeDescriptor = Descriptor(activeWallet.changeDescriptor, Network.TESTNET),
-    //     )
-    // }
-    //
-    // fun recoverWallet(recoverWalletConfig: RecoverWalletConfig, activeWalletsRepository: ActiveWalletsRepository) {
-    //     val mnemonic = Mnemonic.fromString(recoverWalletConfig.recoveryPhrase)
-    //     val bip32ExtendedRootKey = DescriptorSecretKey(recoverWalletConfig.network, mnemonic, null)
-    //     val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
-    //     val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, recoverWalletConfig.network)
-    //     initialize(
-    //         descriptor = descriptor,
-    //         changeDescriptor = changeDescriptor,
-    //     )
-    //     // recoveryPhrase = mnemonic.asString()
-    //     val newWallet: SingleWallet = SingleWallet.newBuilder()
-    //         .setName(recoverWalletConfig.name)
-    //         .setNetwork(recoverWalletConfig.network.intoProto())
-    //         .setScriptType(ActiveWalletScriptType.P2TR)
-    //         .setDescriptor(descriptor.asStringPrivate())
-    //         .setChangeDescriptor(changeDescriptor.asStringPrivate())
-    //         .setRecoveryPhrase(mnemonic.asString())
-    //         .build()
-    //     // TODO: launch this correctly, not on the main thread
-    //     runBlocking { activeWalletsRepository.updateActiveWallets(newWallet) }
-    // }
 
     fun getRecoveryPhrase(): List<String> {
         return recoveryPhrase.split(" ")
@@ -191,7 +120,7 @@ class Wallet private constructor(
         return signedPsbt.extractTx().txid()
     }
 
-    fun getAllTransactions(): List<CanonicalTx>  = wallet.transactions()
+    private fun getAllTransactions(): List<CanonicalTx>  = wallet.transactions()
 
     fun getAllTxDetails(): List<TxDetails> {
         val transactions = getAllTransactions()
@@ -220,7 +149,8 @@ class Wallet private constructor(
 
     fun sync() {
         Log.i(TAG, "Wallet is syncing")
-        val update: Update = currentBlockchainClient?.fullScan(wallet, 10u, 1u) ?: throw IllegalStateException("Blockchain client not initialized")
+        val update: Update = currentBlockchainClient?.fullScan(wallet, 20u, 1u) ?: throw IllegalStateException("Blockchain client not initialized")
+        Log.i(TAG, "Wallet sync complete with update $update")
         wallet.applyUpdate(update)
     }
 
@@ -269,7 +199,7 @@ class Wallet private constructor(
                 .setId(walletId)
                 .setName(newWalletConfig.name)
                 .setNetwork(ActiveWalletNetwork.TESTNET)
-                .setScriptType(ActiveWalletScriptType.P2TR)
+                .setScriptType(ActiveWalletScriptType.P2WPKH)
                 .setDescriptor(descriptor.asStringPrivate())
                 .setChangeDescriptor(changeDescriptor.asStringPrivate())
                 .setRecoveryPhrase(mnemonic.asString())
@@ -333,7 +263,7 @@ class Wallet private constructor(
                 .setId(walletId)
                 .setName(recoverWalletConfig.name)
                 .setNetwork(ActiveWalletNetwork.TESTNET)
-                .setScriptType(ActiveWalletScriptType.P2TR)
+                .setScriptType(ActiveWalletScriptType.P2WPKH)
                 .setDescriptor(descriptor.asStringPrivate())
                 .setChangeDescriptor(changeDescriptor.asStringPrivate())
                 .setRecoveryPhrase(mnemonic.asString())

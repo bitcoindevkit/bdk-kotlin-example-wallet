@@ -74,8 +74,8 @@ internal fun RecoverWalletScreen(
             val walletName: MutableState<String> = remember { mutableStateOf("") }
             var selectedNetwork: Network by remember { mutableStateOf(Network.TESTNET) }
             val network = listOf(Network.TESTNET)
-            var selectedScriptType: ActiveWalletScriptType by remember { mutableStateOf(ActiveWalletScriptType.P2TR) }
-            val scriptTypes = listOf(ActiveWalletScriptType.P2TR)
+            var selectedScriptType: ActiveWalletScriptType by remember { mutableStateOf(ActiveWalletScriptType.P2WPKH) }
+            val scriptTypes = listOf(ActiveWalletScriptType.P2WPKH)
 
             // the app name
             Column(
