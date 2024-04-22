@@ -295,6 +295,28 @@ class Wallet private constructor(
             )
         }
 
+        fun loadActiveWallet(
+            activeWallet: SingleWallet,
+            internalAppFilesPath: String,
+        ): Wallet {
+            val descriptor = Descriptor(activeWallet.descriptor, Network.TESTNET)
+            val changeDescriptor = Descriptor(activeWallet.changeDescriptor, Network.TESTNET)
+            val bdkWallet = BdkWallet(
+                descriptor = descriptor,
+                changeDescriptor = changeDescriptor,
+                persistenceBackendPath = "$internalAppFilesPath/wallet-${activeWallet.id.take(8)}.db",
+                network = Network.TESTNET,
+            )
+
+            return Wallet(
+                wallet = bdkWallet,
+                recoveryPhrase = activeWallet.recoveryPhrase,
+                blockchainClients = mutableMapOf(
+                    Pair(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
+                )
+            )
+        }
+
         fun recoverWallet(
             recoverWalletConfig: RecoverWalletConfig,
             internalAppFilesPath: String,

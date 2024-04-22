@@ -61,17 +61,15 @@ class DevkitWalletActivity : AppCompatActivity() {
                             internalAppFilesPath = filesDir.absolutePath,
                             activeWalletsRepository = activeWalletsRepository,
                         )
+                        is WalletCreateType.LOADEXISTING -> Wallet.loadActiveWallet(
+                            activeWallet = walletCreateType.activeWallet,
+                            internalAppFilesPath = filesDir.absolutePath,
+                        )
                         is WalletCreateType.RECOVER -> Wallet.recoverWallet(
                             recoverWalletConfig = walletCreateType.recoverWalletConfig,
                             internalAppFilesPath = filesDir.absolutePath,
                             activeWalletsRepository = activeWalletsRepository,
                         )
-                        is WalletCreateType.LOADEXISTING -> throw IllegalStateException("Load existing not implemented yet")
-                        // is WalletCreateType.LOADEXISTING -> Wallet.loadActiveWallet(walletCreateType.activeWallet)
-                        // is WalletCreateType.RECOVER -> Wallet.recoverWallet(
-                        //     walletCreateType.recoverWalletConfig,
-                        //     activeWalletsRepository
-                        // )
                     }
                     setContent {
                         DevkitTheme {
