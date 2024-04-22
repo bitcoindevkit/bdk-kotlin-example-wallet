@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2024 thunderbiscuit and contributors.
+ * Copyright 2021-2024 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -46,7 +46,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.LoadingAnimation
@@ -69,7 +68,7 @@ private const val TAG = "WalletHomeScreen"
 internal fun WalletHomeScreen(
     navController: NavHostController,
     drawerState: DrawerState,
-    walletViewModel: WalletViewModel = viewModel<WalletViewModel>(),
+    walletViewModel: WalletViewModel,
 ) {
     val networkAvailable: Boolean = isOnline(LocalContext.current)
     val state: WalletScreenState = walletViewModel.state

@@ -14,7 +14,7 @@ import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.ReceiveScreenAction
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.ReceiveScreenState
 
-internal class AddressViewModel : ViewModel() {
+internal class AddressViewModel(private val wallet: Wallet) : ViewModel() {
     var state: ReceiveScreenState by mutableStateOf(ReceiveScreenState())
         private set
 
@@ -25,7 +25,7 @@ internal class AddressViewModel : ViewModel() {
     }
 
     private fun updateAddress() {
-        val newAddress: AddressInfo = Wallet.getNewAddress()
+        val newAddress: AddressInfo = wallet.getNewAddress()
         state = ReceiveScreenState(
             address = newAddress.address.asString(),
             addressIndex = newAddress.index

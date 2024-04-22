@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
-        android:name=".presentation.ui.DevkitWalletApplication"
+        android:name=".DevkitWalletApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,7 +13,7 @@
         android:theme="@style/Theme.BitcoindevkitSampleApp">
 
         <activity
-            android:name="org.bitcoindevkit.devkitwallet.DevkitWalletActivity"
+            android:name="org.bitcoindevkit.devkitwallet.presentation.DevkitWalletActivity"
             android:theme="@style/Theme.BitcoindevkitSampleApp.Launcher"
             android:exported="true">
             <intent-filter>

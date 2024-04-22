@@ -14,7 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.WalletChoiceScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.WalletRecoveryScreen
-import org.bitcoindevkit.devkitwallet.WalletCreateType
+import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.ActiveWalletsScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.CreateNewWalletScreen

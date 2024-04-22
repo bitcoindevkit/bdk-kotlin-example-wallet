@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2024 thunderbiscuit and contributors.
+ * Copyright 2021-2024 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -40,10 +40,14 @@ import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletNavigation
 import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
 import org.bitcoindevkit.devkitwallet.R
+import org.bitcoindevkit.devkitwallet.domain.Wallet
 
 @OptIn(androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
-internal fun WalletRoot(navController: NavController) {
+internal fun WalletRoot(
+    navController: NavController,
+    activeWallet: Wallet
+) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email, Icons.Default.Face)
@@ -119,6 +123,7 @@ internal fun WalletRoot(navController: NavController) {
         content = {
             WalletNavigation(
                 drawerState = drawerState,
+                activeWallet = activeWallet
             )
         }
     )

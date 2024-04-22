@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package org.bitcoindevkit.devkitwallet
+package org.bitcoindevkit.devkitwallet.presentation
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -55,19 +55,23 @@ class DevkitWalletActivity : AppCompatActivity() {
 
             val onBuildWalletButtonClicked: (WalletCreateType) -> Unit = { walletCreateType ->
                 try {
-                    when (walletCreateType) {
+                    val activeWallet = when (walletCreateType) {
                         is WalletCreateType.FROMSCRATCH -> Wallet.createWallet(
-                            activeWalletsRepository
+                            newWalletConfig = walletCreateType.newWalletConfig,
+                            activeWalletsRepository = activeWalletsRepository,
+                            internalAppFilesPath = filesDir.absolutePath
                         )
-                        is WalletCreateType.LOADEXISTING -> Wallet.loadActiveWallet(walletCreateType.activeWallet)
-                        is WalletCreateType.RECOVER -> Wallet.recoverWallet(
-                            walletCreateType.recoverWalletConfig,
-                            activeWalletsRepository
-                        )
+                        is WalletCreateType.RECOVER -> throw NotImplementedError("Recover wallet not implemented")
+                        is WalletCreateType.LOADEXISTING -> throw NotImplementedError("Load existing wallet not implemented")
+                        // is WalletCreateType.LOADEXISTING -> Wallet.loadActiveWallet(walletCreateType.activeWallet)
+                        // is WalletCreateType.RECOVER -> Wallet.recoverWallet(
+                        //     walletCreateType.recoverWalletConfig,
+                        //     activeWalletsRepository
+                        // )
                     }
                     setContent {
                         DevkitTheme {
-                            HomeNavigation()
+                            HomeNavigation(activeWallet)
                         }
                     }
                 } catch (e: Throwable) {

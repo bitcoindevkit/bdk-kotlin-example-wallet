@@ -25,11 +25,10 @@ import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
 
 @Composable
-internal fun RecoveryPhraseScreen(navController: NavController) {
-
-    val seedPhrase: String = Wallet.getRecoveryPhrase()
-    val wordList: List<String> = seedPhrase.split(" ")
-
+internal fun RecoveryPhraseScreen(
+    navController: NavController,
+    recoveryPhrase: List<String>,
+) {
     Scaffold(
         topBar = {
             SecondaryScreensAppBar(
@@ -45,7 +44,7 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
                 .padding(paddingValues)
                 .padding(all = 32.dp)
         ) {
-            wordList.forEachIndexed { index, item ->
+            recoveryPhrase.forEachIndexed { index, item ->
                 Text(
                     text = "${index + 1}. $item",
                     modifier = Modifier.weight(weight = 1F),
@@ -60,5 +59,8 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
 @Preview(device = Devices.PIXEL_4, showBackground = true)
 @Composable
 internal fun PreviewRecoveryPhraseScreen() {
-    RecoveryPhraseScreen(rememberNavController())
+    RecoveryPhraseScreen(
+        rememberNavController(),
+        listOf("word1", "word2", "word3", "word4", "word5", "word6", "word7", "word8", "word9", "word10", "word11", "word12")
+    )
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2024 thunderbiscuit and contributors.
+ * Copyright 2021-2024 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -26,8 +26,11 @@ import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 private const val TAG = "TransactionHistoryScreen"
 
 @Composable
-internal fun TransactionHistoryScreen(navController: NavController) {
-    val (pendingTransactions, confirmedTransactions) = Wallet.getAllTxDetails().partition { it.pending }
+internal fun TransactionHistoryScreen(
+    navController: NavController,
+    activeWallet: Wallet
+) {
+    val (pendingTransactions, confirmedTransactions) = activeWallet.getAllTxDetails().partition { it.pending }
 
     Scaffold(
         topBar = {

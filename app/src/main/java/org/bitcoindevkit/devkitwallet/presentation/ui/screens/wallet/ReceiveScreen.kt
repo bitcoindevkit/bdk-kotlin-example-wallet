@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.graphics.createBitmap
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
@@ -51,7 +50,7 @@ private const val TAG = "ReceiveScreen"
 @Composable
 internal fun ReceiveScreen(
     navController: NavController,
-    addressViewModel: AddressViewModel = viewModel<AddressViewModel>()
+    addressViewModel: AddressViewModel
 ) {
     Log.i(TAG, "We are recomposing the ReceiveScreen")
     val state = addressViewModel.state

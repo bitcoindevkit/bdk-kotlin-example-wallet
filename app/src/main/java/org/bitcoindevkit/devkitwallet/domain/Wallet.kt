@@ -7,46 +7,50 @@ package org.bitcoindevkit.devkitwallet.domain
 
 import android.util.Log
 import kotlinx.coroutines.runBlocking
-import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.Recipient
-import org.bitcoindevkit.Network
 import org.bitcoindevkit.Address
-import org.bitcoindevkit.Descriptor
-import org.bitcoindevkit.DescriptorSecretKey
-import org.bitcoindevkit.KeychainKind
-import org.bitcoindevkit.Mnemonic
-import org.bitcoindevkit.WordCount
-import org.bitcoindevkit.TxBuilder
-import org.bitcoindevkit.Psbt
-import org.bitcoindevkit.AddressInfo
 import org.bitcoindevkit.AddressIndex
+import org.bitcoindevkit.AddressInfo
 import org.bitcoindevkit.CanonicalTx
 import org.bitcoindevkit.ChainPosition
+import org.bitcoindevkit.Descriptor
+import org.bitcoindevkit.DescriptorSecretKey
 import org.bitcoindevkit.FeeRate
-import org.bitcoindevkit.Update
+import org.bitcoindevkit.KeychainKind
+import org.bitcoindevkit.Mnemonic
+import org.bitcoindevkit.Network
+import org.bitcoindevkit.Psbt
 import org.bitcoindevkit.Script
-import org.bitcoindevkit.devkitwallet.data.RecoverWalletConfig
+import org.bitcoindevkit.TxBuilder
+import org.bitcoindevkit.Update
+import org.bitcoindevkit.WordCount
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.ConfirmationBlock
+import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.data.Timestamp
 import org.bitcoindevkit.devkitwallet.data.TxDetails
-import org.bitcoindevkit.devkitwallet.domain.utils.intoProto
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.Recipient
 import org.bitcoindevkit.Wallet as BdkWallet
 
 private const val TAG = "Wallet"
 
-object Wallet {
-    private lateinit var wallet: BdkWallet
-    private lateinit var path: String
-    private lateinit var recoveryPhrase: String
-    private var currentBlockchainClient: BlockchainClient? = null
-    private val blockchainClients: MutableMap<ClientRank, BlockchainClient> = mutableMapOf()
+class Wallet private constructor(
+    private val wallet: BdkWallet,
+    private val recoveryPhrase: String,
+    private val blockchainClients: MutableMap<ClientRank, BlockchainClient>
+) {
+    private var currentBlockchainClient: BlockchainClient? = blockchainClients[ClientRank.DEFAULT]
+
+    // private lateinit var wallet: BdkWallet
+    // private lateinit var path: String
+    // private lateinit var recoveryPhrase: String
+    // private val blockchainClients: MutableMap<ClientRank, BlockchainClient> = mutableMapOf()
 
     init {
-        blockchainClients.put(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
+        // blockchainClients.put(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
         // blockchainClients.put(ClientRank.DEFAULT, EsploraClient("https://blockstream.info/testnet/api/"))
-        currentBlockchainClient = blockchainClients[ClientRank.DEFAULT]
+        // currentBlockchainClient = blockchainClients[ClientRank.DEFAULT]
     }
     // private lateinit var electrumServer: ElectrumServer
     // private val esploraClient: EsploraClient = EsploraClient("http://10.0.2.2:3002")
@@ -55,22 +59,22 @@ object Wallet {
     // private const val regtestEsploraUrl: String = "http://10.0.2.2:3002"
 
     // setting the path requires the application context and is done once by the DevkitWalletApplication class
-    fun setPath(path: String) {
-        Wallet.path = path
-    }
+    // fun setPath(path: String) {
+    //     this.path = path
+    // }
 
-    private fun initialize(
-        descriptor: Descriptor,
-        changeDescriptor: Descriptor?,
-    ) {
-        val databasePath = "$path/wallet.db"
-        wallet = BdkWallet(
-            descriptor,
-            changeDescriptor,
-            databasePath,
-            Network.TESTNET,
-        )
-    }
+    // private fun initialize(
+    //     descriptor: Descriptor,
+    //     changeDescriptor: Descriptor?,
+    // ) {
+    //     val databasePath = "$path/wallet.db"
+    //     wallet = BdkWallet(
+    //         descriptor,
+    //         changeDescriptor,
+    //         databasePath,
+    //         Network.TESTNET,
+    //     )
+    // }
 
     // fun createBlockchain() {
         // electrumServer = ElectrumServer()
@@ -82,68 +86,46 @@ object Wallet {
     //     wallet.sync(electrumServer.server, LogProgress)
     // }
 
-    fun createWallet(activeWalletsRepository: ActiveWalletsRepository) {
-        val mnemonic = Mnemonic(WordCount.WORDS12)
-        val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
-        val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
-        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
-        initialize(
-            descriptor = descriptor,
-            changeDescriptor = changeDescriptor,
-        )
-        recoveryPhrase = mnemonic.asString()
-        val newWallet: SingleWallet = SingleWallet.newBuilder()
-            .setName("Wallet")
-            .setNetwork(ActiveWalletNetwork.TESTNET)
-            .setScriptType(ActiveWalletScriptType.P2TR)
-            .setDescriptor(descriptor.asStringPrivate())
-            .setChangeDescriptor(changeDescriptor.asStringPrivate())
-            .setRecoveryPhrase(mnemonic.asString())
-            .build()
-        // TODO: launch this correctly, not on the main thread
-        runBlocking { activeWalletsRepository.updateActiveWallets(newWallet) }
-    }
+    // fun loadActiveWallet(activeWallet: SingleWallet) {
+    //     Log.i(TAG, "Loading existing wallet with descriptor: ${activeWallet.descriptor}")
+    //     Log.i(TAG, "Loading existing wallet with change descriptor: ${activeWallet.changeDescriptor}")
+    //     // recoveryPhrase = activeWallet.recoveryPhrase
+    //     initialize(
+    //         descriptor = Descriptor(activeWallet.descriptor, Network.TESTNET),
+    //         changeDescriptor = Descriptor(activeWallet.changeDescriptor, Network.TESTNET),
+    //     )
+    // }
+    //
+    // fun recoverWallet(recoverWalletConfig: RecoverWalletConfig, activeWalletsRepository: ActiveWalletsRepository) {
+    //     val mnemonic = Mnemonic.fromString(recoverWalletConfig.recoveryPhrase)
+    //     val bip32ExtendedRootKey = DescriptorSecretKey(recoverWalletConfig.network, mnemonic, null)
+    //     val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+    //     val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, recoverWalletConfig.network)
+    //     initialize(
+    //         descriptor = descriptor,
+    //         changeDescriptor = changeDescriptor,
+    //     )
+    //     // recoveryPhrase = mnemonic.asString()
+    //     val newWallet: SingleWallet = SingleWallet.newBuilder()
+    //         .setName(recoverWalletConfig.name)
+    //         .setNetwork(recoverWalletConfig.network.intoProto())
+    //         .setScriptType(ActiveWalletScriptType.P2TR)
+    //         .setDescriptor(descriptor.asStringPrivate())
+    //         .setChangeDescriptor(changeDescriptor.asStringPrivate())
+    //         .setRecoveryPhrase(mnemonic.asString())
+    //         .build()
+    //     // TODO: launch this correctly, not on the main thread
+    //     runBlocking { activeWalletsRepository.updateActiveWallets(newWallet) }
+    // }
 
-    fun loadActiveWallet(activeWallet: SingleWallet) {
-        Log.i(TAG, "Loading existing wallet with descriptor: ${activeWallet.descriptor}")
-        Log.i(TAG, "Loading existing wallet with change descriptor: ${activeWallet.changeDescriptor}")
-        recoveryPhrase = activeWallet.recoveryPhrase
-        initialize(
-            descriptor = Descriptor(activeWallet.descriptor, Network.TESTNET),
-            changeDescriptor = Descriptor(activeWallet.changeDescriptor, Network.TESTNET),
-        )
-    }
-
-    fun recoverWallet(recoverWalletConfig: RecoverWalletConfig, activeWalletsRepository: ActiveWalletsRepository) {
-        val mnemonic = Mnemonic.fromString(recoverWalletConfig.recoveryPhrase)
-        val bip32ExtendedRootKey = DescriptorSecretKey(recoverWalletConfig.network, mnemonic, null)
-        val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
-        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, recoverWalletConfig.network)
-        initialize(
-            descriptor = descriptor,
-            changeDescriptor = changeDescriptor,
-        )
-        recoveryPhrase = mnemonic.asString()
-        val newWallet: SingleWallet = SingleWallet.newBuilder()
-            .setName(recoverWalletConfig.name)
-            .setNetwork(recoverWalletConfig.network.intoProto())
-            .setScriptType(ActiveWalletScriptType.P2TR)
-            .setDescriptor(descriptor.asStringPrivate())
-            .setChangeDescriptor(changeDescriptor.asStringPrivate())
-            .setRecoveryPhrase(mnemonic.asString())
-            .build()
-        // TODO: launch this correctly, not on the main thread
-        runBlocking { activeWalletsRepository.updateActiveWallets(newWallet) }
-    }
-
-    fun getRecoveryPhrase(): String {
-        return recoveryPhrase
+    fun getRecoveryPhrase(): List<String> {
+        return recoveryPhrase.split(" ")
     }
 
     fun createTransaction(
-        recipientList: MutableList<Recipient>,
+        recipientList: List<Recipient>,
         feeRate: FeeRate,
-        enableRBF: Boolean,
+        disableRbf: Boolean,
         opReturnMsg: String?
     ): Psbt {
         // technique 1 for adding a list of recipients to the TxBuilder
@@ -159,7 +141,9 @@ object Wallet {
             val scriptPubKey: Script = Address(recipient.address, Network.TESTNET).scriptPubkey()
             builder.addRecipient(scriptPubKey, recipient.amount)
         }
-        if (enableRBF) {
+        if (disableRbf) {
+            // Nothing
+        } else {
             txBuilder = txBuilder.enableRbf()
         }
         // if (!opReturnMsg.isNullOrEmpty()) {
@@ -256,9 +240,54 @@ object Wallet {
     //         ElectrumSettings.CUSTOM ->  electrumServer.useCustomElectrum()
     //     }
     // }
-}
 
-// enum class ElectrumSettings {
-//     DEFAULT,
-//     CUSTOM
-// }
+    companion object {
+        // Code to ensure only one instance of Wallet is ever created
+        // private var instance: Wallet? = null
+        // fun getInstance(): Wallet {
+        //     if (instance == null) {
+        //         instance = Wallet()
+        //     }
+        //     return instance!!
+        // }
+
+        fun createWallet(
+            newWalletConfig: NewWalletConfig,
+            activeWalletsRepository: ActiveWalletsRepository,
+            internalAppFilesPath: String
+        ): Wallet {
+            val mnemonic = Mnemonic(WordCount.WORDS12)
+            val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
+            val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+            val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
+
+            // Create SingleWallet object for saving to datastore
+            val newWalletForDatastore: SingleWallet = SingleWallet.newBuilder()
+                .setName(newWalletConfig.name)
+                .setNetwork(ActiveWalletNetwork.TESTNET)
+                .setScriptType(ActiveWalletScriptType.P2TR)
+                .setDescriptor(descriptor.asStringPrivate())
+                .setChangeDescriptor(changeDescriptor.asStringPrivate())
+                .setRecoveryPhrase(mnemonic.asString())
+                .build()
+            // Save the new wallet to the datastore
+            // TODO: launch this correctly, not on the main thread
+            runBlocking { activeWalletsRepository.updateActiveWallets(newWalletForDatastore) }
+
+            val bdkWallet = BdkWallet(
+                descriptor = descriptor,
+                changeDescriptor = changeDescriptor,
+                persistenceBackendPath = "$internalAppFilesPath/wallet.db",
+                network = Network.TESTNET,
+            )
+
+            return Wallet(
+                wallet = bdkWallet,
+                recoveryPhrase = mnemonic.asString(),
+                blockchainClients = mutableMapOf(
+                    Pair(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
+                )
+            )
+        }
+    }
+}

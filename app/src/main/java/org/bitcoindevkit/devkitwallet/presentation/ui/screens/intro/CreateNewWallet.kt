@@ -28,7 +28,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.bitcoindevkit.Network
-import org.bitcoindevkit.devkitwallet.WalletCreateType
+import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
@@ -61,7 +61,7 @@ internal fun CreateNewWalletScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .padding(vertical = 8.dp),
-                value = "",
+                value = walletName.value,
                 onValueChange = { walletName.value = it },
                 label = {
                     Text(

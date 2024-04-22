@@ -12,13 +12,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.WalletRoot
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.AboutScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.CustomBlockchainClient
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.RecoveryPhraseScreen
 
 @Composable
-fun HomeNavigation() {
+fun HomeNavigation(
+    activeWallet: Wallet
+) {
     val navController: NavHostController = rememberNavController()
     val animationDuration = 400
 
@@ -35,7 +38,7 @@ fun HomeNavigation() {
             popEnterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(animationDuration))
             },
-        ) { WalletRoot(navController = navController) }
+        ) { WalletRoot(navController = navController, activeWallet = activeWallet) }
 
         composable(
             route = Screen.AboutScreen.route,
@@ -67,7 +70,7 @@ fun HomeNavigation() {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             }
-        ) { RecoveryPhraseScreen(navController = navController) }
+        ) { RecoveryPhraseScreen(navController = navController, activeWallet.getRecoveryPhrase()) }
 
         composable(
             route = Screen.CustomBlockchainClient.route,

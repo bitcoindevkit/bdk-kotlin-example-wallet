@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2024 thunderbiscuit and contributors.
+ * Copyright 2021-2024 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
@@ -13,15 +13,22 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.material3.DrawerState
+import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.RBFScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.ReceiveScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.SendScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.TransactionScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.TransactionHistoryScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.WalletHomeScreen
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.AddressViewModel
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.SendViewModel
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 
 @Composable
-fun WalletNavigation(drawerState: DrawerState) {
+fun WalletNavigation(
+    drawerState: DrawerState,
+    activeWallet: Wallet
+) {
     val navController: NavHostController = rememberNavController()
     val animationDuration = 400
 
@@ -38,7 +45,7 @@ fun WalletNavigation(drawerState: DrawerState) {
             popEnterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(animationDuration))
             },
-        ) { WalletHomeScreen(navController, drawerState) }
+        ) { WalletHomeScreen(navController, drawerState, WalletViewModel(activeWallet)) }
 
         composable(
             route = Screen.ReceiveScreen.route,
@@ -54,7 +61,7 @@ fun WalletNavigation(drawerState: DrawerState) {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { ReceiveScreen(navController, ) }
+        ) { ReceiveScreen(navController, AddressViewModel(activeWallet)) }
 
         composable(
             route = Screen.SendScreen.route,
@@ -70,7 +77,7 @@ fun WalletNavigation(drawerState: DrawerState) {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { SendScreen(navController) }
+        ) { SendScreen(navController, SendViewModel(activeWallet)) }
 
         composable(
             route = "${Screen.RBFScreen.route}/txid={txid}",
@@ -106,7 +113,7 @@ fun WalletNavigation(drawerState: DrawerState) {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { TransactionHistoryScreen(navController) }
+        ) { TransactionHistoryScreen(navController, activeWallet) }
 
         composable(
             route = "${Screen.TransactionScreen.route}/txid={txid}",

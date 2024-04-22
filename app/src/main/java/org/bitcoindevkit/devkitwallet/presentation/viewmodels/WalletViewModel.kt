@@ -21,7 +21,9 @@ import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenSt
 
 private const val TAG = "WalletViewModel"
 
-internal class WalletViewModel : ViewModel() {
+internal class WalletViewModel(
+    private val wallet: Wallet
+) : ViewModel() {
 
     var state: WalletScreenState by mutableStateOf(WalletScreenState())
         private set
@@ -43,9 +45,9 @@ internal class WalletViewModel : ViewModel() {
     private fun updateBalance() {
         state = state.copy(syncing = true)
         viewModelScope.launch(Dispatchers.IO) {
-            Wallet.sync()
+            wallet.sync()
             withContext(Dispatchers.Main) {
-                val newBalance = Wallet.getBalance()
+                val newBalance = wallet.getBalance()
                 Log.i(TAG, "New balance: $newBalance")
                 state = state.copy(balance = newBalance, syncing = false)
             }

@@ -6,7 +6,6 @@
 package org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,30 +24,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
-import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.domain.Wallet
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
-import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
@@ -57,12 +40,30 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.bitcoindevkit.FeeRate
-import org.bitcoindevkit.Psbt
+import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.SendViewModel
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.Recipient
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.SendScreenAction
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.TransactionType
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.TxDataBundle
 
 private const val TAG = "SendScreen"
 
@@ -70,7 +71,10 @@ private const val TAG = "SendScreen"
 @Composable
 internal fun SendScreen(
     navController: NavController,
+    sendViewModel: SendViewModel
 ) {
+    val onAction = sendViewModel::onAction
+
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -79,7 +83,7 @@ internal fun SendScreen(
     val (showDialog, setShowDialog) =  rememberSaveable { mutableStateOf(false) }
 
     val sendAll: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val rbfEnabled: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val rbfDisabled: MutableState<Boolean> = remember { mutableStateOf(false) }
     val opReturnMsg: MutableState<String?> = remember { mutableStateOf(null) }
 
     val bottomSheetScaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState()
@@ -92,7 +96,7 @@ internal fun SendScreen(
             )
         },
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetContent = { AdvancedOptions(sendAll, rbfEnabled, opReturnMsg, recipientList) },
+        sheetContent = { AdvancedOptions(sendAll, rbfDisabled, opReturnMsg, recipientList) },
         sheetContainerColor = DevkitWalletColors.primaryDark,
         scaffoldState = bottomSheetScaffoldState,
         sheetPeekHeight = 0.dp,
@@ -118,7 +122,7 @@ internal fun SendScreen(
                 TransactionRecipientInput(recipientList = recipientList)
                 TransactionAmountInput(
                     recipientList = recipientList,
-                    transactionType = if (sendAll.value) TransactionType.SEND_ALL else TransactionType.DEFAULT
+                    transactionType = if (sendAll.value) TransactionType.SEND_ALL else TransactionType.STANDARD
                 )
                 TransactionFeeInput(feeRate = feeRate)
                 MoreOptions(coroutineScope = coroutineScope, bottomSheetScaffoldState = bottomSheetScaffoldState)
@@ -127,10 +131,11 @@ internal fun SendScreen(
                     feeRate = feeRate,
                     showDialog = showDialog,
                     setShowDialog = setShowDialog,
-                    transactionType = if (sendAll.value) TransactionType.SEND_ALL else TransactionType.DEFAULT,
-                    rbfEnabled = rbfEnabled.value,
+                    transactionType = if (sendAll.value) TransactionType.SEND_ALL else TransactionType.STANDARD,
+                    rbfDisabled = rbfDisabled.value,
                     opReturnMsg = opReturnMsg.value,
-                    context = context
+                    context = context,
+                    onAction = onAction
                 )
             }
             Column(
@@ -168,7 +173,7 @@ internal fun SendScreen(
 @Composable
 internal fun AdvancedOptions(
     sendAll: MutableState<Boolean>,
-    rbfEnabled: MutableState<Boolean>,
+    rbfDisabled: MutableState<Boolean>,
     opReturnMsg: MutableState<String?>,
     recipientList: MutableList<Recipient>
 ) {
@@ -227,7 +232,7 @@ internal fun AdvancedOptions(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Enable Replace-by-Fee",
+                text = "Disable Replace-by-Fee",
                 color = DevkitWalletColors.white,
                 fontSize = 14.sp,
                 fontFamily = jetBrainsMonoLight,
@@ -236,9 +241,9 @@ internal fun AdvancedOptions(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Switch(
-                checked = rbfEnabled.value,
+                checked = rbfDisabled.value,
                 onCheckedChange = {
-                    rbfEnabled.value = !rbfEnabled.value
+                    rbfDisabled.value = !rbfDisabled.value
                 },
                 colors = SwitchDefaults.colors(
                     uncheckedBorderColor = DevkitWalletColors.primaryDark,
@@ -498,15 +503,16 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
 }
 
 @Composable
-fun Dialog(
+private fun Dialog(
     recipientList: MutableList<Recipient>,
     feeRate: MutableState<String>,
     showDialog: Boolean,
     setShowDialog: (Boolean) -> Unit,
     transactionType: TransactionType,
-    rbfEnabled: Boolean,
+    rbfDisabled: Boolean,
     opReturnMsg: String?,
     context: Context,
+    onAction: (SendScreenAction) -> Unit,
 ) {
     if (showDialog) {
         var confirmationText = "Confirm Transaction : \n"
@@ -536,13 +542,14 @@ fun Dialog(
                 TextButton(
                     onClick = {
                         if (checkRecipientList(recipientList = recipientList, feeRate = feeRate, context = context)) {
-                            broadcastTransaction(
-                                recipientList = recipientList,
+                            val txDataBundle = TxDataBundle(
+                                recipients = recipientList,
                                 feeRate = feeRate.value.toULong(),
                                 transactionType = transactionType,
-                                rbfEnabled = rbfEnabled,
+                                rbfDisabled = rbfDisabled,
                                 opReturnMsg = opReturnMsg
                             )
+                            onAction(SendScreenAction.Broadcast(txDataBundle))
                             setShowDialog(false)
                         }
                     },
@@ -567,40 +574,6 @@ fun Dialog(
             },
         )
     }
-}
-
-private fun broadcastTransaction(
-    recipientList: MutableList<Recipient>,
-    feeRate: ULong = 1uL,
-    transactionType: TransactionType,
-    rbfEnabled: Boolean,
-    opReturnMsg: String?
-) {
-    Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient, amount: $recipientList, fee rate: $feeRate")
-    try {
-        // create, sign, and broadcast
-        val psbt: Psbt = when (transactionType) {
-            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, FeeRate.fromSatPerVb(feeRate), rbfEnabled, opReturnMsg)
-            // TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, FeeRate.fromSatPerVb(feeRate), rbfEnabled, opReturnMsg)
-            TransactionType.SEND_ALL -> throw NotImplementedError("Send all not implemented")
-        }
-        val isSigned = Wallet.sign(psbt)
-        if (isSigned) {
-            val txid: String = Wallet.broadcast(psbt)
-            Log.i(TAG, "Transaction was broadcast! txid: $txid")
-        } else {
-            Log.i(TAG, "Transaction not signed.")
-        }
-    } catch (e: Throwable) {
-        Log.i(TAG, "Broadcast error: ${e.message}")
-    }
-}
-
-data class Recipient(var address: String, var amount: ULong)
-
-enum class TransactionType {
-    DEFAULT,
-    SEND_ALL,
 }
 
 // @Preview(device = Devices.PIXEL_4, showBackground = true)

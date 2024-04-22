@@ -30,5 +30,8 @@ class EsploraClient(url: String) : BlockchainClient {
 
 enum class ClientRank {
     DEFAULT,
-    ALTERNATIVE
+    ALTERNATIVE1,
+    ALTERNATIVE2,
+    ALTERNATIVE3,
+    ALTERNATIVE4,
 }
