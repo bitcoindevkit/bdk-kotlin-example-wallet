@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.protobuf").version("0.9.4")
+    id("com.google.protobuf")
 }
 
 android {
@@ -55,24 +55,21 @@ dependencies {
     // Adding the Bill of Materials synchronizes dependencies in the androidx.compose namespace
     // You can remove the library version in your dependency declarations
     implementation(platform("androidx.compose:compose-bom:2024.04.01"))
-    // implementation("androidx.compose.material:material")
     implementation("androidx.compose.animation:animation")
     implementation("androidx.compose.ui:ui-tooling")
-    // implementation("androidx.compose.runtime:runtime-livedata")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.activity:activity-compose")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.navigation:navigation-compose:2.7.7")
-    // implementation("com.google.accompanist:accompanist-navigation-animation:0.23.1")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.23.1")
 
     // Toolbar
     implementation("androidx.appcompat:appcompat:1.6.1")
 
     // Bitcoin Development Kit
-    implementation("org.bitcoindevkit:bdk-android:1.0.0-alpha.8-SNAPSHOT")
+    implementation("org.bitcoindevkit:bdk-android:1.0.0-alpha.9")
 
     // QR codes
     implementation("com.google.zxing:core:3.4.1")
