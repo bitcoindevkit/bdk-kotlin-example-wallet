@@ -62,7 +62,7 @@ import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.FeeRate
-import org.bitcoindevkit.PartiallySignedTransaction
+import org.bitcoindevkit.Psbt
 
 private const val TAG = "SendScreen"
 
@@ -579,7 +579,7 @@ private fun broadcastTransaction(
     Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient, amount: $recipientList, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
-        val psbt: PartiallySignedTransaction = when (transactionType) {
+        val psbt: Psbt = when (transactionType) {
             TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, FeeRate.fromSatPerVb(feeRate), rbfEnabled, opReturnMsg)
             // TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, FeeRate.fromSatPerVb(feeRate), rbfEnabled, opReturnMsg)
             TransactionType.SEND_ALL -> throw NotImplementedError("Send all not implemented")

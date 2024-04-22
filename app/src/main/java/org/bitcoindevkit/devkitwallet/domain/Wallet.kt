@@ -16,7 +16,7 @@ import org.bitcoindevkit.KeychainKind
 import org.bitcoindevkit.Mnemonic
 import org.bitcoindevkit.WordCount
 import org.bitcoindevkit.TxBuilder
-import org.bitcoindevkit.PartiallySignedTransaction
+import org.bitcoindevkit.Psbt
 import org.bitcoindevkit.AddressInfo
 import org.bitcoindevkit.AddressIndex
 import org.bitcoindevkit.CanonicalTx
@@ -145,7 +145,7 @@ object Wallet {
         feeRate: FeeRate,
         enableRBF: Boolean,
         opReturnMsg: String?
-    ): PartiallySignedTransaction {
+    ): Psbt {
         // technique 1 for adding a list of recipients to the TxBuilder
         // var txBuilder = TxBuilder()
         // for (recipient in recipientList) {
@@ -196,11 +196,11 @@ object Wallet {
     //         .finish(wallet = wallet)
     // }
 
-    fun sign(psbt: PartiallySignedTransaction): Boolean {
+    fun sign(psbt: Psbt): Boolean {
         return wallet.sign(psbt)
     }
 
-    fun broadcast(signedPsbt: PartiallySignedTransaction): String {
+    fun broadcast(signedPsbt: Psbt): String {
         currentBlockchainClient?.broadcast(signedPsbt.extractTx()) ?: throw IllegalStateException("Blockchain client not initialized")
         return signedPsbt.extractTx().txid()
     }
