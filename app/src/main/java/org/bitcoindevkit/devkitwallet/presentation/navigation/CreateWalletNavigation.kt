@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.WalletChoiceScreen
-import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.WalletRecoveryScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.RecoverWalletScreen
 import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.ActiveWalletsScreen
@@ -88,6 +88,6 @@ fun CreateWalletNavigation(
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { WalletRecoveryScreen(navController = navController, onBuildWalletButtonClicked) }
+        ) { RecoverWalletScreen(navController = navController, onBuildWalletButtonClicked) }
     }
 }

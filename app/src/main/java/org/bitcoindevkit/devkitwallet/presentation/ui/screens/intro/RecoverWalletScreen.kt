@@ -47,7 +47,7 @@ import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
 
 @Composable
-internal fun WalletRecoveryScreen(
+internal fun RecoverWalletScreen(
     navController: NavController,
     onBuildWalletButtonClicked: (WalletCreateType) -> Unit
 ) {
@@ -91,7 +91,7 @@ internal fun WalletRecoveryScreen(
                     OutlinedTextField(
                         modifier = Modifier
                             .padding(vertical = 8.dp),
-                        value = "",
+                        value = walletName.value,
                         onValueChange = { walletName.value = it },
                         label = {
                             Text(
