@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -115,15 +118,25 @@ internal fun CreateNewWalletScreen(
 
 @Composable
 fun RadioButtonWithLabel(label: String, isSelected: Boolean, onSelect: () -> Unit) {
-    Row(modifier = Modifier.padding(8.dp)) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .selectable(
+                selected = isSelected,
+                onClick = onSelect
+            )
+    ) {
         RadioButton(
             selected = isSelected,
-            onClick = onSelect
+            onClick = onSelect,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = DevkitWalletColors.accent1,
+                unselectedColor = DevkitWalletColors.accent2
+            )
         )
         Text(
             text = label,
             modifier = Modifier
-                .padding(start = 8.dp)
                 .clickable(onClick = onSelect)
         )
     }

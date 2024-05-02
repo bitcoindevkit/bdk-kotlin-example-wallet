@@ -3,12 +3,9 @@ syntax = "proto3";
 option java_package = "org.bitcoindevkit.devkitwallet.data";
 option java_multiple_files = true;
 
-message IntroDone {
+message UserPreferences {
   bool introDone = 1;
-}
-
-message ActiveWallets {
-  repeated SingleWallet wallets = 1;
+  repeated SingleWallet wallets = 2;
 }
 
 message SingleWallet {

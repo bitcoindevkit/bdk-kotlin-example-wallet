@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -19,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -202,7 +204,7 @@ fun WordField(
             )
         },
         textStyle = TextStyle(
-            fontSize = 18.sp,
+            fontSize = 16.sp,
             color = DevkitWalletColors.white
         ),
         colors = OutlinedTextFieldDefaults.colors(
@@ -211,7 +213,7 @@ fun WordField(
             unfocusedBorderColor = DevkitWalletColors.white,
         ),
         modifier = Modifier
-            .padding(8.dp),
+            .padding(4.dp),
         keyboardOptions = when (wordNumber) {
             12 -> KeyboardOptions(imeAction = ImeAction.Done)
             else -> KeyboardOptions(imeAction = ImeAction.Next)
@@ -221,6 +223,12 @@ fun WordField(
             onDone = { focusManager.clearFocus() }
         ),
         singleLine = true,
+        // contentPadding = TextFieldDefaults.contentPaddingWithoutLabel(
+        //     start = 8.dp,
+        //     top = 4.dp,
+        //     end = 8.dp,
+        //     bottom = 4.dp,
+        // )
     )
 }
 

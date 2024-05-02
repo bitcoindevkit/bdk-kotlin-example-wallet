@@ -15,14 +15,12 @@ import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import org.bitcoindevkit.devkitwallet.data.ActiveWallets
-import org.bitcoindevkit.devkitwallet.data.ActiveWalletsSerializer
-import org.bitcoindevkit.devkitwallet.data.IntroDone
-import org.bitcoindevkit.devkitwallet.data.IntroDoneSerializer
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
 import org.bitcoindevkit.devkitwallet.data.RecoverWalletConfig
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
-import org.bitcoindevkit.devkitwallet.domain.ActiveWalletsRepository
+import org.bitcoindevkit.devkitwallet.data.UserPreferences
+import org.bitcoindevkit.devkitwallet.data.UserPreferencesSerializer
+import org.bitcoindevkit.devkitwallet.domain.UserPreferencesRepository
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.navigation.HomeNavigation
 import org.bitcoindevkit.devkitwallet.presentation.navigation.CreateWalletNavigation
@@ -30,59 +28,54 @@ import org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro.OnboardingSc
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitTheme
 
 private const val TAG = "DevkitWalletActivity"
-private val Context.activeWalletsStore: DataStore<ActiveWallets> by dataStore(
-    fileName = "wallets_preferences.pb",
-    serializer = ActiveWalletsSerializer
-)
-private val Context.introDoneStore: DataStore<IntroDone> by dataStore(
-    fileName = "intro_done.pb",
-    serializer = IntroDoneSerializer
+private val Context.userPreferencesStore: DataStore<UserPreferences> by dataStore(
+    fileName = "user_preferences.pb",
+    serializer = UserPreferencesSerializer
 )
 
 class DevkitWalletActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val activeWalletsRepository = ActiveWalletsRepository(activeWalletsStore, introDoneStore)
+        val userPreferencesRepository = UserPreferencesRepository(userPreferencesStore)
+        val onBuildWalletButtonClicked: (WalletCreateType) -> Unit = { walletCreateType ->
+            try {
+                val activeWallet = when (walletCreateType) {
+                    is WalletCreateType.FROMSCRATCH -> Wallet.createWallet(
+                        newWalletConfig = walletCreateType.newWalletConfig,
+                        internalAppFilesPath = filesDir.absolutePath,
+                        userPreferencesRepository = userPreferencesRepository,
+                    )
+                    is WalletCreateType.LOADEXISTING -> Wallet.loadActiveWallet(
+                        activeWallet = walletCreateType.activeWallet,
+                        internalAppFilesPath = filesDir.absolutePath,
+                    )
+                    is WalletCreateType.RECOVER -> Wallet.recoverWallet(
+                        recoverWalletConfig = walletCreateType.recoverWalletConfig,
+                        internalAppFilesPath = filesDir.absolutePath,
+                        userPreferencesRepository = userPreferencesRepository,
+                    )
+                }
+                setContent {
+                    DevkitTheme {
+                        HomeNavigation(activeWallet)
+                    }
+                }
+            } catch (e: Throwable) {
+                Log.i(TAG, "Could not build wallet: $e")
+            }
+        }
 
         lifecycleScope.launch {
             val activeWallets = async {
-                activeWalletsRepository.fetchActiveWallets().walletsList
+                userPreferencesRepository.fetchActiveWallets()
             }.await()
 
             val onboardingDone = async {
-                activeWalletsRepository.fetchIntroDone().introDone
+                userPreferencesRepository.fetchIntroDone()
             }.await()
 
-            val onBuildWalletButtonClicked: (WalletCreateType) -> Unit = { walletCreateType ->
-                try {
-                    val activeWallet = when (walletCreateType) {
-                        is WalletCreateType.FROMSCRATCH -> Wallet.createWallet(
-                            newWalletConfig = walletCreateType.newWalletConfig,
-                            internalAppFilesPath = filesDir.absolutePath,
-                            activeWalletsRepository = activeWalletsRepository,
-                        )
-                        is WalletCreateType.LOADEXISTING -> Wallet.loadActiveWallet(
-                            activeWallet = walletCreateType.activeWallet,
-                            internalAppFilesPath = filesDir.absolutePath,
-                        )
-                        is WalletCreateType.RECOVER -> Wallet.recoverWallet(
-                            recoverWalletConfig = walletCreateType.recoverWalletConfig,
-                            internalAppFilesPath = filesDir.absolutePath,
-                            activeWalletsRepository = activeWalletsRepository,
-                        )
-                    }
-                    setContent {
-                        DevkitTheme {
-                            HomeNavigation(activeWallet)
-                        }
-                    }
-                } catch (e: Throwable) {
-                    Log.i(TAG, "Could not build wallet: $e")
-                }
-            }
-
             val onFinishOnboarding: () -> Unit = {
-                lifecycleScope.launch { activeWalletsRepository.setIntroDone() }
+                lifecycleScope.launch { userPreferencesRepository.setIntroDone() }
                 setContent {
                     DevkitTheme {
                         CreateWalletNavigation(onBuildWalletButtonClicked, activeWallets)

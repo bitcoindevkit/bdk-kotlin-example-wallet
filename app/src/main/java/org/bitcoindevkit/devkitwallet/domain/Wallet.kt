@@ -186,7 +186,7 @@ class Wallet private constructor(
         fun createWallet(
             newWalletConfig: NewWalletConfig,
             internalAppFilesPath: String,
-            activeWalletsRepository: ActiveWalletsRepository,
+            userPreferencesRepository: UserPreferencesRepository,
         ): Wallet {
             val mnemonic = Mnemonic(WordCount.WORDS12)
             val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
@@ -207,7 +207,7 @@ class Wallet private constructor(
 
             // TODO: launch this correctly, not on the main thread
             // Save the new wallet to the datastore
-            runBlocking { activeWalletsRepository.updateActiveWallets(newWalletForDatastore) }
+            runBlocking { userPreferencesRepository.updateActiveWallets(newWalletForDatastore) }
 
             val bdkWallet = BdkWallet(
                 descriptor = descriptor,
@@ -250,7 +250,7 @@ class Wallet private constructor(
         fun recoverWallet(
             recoverWalletConfig: RecoverWalletConfig,
             internalAppFilesPath: String,
-            activeWalletsRepository: ActiveWalletsRepository,
+            userPreferencesRepository: UserPreferencesRepository,
         ): Wallet {
             val mnemonic = Mnemonic.fromString(recoverWalletConfig.recoveryPhrase)
             val bip32ExtendedRootKey = DescriptorSecretKey(recoverWalletConfig.network, mnemonic, null)
@@ -271,7 +271,7 @@ class Wallet private constructor(
 
             // TODO: launch this correctly, not on the main thread
             // Save the new wallet to the datastore
-            runBlocking { activeWalletsRepository.updateActiveWallets(newWalletForDatastore) }
+            runBlocking { userPreferencesRepository.updateActiveWallets(newWalletForDatastore) }
 
             val bdkWallet = BdkWallet(
                 descriptor = descriptor,
