@@ -22,7 +22,7 @@ import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 
 @Composable
 internal fun RecoveryPhraseScreen(
@@ -49,7 +49,7 @@ internal fun RecoveryPhraseScreen(
                     text = "${index + 1}. $item",
                     modifier = Modifier.weight(weight = 1F),
                     color = DevkitWalletColors.white,
-                    fontFamily = jetBrainsMonoLight
+                    fontFamily = monoRegular
                 )
             }
         }

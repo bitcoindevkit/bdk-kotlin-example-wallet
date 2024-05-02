@@ -30,7 +30,6 @@ import androidx.navigation.compose.rememberNavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
 
 @Composable
 internal fun AboutScreen(navController: NavController) {
@@ -61,7 +60,6 @@ internal fun AboutScreen(navController: NavController) {
                 text = "This wallet is build for developers to learn how to leverage the Bitcoin Development Kit.",
                 color = DevkitWalletColors.white,
                 fontSize = 14.sp,
-                fontFamily = jetBrainsMonoLight,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(all = 8.dp)
             )

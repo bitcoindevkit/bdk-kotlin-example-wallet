@@ -26,7 +26,7 @@ import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 
 @Composable
 internal fun ActiveWalletsScreen(
@@ -68,7 +68,7 @@ fun ActiveWalletCard(wallet: SingleWallet, onBuildWalletButtonClicked: (WalletCr
     ) {
         Text(
             "Name: ${wallet.name}\nNetwork: ${wallet.network}\nScript Type: ${wallet.scriptType}",
-            fontFamily = jetBrainsMonoLight,
+            fontFamily = monoRegular,
             fontSize = 12.sp,
             lineHeight = 20.sp,
             color = DevkitWalletColors.white,

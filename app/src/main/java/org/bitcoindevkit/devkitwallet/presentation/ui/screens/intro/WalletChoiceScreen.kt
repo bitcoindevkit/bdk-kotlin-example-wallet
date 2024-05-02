@@ -32,7 +32,7 @@ import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.monoBold
 
 @Composable
 internal fun WalletChoiceScreen(
@@ -68,7 +68,7 @@ internal fun WalletChoiceScreen(
                     color = DevkitWalletColors.white,
                     fontSize = 28.sp,
                     lineHeight = 38.sp,
-                    fontFamily = jetBrainsMonoLight,
+                    fontFamily = monoBold,
                 )
             }
 
@@ -90,7 +90,6 @@ internal fun WalletChoiceScreen(
                 Text(
                     text = "Use an\nActive Wallet",
                     // fontSize = 18.sp,
-                    // fontFamily = jetBrainsMonoLight,
                     textAlign = TextAlign.Center,
                     // lineHeight = 28.sp,
                 )
@@ -113,7 +112,6 @@ internal fun WalletChoiceScreen(
                 Text(
                     text = "Create a\nNew Wallet",
                     // fontSize = 18.sp,
-                    // fontFamily = jetBrainsMonoLight,
                     textAlign = TextAlign.Center,
                     // lineHeight = 28.sp,
                 )
@@ -136,7 +134,6 @@ internal fun WalletChoiceScreen(
                 Text(
                     text = "Recover an\nExisting Wallet",
                     // fontSize = 18.sp,
-                    // fontFamily = jetBrainsMonoLight,
                     textAlign = TextAlign.Center,
                     // lineHeight = 28.sp,
                 )

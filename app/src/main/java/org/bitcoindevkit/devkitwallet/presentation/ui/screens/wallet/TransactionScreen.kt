@@ -31,7 +31,7 @@ import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 
 @Composable
 internal fun TransactionScreen(
@@ -73,7 +73,7 @@ internal fun TransactionScreen(
                     text = "Transaction",
                     color = DevkitWalletColors.white,
                     fontSize = 28.sp,
-                    fontFamily = jetBrainsMonoLight,
+                    fontFamily = monoRegular,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -81,7 +81,6 @@ internal fun TransactionScreen(
                 //     text = transactionTitle(transaction = transaction),
                 //     color = DevkitWalletColors.white,
                 //     fontSize = 14.sp,
-                //     fontFamily = jetBrainsMonoLight,
                 //     textAlign = TextAlign.Center,
                 //     modifier = Modifier.padding(horizontal = 16.dp)
                 // )
@@ -108,13 +107,11 @@ internal fun TransactionScreen(
                 //         Text(
                 //             text = "${it.first} :",
                 //             fontSize = 16.sp,
-                //             fontFamily = jetBrainsMonoLight,
                 //             color = DevkitWalletColors.white,
                 //         )
                 //         Text(
                 //             text = it.second,
                 //             fontSize = 16.sp,
-                //             fontFamily = jetBrainsMonoLight,
                 //             textAlign = TextAlign.End,
                 //             color = DevkitWalletColors.white,
                 //             modifier = Modifier.fillMaxWidth()
@@ -167,7 +164,7 @@ fun TransactionDetailButton(content: String, navController: NavController, txid:
         Text(
             text = content,
             fontSize = 14.sp,
-            fontFamily = jetBrainsMonoLight,
+            fontFamily = monoRegular,
             textAlign = TextAlign.Center,
             lineHeight = 28.sp,
         )

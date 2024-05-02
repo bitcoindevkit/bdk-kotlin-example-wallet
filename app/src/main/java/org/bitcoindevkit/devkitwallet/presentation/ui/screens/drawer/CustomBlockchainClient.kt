@@ -53,7 +53,6 @@ internal fun CustomBlockchainClient(navController: NavController) {
             //         text = "Use default electrum URL",
             //         color = DevkitWalletColors.white,
             //         fontSize = 14.sp,
-            //         fontFamily = jetBrainsMonoLight,
             //         textAlign = TextAlign.Center,
             //     )
             //     Switch(
@@ -80,7 +79,7 @@ internal fun CustomBlockchainClient(navController: NavController) {
             //             )
             //         },
             //         singleLine = true,
-            //         textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+            //         textStyle = TextStyle(color = DevkitWalletColors.white),
             //         colors = TextFieldDefaults.outlinedTextFieldColors(
             //             focusedBorderColor = DevkitWalletColors.accent1,
             //             unfocusedBorderColor = DevkitWalletColors.white,
@@ -108,7 +107,6 @@ internal fun CustomBlockchainClient(navController: NavController) {
             //         text = "Save",
             //         color = DevkitWalletColors.white,
             //         fontSize = 12.sp,
-            //         fontFamily = jetBrainsMonoLight,
             //         textAlign = TextAlign.Center,
             //     )
             // }

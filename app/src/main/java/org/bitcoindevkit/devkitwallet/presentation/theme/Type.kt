@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.sp
 
 internal val devkitTypography = Typography(
     labelLarge = TextStyle(
-        fontFamily = jetBrainsMonoLight,
-        fontWeight = FontWeight.Light,
+        fontFamily = quattroRegular,
+        fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 28.sp
     ),

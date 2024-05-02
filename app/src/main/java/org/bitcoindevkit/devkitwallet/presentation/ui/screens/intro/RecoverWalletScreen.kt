@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -20,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -46,7 +44,7 @@ import org.bitcoindevkit.devkitwallet.data.RecoverWalletConfig
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 
 @Composable
 internal fun RecoverWalletScreen(
@@ -102,7 +100,7 @@ internal fun RecoverWalletScreen(
                             )
                         },
                         singleLine = true,
-                        textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+                        textStyle = TextStyle(fontFamily = quattroRegular, color = DevkitWalletColors.white),
                         colors = OutlinedTextFieldDefaults.colors(
                             cursorColor = DevkitWalletColors.accent1,
                             focusedBorderColor = DevkitWalletColors.accent1,

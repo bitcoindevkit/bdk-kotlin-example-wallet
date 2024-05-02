@@ -38,10 +38,10 @@ import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoRegular
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
+import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.ReceiveScreenAction
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.AddressViewModel
 
@@ -95,14 +95,14 @@ internal fun ReceiveScreen(
                     SelectionContainer {
                         Text(
                             text = state.address,
-                            fontFamily = jetBrainsMonoRegular,
+                            fontFamily = monoRegular,
                             color = DevkitWalletColors.white
                         )
                     }
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
                     Text(
-                        text = "m/84h/1h/0h/0/${state.addressIndex}",
-                        fontFamily = jetBrainsMonoRegular,
+                        text = "index: ${state.addressIndex}",
+                        fontFamily = monoRegular,
                         color = DevkitWalletColors.white
                     )
                 }
@@ -130,7 +130,7 @@ internal fun ReceiveScreen(
                     Text(
                         text = "generate address",
                         fontSize = 14.sp,
-                        fontFamily = jetBrainsMonoRegular,
+                        fontFamily = monoRegular,
                         textAlign = TextAlign.Center,
                         lineHeight = 28.sp,
                     )

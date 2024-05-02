@@ -37,7 +37,7 @@ import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 
 @Composable
 internal fun CreateNewWalletScreen(
@@ -73,7 +73,7 @@ internal fun CreateNewWalletScreen(
                     )
                 },
                 singleLine = true,
-                textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+                textStyle = TextStyle(fontFamily = monoRegular, color = DevkitWalletColors.white),
                 colors = OutlinedTextFieldDefaults.colors(
                     cursorColor = DevkitWalletColors.accent1,
                     focusedBorderColor = DevkitWalletColors.accent1,

@@ -38,9 +38,9 @@ import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletNavigation
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.domain.Wallet
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 
 @OptIn(androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
@@ -83,13 +83,11 @@ internal fun WalletRoot(
                     Text(
                         text = "BDK Android Sample Wallet",
                         color = DevkitWalletColors.white,
-                        fontFamily = jetBrainsMonoLight,
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(
                         "Version 0.1.0",
                         color = DevkitWalletColors.white,
-                        fontFamily = jetBrainsMonoLight,
                     )
                 }
                 Column(
@@ -133,6 +131,6 @@ internal fun WalletRoot(
 fun DrawerItemLabel(text: String) {
     Text(
         text = text,
-        fontFamily = jetBrainsMonoLight,
+        fontFamily = quattroRegular,
     )
 }

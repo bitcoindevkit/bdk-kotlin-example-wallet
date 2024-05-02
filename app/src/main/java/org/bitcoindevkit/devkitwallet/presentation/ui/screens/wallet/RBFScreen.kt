@@ -44,7 +44,6 @@ internal fun RBFScreen(
 //             text = "Send Bitcoin",
 //             color = DevkitWalletColors.white,
 //             fontSize = 28.sp,
-//             fontFamily = jetBrainsMonoLight,
 //             textAlign = TextAlign.Center,
 //             modifier = Modifier
 //                 .constrainAs(screenTitle) {
@@ -100,7 +99,6 @@ internal fun RBFScreen(
 //                 Text(
 //                     text = "broadcast transaction",
 //                     fontSize = 14.sp,
-//                     fontFamily = jetBrainsMonoLight,
 //                     textAlign = TextAlign.Center,
 //                     lineHeight = 28.sp,
 //                 )
@@ -118,7 +116,6 @@ internal fun RBFScreen(
 //                 Text(
 //                     text = "back to wallet",
 //                     fontSize = 14.sp,
-//                     fontFamily = jetBrainsMonoLight,
 //                     textAlign = TextAlign.Center,
 //                     lineHeight = 28.sp,
 //                 )
@@ -147,7 +144,7 @@ internal fun RBFScreen(
 //                 )
 //             },
 //             singleLine = true,
-//             textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+//             textStyle = TextStyle(color = DevkitWalletColors.white),
 //             colors = TextFieldDefaults.outlinedTextFieldColors(
 //                 focusedBorderColor = DevkitWalletColors.accent1,
 //                 unfocusedBorderColor = DevkitWalletColors.white,
@@ -171,7 +168,7 @@ internal fun RBFScreen(
 //                 feeRate.value = newValue.filter { it.isDigit() }
 //             },
 //             singleLine = true,
-//             textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+//             textStyle = TextStyle(color = DevkitWalletColors.white),
 //             label = {
 //                 Text(
 //                     text = "New fee rate",

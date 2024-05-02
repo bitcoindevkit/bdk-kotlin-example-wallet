@@ -57,7 +57,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
+import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.SendViewModel
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.Recipient
@@ -160,7 +160,7 @@ internal fun SendScreen(
                     Text(
                         text = "broadcast transaction",
                         fontSize = 14.sp,
-                        fontFamily = jetBrainsMonoLight,
+                        fontFamily = monoRegular,
                         textAlign = TextAlign.Center,
                         lineHeight = 28.sp,
                     )
@@ -192,7 +192,6 @@ internal fun AdvancedOptions(
                 text = "Advanced Options",
                 color = DevkitWalletColors.white,
                 fontSize = 18.sp,
-                fontFamily = jetBrainsMonoLight,
             )
         }
 
@@ -205,7 +204,6 @@ internal fun AdvancedOptions(
                 text = "Send All",
                 color = DevkitWalletColors.white,
                 fontSize = 14.sp,
-                fontFamily = jetBrainsMonoLight,
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
             )
@@ -235,7 +233,6 @@ internal fun AdvancedOptions(
                 text = "Disable Replace-by-Fee",
                 color = DevkitWalletColors.white,
                 fontSize = 14.sp,
-                fontFamily = jetBrainsMonoLight,
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
             )
@@ -271,7 +268,7 @@ internal fun AdvancedOptions(
                     )
                 },
                 singleLine = true,
-                textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+                textStyle = TextStyle(color = DevkitWalletColors.white),
                 colors = OutlinedTextFieldDefaults.colors(
                     cursorColor = DevkitWalletColors.accent1,
                     focusedBorderColor = DevkitWalletColors.accent1,
@@ -290,7 +287,6 @@ internal fun AdvancedOptions(
                 text = "Number of Recipients",
                 color = DevkitWalletColors.white,
                 fontSize = 14.sp,
-                fontFamily = jetBrainsMonoLight,
             )
         }
 
@@ -355,7 +351,7 @@ private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
                         )
                     },
                     singleLine = true,
-                    textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+                    textStyle = TextStyle(color = DevkitWalletColors.white),
                     colors = OutlinedTextFieldDefaults.colors(
                         cursorColor = DevkitWalletColors.accent1,
                         focusedBorderColor = DevkitWalletColors.accent1,
@@ -424,7 +420,7 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
                         }
                     },
                     singleLine = true,
-                    textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+                    textStyle = TextStyle(color = DevkitWalletColors.white),
                     colors = OutlinedTextFieldDefaults.colors(
                         cursorColor = DevkitWalletColors.accent1,
                         focusedBorderColor = DevkitWalletColors.accent1,
@@ -454,7 +450,7 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
                 feeRate.value = newValue.filter { it.isDigit() }
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = jetBrainsMonoLight, color = DevkitWalletColors.white),
+            textStyle = TextStyle(color = DevkitWalletColors.white),
             label = {
                 Text(
                     text = "Fee rate",
@@ -494,7 +490,6 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
             Text(
                 text = "advanced options",
                 fontSize = 14.sp,
-                fontFamily = jetBrainsMonoLight,
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
             )

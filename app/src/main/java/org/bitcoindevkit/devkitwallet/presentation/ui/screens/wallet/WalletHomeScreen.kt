@@ -51,14 +51,14 @@ import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.LoadingAnimation
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoLight
-import org.bitcoindevkit.devkitwallet.presentation.theme.jetBrainsMonoSemiBold
 import org.bitcoindevkit.devkitwallet.domain.utils.formatInBtc
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
+import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
@@ -116,7 +116,8 @@ internal fun WalletHomeScreen(
                         )
                         Text(
                             text = state.balance.formatInBtc(),
-                            fontFamily = jetBrainsMonoSemiBold,
+                            // fontFamily = quattroBold,
+                            fontFamily = monoRegular,
                             fontSize = 32.sp,
                             color = DevkitWalletColors.white
                         )
@@ -124,7 +125,8 @@ internal fun WalletHomeScreen(
                     CurrencyUnit.Satoshi -> {
                         Text(
                             text = "${state.balance} sat",
-                            fontFamily = jetBrainsMonoSemiBold,
+                            // fontFamily = quattroBold,
+                            fontFamily = monoRegular,
                             fontSize = 32.sp,
                             color = DevkitWalletColors.white
                         )
@@ -152,7 +154,7 @@ internal fun WalletHomeScreen(
                 ) {
                     Text(
                         text = "Network unavailable",
-                        fontFamily = jetBrainsMonoLight,
+                        fontFamily = monoRegular,
                         fontSize = 16.sp,
                         color = DevkitWalletColors.white
                     )
@@ -190,7 +192,6 @@ internal fun WalletHomeScreen(
                     Text(
                         text = "receive",
                         fontSize = 16.sp,
-                        fontFamily = jetBrainsMonoLight,
                         textAlign = TextAlign.End,
                         lineHeight = 28.sp,
                         modifier = Modifier
@@ -215,7 +216,6 @@ internal fun WalletHomeScreen(
                     Text(
                         text = "send",
                         fontSize = 16.sp,
-                        fontFamily = jetBrainsMonoLight,
                         textAlign = TextAlign.End,
                         lineHeight = 28.sp,
                         modifier = Modifier
@@ -235,9 +235,10 @@ internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "BDK Sample Wallet",
+                text = "Devkit Wallet",
                 color = DevkitWalletColors.white,
-                fontFamily = jetBrainsMonoSemiBold,
+                // fontFamily = quattroRegular,
+                fontFamily = quattroBold,
                 fontSize = 20.sp,
             )
         },
