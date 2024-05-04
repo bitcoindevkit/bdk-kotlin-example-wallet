@@ -11,13 +11,19 @@ import org.bitcoindevkit.Update
 import org.bitcoindevkit.Wallet as BdkWallet
 
 interface BlockchainClient {
+    fun clientId(): String
+
     fun fullScan(wallet: BdkWallet, stopGap: ULong, parallelRequests: ULong): Update
 
     fun broadcast(transaction: Transaction): Unit
 }
 
-class EsploraClient(url: String) : BlockchainClient {
+class EsploraClient(private val url: String) : BlockchainClient {
     private val client = BdkEsploraClient(url)
+
+    override fun clientId(): String {
+        return url
+    }
 
     override fun fullScan(wallet: BdkWallet, stopGap: ULong, parallelRequests: ULong): Update {
         return client.fullScan(wallet, stopGap, parallelRequests)
@@ -26,12 +32,4 @@ class EsploraClient(url: String) : BlockchainClient {
     override fun broadcast(transaction: Transaction) {
         client.broadcast(transaction)
     }
-}
-
-enum class ClientRank {
-    DEFAULT,
-    ALTERNATIVE1,
-    ALTERNATIVE2,
-    ALTERNATIVE3,
-    ALTERNATIVE4,
 }

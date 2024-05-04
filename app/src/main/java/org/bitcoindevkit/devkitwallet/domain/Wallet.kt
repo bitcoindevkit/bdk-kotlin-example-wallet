@@ -41,9 +41,9 @@ private const val TAG = "Wallet"
 class Wallet private constructor(
     private val wallet: BdkWallet,
     private val recoveryPhrase: String,
-    private val blockchainClients: MutableMap<ClientRank, BlockchainClient>
+    blockchainClientsConfig: BlockchainClientsConfig
 ) {
-    private var currentBlockchainClient: BlockchainClient? = blockchainClients[ClientRank.DEFAULT]
+    private var currentBlockchainClient: BlockchainClient? = blockchainClientsConfig.getClient()
 
     fun getRecoveryPhrase(): List<String> {
         return recoveryPhrase.split(" ")
@@ -202,14 +202,11 @@ class Wallet private constructor(
                 persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.db",
                 network = newWalletConfig.network,
             )
-            val defaultClient = getDefaultEsploraClient(newWalletConfig.network)
 
             return Wallet(
                 wallet = bdkWallet,
                 recoveryPhrase = mnemonic.asString(),
-                blockchainClients = mutableMapOf(
-                    Pair(ClientRank.DEFAULT, defaultClient)
-                )
+                blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(newWalletConfig.network)
             )
         }
 
@@ -225,14 +222,11 @@ class Wallet private constructor(
                 persistenceBackendPath = "$internalAppFilesPath/wallet-${activeWallet.id.take(8)}.db",
                 network = activeWallet.network.intoDomain(),
             )
-            val defaultClient = getDefaultEsploraClient(activeWallet.network.intoDomain())
 
             return Wallet(
                 wallet = bdkWallet,
                 recoveryPhrase = activeWallet.recoveryPhrase,
-                blockchainClients = mutableMapOf(
-                    Pair(ClientRank.DEFAULT, defaultClient)
-                )
+                blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(activeWallet.network.intoDomain())
             )
         }
 
@@ -268,22 +262,12 @@ class Wallet private constructor(
                 persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.db",
                 network = recoverWalletConfig.network,
             )
-            val client = getDefaultEsploraClient(recoverWalletConfig.network)
 
             return Wallet(
                 wallet = bdkWallet,
                 recoveryPhrase = mnemonic.asString(),
-                blockchainClients = mutableMapOf(Pair(ClientRank.DEFAULT, client))
+                blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(recoverWalletConfig.network)
             )
         }
-    }
-}
-
-fun getDefaultEsploraClient(network: Network): EsploraClient {
-    return when (network) {
-        Network.TESTNET -> EsploraClient("https://esplora.testnet.kuutamo.cloud/")
-        Network.REGTEST -> EsploraClient("http://10.0.2.2:3002")
-        Network.BITCOIN -> throw IllegalArgumentException("this wallet does not support mainnet")
-        Network.SIGNET -> TODO()
     }
 }
