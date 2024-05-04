@@ -177,8 +177,18 @@ class Wallet private constructor(
         ): Wallet {
             val mnemonic = Mnemonic(WordCount.WORDS12)
             val bip32ExtendedRootKey = DescriptorSecretKey(newWalletConfig.network, mnemonic, null)
-            val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, newWalletConfig.network)
-            val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, newWalletConfig.network)
+            val descriptor: Descriptor = createScriptAppropriateDescriptor(
+                newWalletConfig.scriptType,
+                bip32ExtendedRootKey,
+                newWalletConfig.network,
+                KeychainKind.EXTERNAL
+            )
+            val changeDescriptor: Descriptor = createScriptAppropriateDescriptor(
+                newWalletConfig.scriptType,
+                bip32ExtendedRootKey,
+                newWalletConfig.network,
+                KeychainKind.INTERNAL
+            )
             val walletId = UUID.randomUUID().toString()
 
             // Create SingleWallet object for saving to datastore
@@ -237,8 +247,18 @@ class Wallet private constructor(
         ): Wallet {
             val mnemonic = Mnemonic.fromString(recoverWalletConfig.recoveryPhrase)
             val bip32ExtendedRootKey = DescriptorSecretKey(recoverWalletConfig.network, mnemonic, null)
-            val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, recoverWalletConfig.network)
-            val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, recoverWalletConfig.network)
+            val descriptor: Descriptor = createScriptAppropriateDescriptor(
+                recoverWalletConfig.scriptType,
+                bip32ExtendedRootKey,
+                recoverWalletConfig.network,
+                KeychainKind.EXTERNAL
+            )
+            val changeDescriptor: Descriptor = createScriptAppropriateDescriptor(
+                recoverWalletConfig.scriptType,
+                bip32ExtendedRootKey,
+                recoverWalletConfig.network,
+                KeychainKind.INTERNAL
+            )
             val walletId = UUID.randomUUID().toString()
 
             // Create SingleWallet object for saving to datastore
@@ -268,6 +288,27 @@ class Wallet private constructor(
                 recoveryPhrase = mnemonic.asString(),
                 blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(recoverWalletConfig.network)
             )
+        }
+    }
+}
+
+fun createScriptAppropriateDescriptor(
+    scriptType: ActiveWalletScriptType,
+    bip32ExtendedRootKey: DescriptorSecretKey,
+    network: Network,
+    keychain: KeychainKind
+): Descriptor {
+    return if (keychain == KeychainKind.EXTERNAL) {
+        when (scriptType) {
+            ActiveWalletScriptType.P2WPKH -> Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, network)
+            ActiveWalletScriptType.P2TR -> Descriptor.newBip86(bip32ExtendedRootKey, KeychainKind.EXTERNAL, network)
+            ActiveWalletScriptType.UNRECOGNIZED -> TODO()
+        }
+    } else {
+        when (scriptType) {
+            ActiveWalletScriptType.P2WPKH -> Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, network)
+            ActiveWalletScriptType.P2TR -> Descriptor.newBip86(bip32ExtendedRootKey, KeychainKind.INTERNAL, network)
+            ActiveWalletScriptType.UNRECOGNIZED -> TODO()
         }
     }
 }

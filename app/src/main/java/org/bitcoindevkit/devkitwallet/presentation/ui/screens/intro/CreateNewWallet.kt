@@ -7,7 +7,6 @@ package org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,8 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
@@ -42,7 +39,6 @@ import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
-import java.util.Locale
 
 @Composable
 internal fun CreateNewWalletScreen(
@@ -67,7 +63,7 @@ internal fun CreateNewWalletScreen(
             var selectedNetwork: Network by remember { mutableStateOf(Network.TESTNET) }
             val network = listOf(Network.TESTNET, Network.REGTEST)
             var selectedScriptType: ActiveWalletScriptType by remember { mutableStateOf(ActiveWalletScriptType.P2TR) }
-            val scriptTypes = listOf(ActiveWalletScriptType.P2TR)
+            val scriptTypes = listOf(ActiveWalletScriptType.P2TR, ActiveWalletScriptType.P2WPKH)
 
             Column(
                 modifier = Modifier
@@ -111,7 +107,7 @@ internal fun CreateNewWalletScreen(
 
                 network.forEach {
                     RadioButtonWithLabel(
-                        label = it.name.lowercase().replaceFirstChar { char -> char.uppercase() },
+                        label = it.displayString(),
                         isSelected = selectedNetwork == it,
                         onSelect = { selectedNetwork = it }
                     )
@@ -122,7 +118,7 @@ internal fun CreateNewWalletScreen(
 
                 scriptTypes.forEach {
                     RadioButtonWithLabel(
-                        label = it.name,
+                        label = it.displayString(),
                         isSelected = selectedScriptType == it,
                         onSelect = { selectedScriptType = it }
                     )
@@ -180,5 +176,22 @@ fun RadioButtonWithLabel(label: String, isSelected: Boolean, onSelect: () -> Uni
             modifier = Modifier
                 .clickable(onClick = onSelect)
         )
+    }
+}
+
+fun ActiveWalletScriptType.displayString(): String {
+    return when (this) {
+        ActiveWalletScriptType.P2TR -> "P2TR (Taproot, BIP-86)"
+        ActiveWalletScriptType.P2WPKH -> "P2WPKH (Native Segwit, BIP-84)"
+        ActiveWalletScriptType.UNRECOGNIZED -> TODO()
+    }
+}
+
+fun Network.displayString(): String {
+    return when (this) {
+        Network.TESTNET -> "Testnet"
+        Network.REGTEST -> "Regtest"
+        Network.SIGNET -> "Signet"
+        Network.BITCOIN -> TODO()
     }
 }
