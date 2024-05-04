@@ -23,7 +23,6 @@ import org.bitcoindevkit.Script
 import org.bitcoindevkit.TxBuilder
 import org.bitcoindevkit.Update
 import org.bitcoindevkit.WordCount
-import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.ConfirmationBlock
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
@@ -31,9 +30,11 @@ import org.bitcoindevkit.devkitwallet.data.RecoverWalletConfig
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.data.Timestamp
 import org.bitcoindevkit.devkitwallet.data.TxDetails
+import org.bitcoindevkit.devkitwallet.domain.utils.intoDomain
+import org.bitcoindevkit.devkitwallet.domain.utils.intoProto
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.Recipient
-import java.util.UUID
 import org.bitcoindevkit.Wallet as BdkWallet
+import java.util.UUID
 
 private const val TAG = "Wallet"
 
@@ -43,11 +44,6 @@ class Wallet private constructor(
     private val blockchainClients: MutableMap<ClientRank, BlockchainClient>
 ) {
     private var currentBlockchainClient: BlockchainClient? = blockchainClients[ClientRank.DEFAULT]
-
-    // private val esploraClient: EsploraClient = EsploraClient("http://10.0.2.2:3002")
-    // private val esploraClient: EsploraClient = EsploraClient("https://esplora.testnet.kuutamo.cloud/")
-    // to use Esplora on regtest locally, use the following address
-    // private const val regtestEsploraUrl: String = "http://10.0.2.2:3002"
 
     fun getRecoveryPhrase(): List<String> {
         return recoveryPhrase.split(" ")
@@ -174,31 +170,22 @@ class Wallet private constructor(
     // }
 
     companion object {
-        // Code to ensure only one instance of Wallet is ever created
-        // private var instance: Wallet? = null
-        // fun getInstance(): Wallet {
-        //     if (instance == null) {
-        //         instance = Wallet()
-        //     }
-        //     return instance!!
-        // }
-
         fun createWallet(
             newWalletConfig: NewWalletConfig,
             internalAppFilesPath: String,
             userPreferencesRepository: UserPreferencesRepository,
         ): Wallet {
             val mnemonic = Mnemonic(WordCount.WORDS12)
-            val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
-            val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
-            val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
+            val bip32ExtendedRootKey = DescriptorSecretKey(newWalletConfig.network, mnemonic, null)
+            val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, newWalletConfig.network)
+            val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, newWalletConfig.network)
             val walletId = UUID.randomUUID().toString()
 
             // Create SingleWallet object for saving to datastore
             val newWalletForDatastore: SingleWallet = SingleWallet.newBuilder()
                 .setId(walletId)
                 .setName(newWalletConfig.name)
-                .setNetwork(ActiveWalletNetwork.TESTNET)
+                .setNetwork(newWalletConfig.network.intoProto())
                 .setScriptType(ActiveWalletScriptType.P2WPKH)
                 .setDescriptor(descriptor.asStringPrivate())
                 .setChangeDescriptor(changeDescriptor.asStringPrivate())
@@ -213,14 +200,15 @@ class Wallet private constructor(
                 descriptor = descriptor,
                 changeDescriptor = changeDescriptor,
                 persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.db",
-                network = Network.TESTNET,
+                network = newWalletConfig.network,
             )
+            val defaultClient = getDefaultEsploraClient(newWalletConfig.network)
 
             return Wallet(
                 wallet = bdkWallet,
                 recoveryPhrase = mnemonic.asString(),
                 blockchainClients = mutableMapOf(
-                    Pair(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
+                    Pair(ClientRank.DEFAULT, defaultClient)
                 )
             )
         }
@@ -229,20 +217,21 @@ class Wallet private constructor(
             activeWallet: SingleWallet,
             internalAppFilesPath: String,
         ): Wallet {
-            val descriptor = Descriptor(activeWallet.descriptor, Network.TESTNET)
-            val changeDescriptor = Descriptor(activeWallet.changeDescriptor, Network.TESTNET)
+            val descriptor = Descriptor(activeWallet.descriptor, activeWallet.network.intoDomain())
+            val changeDescriptor = Descriptor(activeWallet.changeDescriptor, activeWallet.network.intoDomain())
             val bdkWallet = BdkWallet(
                 descriptor = descriptor,
                 changeDescriptor = changeDescriptor,
                 persistenceBackendPath = "$internalAppFilesPath/wallet-${activeWallet.id.take(8)}.db",
-                network = Network.TESTNET,
+                network = activeWallet.network.intoDomain(),
             )
+            val defaultClient = getDefaultEsploraClient(activeWallet.network.intoDomain())
 
             return Wallet(
                 wallet = bdkWallet,
                 recoveryPhrase = activeWallet.recoveryPhrase,
                 blockchainClients = mutableMapOf(
-                    Pair(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
+                    Pair(ClientRank.DEFAULT, defaultClient)
                 )
             )
         }
@@ -254,7 +243,7 @@ class Wallet private constructor(
         ): Wallet {
             val mnemonic = Mnemonic.fromString(recoverWalletConfig.recoveryPhrase)
             val bip32ExtendedRootKey = DescriptorSecretKey(recoverWalletConfig.network, mnemonic, null)
-            val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+            val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, recoverWalletConfig.network)
             val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, recoverWalletConfig.network)
             val walletId = UUID.randomUUID().toString()
 
@@ -262,7 +251,7 @@ class Wallet private constructor(
             val newWalletForDatastore: SingleWallet = SingleWallet.newBuilder()
                 .setId(walletId)
                 .setName(recoverWalletConfig.name)
-                .setNetwork(ActiveWalletNetwork.TESTNET)
+                .setNetwork(recoverWalletConfig.network.intoProto())
                 .setScriptType(ActiveWalletScriptType.P2WPKH)
                 .setDescriptor(descriptor.asStringPrivate())
                 .setChangeDescriptor(changeDescriptor.asStringPrivate())
@@ -277,16 +266,24 @@ class Wallet private constructor(
                 descriptor = descriptor,
                 changeDescriptor = changeDescriptor,
                 persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.db",
-                network = Network.TESTNET,
+                network = recoverWalletConfig.network,
             )
+            val client = getDefaultEsploraClient(recoverWalletConfig.network)
 
             return Wallet(
                 wallet = bdkWallet,
                 recoveryPhrase = mnemonic.asString(),
-                blockchainClients = mutableMapOf(
-                    Pair(ClientRank.DEFAULT, EsploraClient("https://esplora.testnet.kuutamo.cloud/"))
-                )
+                blockchainClients = mutableMapOf(Pair(ClientRank.DEFAULT, client))
             )
         }
+    }
+}
+
+fun getDefaultEsploraClient(network: Network): EsploraClient {
+    return when (network) {
+        Network.TESTNET -> EsploraClient("https://esplora.testnet.kuutamo.cloud/")
+        Network.REGTEST -> EsploraClient("http://10.0.2.2:3002")
+        Network.BITCOIN -> throw IllegalArgumentException("this wallet does not support mainnet")
+        Network.SIGNET -> TODO()
     }
 }
