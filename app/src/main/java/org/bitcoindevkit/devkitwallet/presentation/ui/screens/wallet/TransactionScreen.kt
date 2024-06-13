@@ -28,15 +28,15 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.RbfScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 
 @Composable
 internal fun TransactionScreen(
-    navController: NavController,
     txid: String?,
+    navController: NavController,
 ) {
     // val transaction = getTransaction(txid = txid)
     // if (transaction == null) {
@@ -148,7 +148,7 @@ fun TransactionDetailButton(content: String, navController: NavController, txid:
         onClick = {
             when (content) {
                 "increase fees" -> {
-                    navController.navigate("${Screen.RBFScreen.route}/txid=$txid")
+                    navController.navigate(RbfScreen(txid!!))
                 }
                 "back to transaction list" -> {
                     navController.popBackStack()

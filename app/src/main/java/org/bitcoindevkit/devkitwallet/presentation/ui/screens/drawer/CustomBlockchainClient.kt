@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 
@@ -36,7 +36,7 @@ internal fun CustomBlockchainClient(navController: NavController) {
         topBar = {
             SecondaryScreensAppBar(
                 title = "Custom Blockchain Client",
-                navigation = { navController.navigate(Screen.WalletScreen.route) }
+                navigation = { navController.navigate(WalletScreen) }
             )
         },
         containerColor = DevkitWalletColors.primary

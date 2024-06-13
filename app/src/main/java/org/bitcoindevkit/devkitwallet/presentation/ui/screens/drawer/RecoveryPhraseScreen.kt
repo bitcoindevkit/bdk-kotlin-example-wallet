@@ -17,9 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-// import org.bitcoindevkit.devkitwallet.domain.Repository
-import org.bitcoindevkit.devkitwallet.domain.Wallet
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
@@ -33,7 +31,7 @@ internal fun RecoveryPhraseScreen(
         topBar = {
             SecondaryScreensAppBar(
                 title = "Your Recovery Phrase",
-                navigation = { navController.navigate(Screen.WalletScreen.route) }
+                navigation = { navController.navigate(WalletScreen) }
             )
         },
         containerColor = DevkitWalletColors.primary

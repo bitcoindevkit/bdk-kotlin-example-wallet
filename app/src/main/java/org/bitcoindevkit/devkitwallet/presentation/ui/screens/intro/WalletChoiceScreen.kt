@@ -30,7 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.R
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.ActiveWalletsScreen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.CreateNewWalletScreen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletRecoveryScreen
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoBold
 
@@ -73,7 +75,7 @@ internal fun WalletChoiceScreen(
             }
 
             Button(
-                onClick = { navController.navigate(Screen.ActiveWalletsScreen.route) },
+                onClick = { navController.navigate(ActiveWalletsScreen) },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 enabled = true,
@@ -96,7 +98,7 @@ internal fun WalletChoiceScreen(
             }
 
             Button(
-                onClick = { navController.navigate(Screen.CreateNewWalletScreen.route) },
+                onClick = { navController.navigate(CreateNewWalletScreen) },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -118,7 +120,7 @@ internal fun WalletChoiceScreen(
             }
 
             Button(
-                onClick = { navController.navigate(Screen.WalletRecoveryScreen.route) },
+                onClick = { navController.navigate(WalletRecoveryScreen) },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier

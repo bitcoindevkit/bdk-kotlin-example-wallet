@@ -35,12 +35,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.graphics.createBitmap
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
+import org.bitcoindevkit.devkitwallet.presentation.navigation.HomeScreen
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.ReceiveScreenAction
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.AddressViewModel
@@ -60,7 +60,7 @@ internal fun ReceiveScreen(
         topBar = {
             SecondaryScreensAppBar(
                 title = "Receive Address",
-                navigation = { navController.navigate(Screen.HomeScreen.route) }
+                navigation = { navController.navigate(HomeScreen) }
             )
         }
     ) { paddingValues ->

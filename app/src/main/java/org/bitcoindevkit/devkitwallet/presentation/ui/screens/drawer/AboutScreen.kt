@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.R
 import androidx.navigation.compose.rememberNavController
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 
@@ -37,7 +37,7 @@ internal fun AboutScreen(navController: NavController) {
         topBar = {
             SecondaryScreensAppBar(
                 title = "About",
-                navigation = { navController.navigate(Screen.WalletScreen.route) }
+                navigation = { navController.navigate(WalletScreen) }
             )
         }
     ) { paddingValues ->

@@ -17,11 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.domain.Wallet
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.HomeScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.ConfirmedTransactionCard
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.PendingTransactionCard
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.navigation.TransactionScreen
 
 private const val TAG = "TransactionHistoryScreen"
 
@@ -36,7 +37,7 @@ internal fun TransactionHistoryScreen(
         topBar = {
             SecondaryScreensAppBar(
                 title = "Transaction History",
-                navigation = { navController.navigate(Screen.HomeScreen.route) }
+                navigation = { navController.navigate(HomeScreen) }
             )
         }
     ) { paddingValues ->
@@ -64,7 +65,7 @@ internal fun TransactionHistoryScreen(
 }
 
 fun viewTransaction(navController: NavController, txid: String) {
-    navController.navigate("${Screen.TransactionScreen.route}/txid=$txid")
+    navController.navigate(TransactionScreen(txid))
 }
 
 // @Preview(device = Devices.PIXEL_4, showBackground = true)

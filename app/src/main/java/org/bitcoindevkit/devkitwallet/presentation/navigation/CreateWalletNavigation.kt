@@ -29,11 +29,9 @@ fun CreateWalletNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.WalletChoiceScreen.route,
+        startDestination = WalletChoiceScreen,
     ) {
-
-        composable(
-            route = Screen.WalletChoiceScreen.route,
+        composable<WalletChoiceScreen>(
             exitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
@@ -42,8 +40,7 @@ fun CreateWalletNavigation(
             },
         ) { WalletChoiceScreen(navController = navController) }
 
-        composable(
-            route = Screen.ActiveWalletsScreen.route,
+        composable<ActiveWalletsScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
@@ -58,8 +55,7 @@ fun CreateWalletNavigation(
             }
         ) { ActiveWalletsScreen(activeWallets = activeWallets, navController = navController, onBuildWalletButtonClicked) }
 
-        composable(
-            route = Screen.CreateNewWalletScreen.route,
+        composable<CreateNewWalletScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
@@ -74,8 +70,7 @@ fun CreateWalletNavigation(
             }
         ) { CreateNewWalletScreen(navController = navController, onBuildWalletButtonClicked) }
 
-        composable(
-            route = Screen.WalletRecoveryScreen.route,
+        composable<WalletRecoveryScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },

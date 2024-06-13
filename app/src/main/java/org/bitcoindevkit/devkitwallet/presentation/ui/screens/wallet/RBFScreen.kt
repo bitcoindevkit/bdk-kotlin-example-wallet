@@ -14,8 +14,8 @@ private const val TAG = "RBFScreen"
 
 @Composable
 internal fun RBFScreen(
-    navController: NavController,
     txid: String?,
+    navController: NavController,
     paddingValues: PaddingValues = PaddingValues(0.dp),
 ) {
 //     if (txid.isNullOrEmpty()) {

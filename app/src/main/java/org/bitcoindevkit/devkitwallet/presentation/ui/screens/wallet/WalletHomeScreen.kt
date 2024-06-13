@@ -47,7 +47,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.LoadingAnimation
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
@@ -57,10 +56,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
+import org.bitcoindevkit.devkitwallet.presentation.navigation.TransactionHistoryScreen
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
+import org.bitcoindevkit.devkitwallet.presentation.navigation.ReceiveScreen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.SendScreen
 
 private const val TAG = "WalletHomeScreen"
 
@@ -170,7 +172,7 @@ internal fun WalletHomeScreen(
             NeutralButton(
                 text = "transaction history",
                 enabled = networkAvailable,
-                onClick = { navController.navigate(Screen.TransactionsScreen.route) }
+                onClick = { navController.navigate(TransactionHistoryScreen) }
             )
 
             Row(
@@ -181,7 +183,7 @@ internal fun WalletHomeScreen(
                     .fillMaxWidth(0.9f)
             ) {
                 Button(
-                    onClick = { navController.navigate(Screen.ReceiveScreen.route) },
+                    onClick = { navController.navigate(ReceiveScreen) },
                     colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier
@@ -201,7 +203,7 @@ internal fun WalletHomeScreen(
                 }
 
                 Button(
-                    onClick = { navController.navigate(Screen.SendScreen.route) },
+                    onClick = { navController.navigate(SendScreen) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = DevkitWalletColors.accent2,
                         disabledContainerColor = DevkitWalletColors.accent2,

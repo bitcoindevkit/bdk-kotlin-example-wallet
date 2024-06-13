@@ -55,7 +55,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.HomeScreen
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
@@ -92,7 +92,7 @@ internal fun SendScreen(
         topBar = {
             SecondaryScreensAppBar(
                 title = "Send Bitcoin",
-                navigation = { navController.navigate(Screen.HomeScreen.route) }
+                navigation = { navController.navigate(HomeScreen) }
             )
         },
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),

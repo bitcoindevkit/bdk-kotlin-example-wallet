@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.material3.DrawerState
+import androidx.navigation.toRoute
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.RBFScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.ReceiveScreen
@@ -38,11 +39,9 @@ fun WalletNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.HomeScreen.route,
+        startDestination = HomeScreen,
     ) {
-
-        composable(
-            route = Screen.HomeScreen.route,
+        composable<HomeScreen>(
             exitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
             },
@@ -51,8 +50,7 @@ fun WalletNavigation(
             },
         ) { WalletHomeScreen(navController, drawerState, walletViewModel) }
 
-        composable(
-            route = Screen.ReceiveScreen.route,
+        composable<ReceiveScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
             },
@@ -67,8 +65,7 @@ fun WalletNavigation(
             }
         ) { ReceiveScreen(navController, addressViewModel) }
 
-        composable(
-            route = Screen.SendScreen.route,
+        composable<SendScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
             },
@@ -83,8 +80,7 @@ fun WalletNavigation(
             }
         ) { SendScreen(navController, sendViewModel) }
 
-        composable(
-            route = "${Screen.RBFScreen.route}/txid={txid}",
+        composable<RbfScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
             },
@@ -97,14 +93,12 @@ fun WalletNavigation(
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(ANIMATION_DURATION))
             }
-        ) { backStackEntry ->
-            backStackEntry.arguments?.getString("txid")?.let {
-                RBFScreen(navController, backStackEntry.arguments?.getString("txid"))
-            }
+        ) {
+            val args = it.toRoute<RbfScreen>()
+            RBFScreen(args.txid, navController)
         }
 
-        composable(
-            route = Screen.TransactionsScreen.route,
+        composable<TransactionHistoryScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
             },
@@ -119,8 +113,7 @@ fun WalletNavigation(
             }
         ) { TransactionHistoryScreen(navController, activeWallet) }
 
-        composable(
-            route = "${Screen.TransactionScreen.route}/txid={txid}",
+        composable<TransactionScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
             },
@@ -133,10 +126,9 @@ fun WalletNavigation(
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(ANIMATION_DURATION))
             }
-        ) { backStackEntry ->
-            backStackEntry.arguments?.getString("txid")?.let {
-                TransactionScreen(navController, backStackEntry.arguments?.getString("txid"))
-            }
+        ) {
+            val args = it.toRoute<TransactionScreen>()
+            TransactionScreen(args.txid, navController)
         }
     }
 }

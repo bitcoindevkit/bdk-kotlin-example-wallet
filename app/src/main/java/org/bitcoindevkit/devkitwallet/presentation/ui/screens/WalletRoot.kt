@@ -35,11 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.presentation.navigation.Screen
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletNavigation
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.domain.Wallet
+import org.bitcoindevkit.devkitwallet.presentation.navigation.AboutScreen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.CustomBlockchainClientScreen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.RecoveryPhraseScreen
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 
 @OptIn(androidx.compose.animation.ExperimentalAnimationApi::class)
@@ -97,21 +99,21 @@ internal fun WalletRoot(
                     NavigationDrawerItem(
                         label = { DrawerItemLabel("About") },
                         selected = items[0] == selectedItem.value,
-                        onClick = { navController.navigate(Screen.AboutScreen.route) },
+                        onClick = { navController.navigate(AboutScreen) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         colors = navigationItemColors
                     )
                     NavigationDrawerItem(
                         label = { DrawerItemLabel("Recovery Phrase") },
                         selected = items[1] == selectedItem.value,
-                        onClick = { navController.navigate(Screen.RecoveryPhraseScreen.route) },
+                        onClick = { navController.navigate(RecoveryPhraseScreen) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         colors = navigationItemColors
                     )
                     NavigationDrawerItem(
                         label = { DrawerItemLabel("Custom Blockchain Client") },
                         selected = items[2] == selectedItem.value,
-                        onClick = { navController.navigate(Screen.CustomBlockchainClient.route) },
+                        onClick = { navController.navigate(CustomBlockchainClientScreen) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         colors = navigationItemColors
                     )

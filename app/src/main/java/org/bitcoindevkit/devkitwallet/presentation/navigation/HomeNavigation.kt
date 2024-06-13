@@ -27,11 +27,10 @@ fun HomeNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.WalletScreen.route,
+        startDestination = WalletScreen,
     ) {
 
-        composable(
-            route = Screen.WalletScreen.route,
+        composable<WalletScreen>(
             exitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
@@ -40,8 +39,7 @@ fun HomeNavigation(
             },
         ) { WalletRoot(navController = navController, activeWallet = activeWallet) }
 
-        composable(
-            route = Screen.AboutScreen.route,
+        composable<AboutScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
@@ -56,8 +54,7 @@ fun HomeNavigation(
             },
         ) { AboutScreen(navController = navController) }
 
-        composable(
-            route = Screen.RecoveryPhraseScreen.route,
+        composable<RecoveryPhraseScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
@@ -72,8 +69,7 @@ fun HomeNavigation(
             }
         ) { RecoveryPhraseScreen(navController = navController, activeWallet.getRecoveryPhrase()) }
 
-        composable(
-            route = Screen.CustomBlockchainClient.route,
+        composable<CustomBlockchainClientScreen>(
             enterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
