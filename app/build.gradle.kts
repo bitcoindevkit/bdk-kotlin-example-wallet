@@ -54,7 +54,7 @@ dependencies {
     // Jetpack Compose
     // Adding the Bill of Materials synchronizes dependencies in the androidx.compose namespace
     // You can remove the library version in your dependency declarations
-    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
+    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
     implementation("androidx.compose.animation:animation")
     implementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.compose.ui:ui")
