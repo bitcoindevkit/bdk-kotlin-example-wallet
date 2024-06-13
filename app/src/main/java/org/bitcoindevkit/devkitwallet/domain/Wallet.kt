@@ -123,13 +123,25 @@ class Wallet private constructor(
         return transactions.map { tx ->
             val txid = tx.transaction.txid()
             val (sent, received) = wallet.sentAndReceived(tx.transaction)
-            val fee = wallet.calculateFee(tx.transaction)
-            val feeRate = wallet.calculateFeeRate(tx.transaction)
+            var feeRate: FeeRate? = null
+            var fee: ULong? = null
+            // TODO: I don't know why we're getting negative fees here, but it looks like a bug
+            try {
+                fee = wallet.calculateFee(tx.transaction)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error calculating fee rate for tx $txid: $e")
+            }
+            try {
+                feeRate = wallet.calculateFeeRate(tx.transaction)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error calculating fee for tx $txid: $e")
+            }
+
             val (confirmationBlock, confirmationTimestamp, pending) = when (val position = tx.chainPosition) {
                 is ChainPosition.Unconfirmed -> Triple(null, null, true)
                 is ChainPosition.Confirmed -> Triple(ConfirmationBlock(position.height), Timestamp(position.timestamp), false)
             }
-            TxDetails(tx.transaction, txid, sent.toSat(), received.toSat(), fee, feeRate, pending, confirmationBlock, confirmationTimestamp)
+            TxDetails(tx.transaction, txid, sent.toSat(), received.toSat(), fee ?: 0uL, feeRate, pending, confirmationBlock, confirmationTimestamp)
         }
     }
 
@@ -209,7 +221,7 @@ class Wallet private constructor(
             val bdkWallet = BdkWallet(
                 descriptor = descriptor,
                 changeDescriptor = changeDescriptor,
-                persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.db",
+                persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.sqlite",
                 network = newWalletConfig.network,
             )
 
@@ -229,7 +241,7 @@ class Wallet private constructor(
             val bdkWallet = BdkWallet(
                 descriptor = descriptor,
                 changeDescriptor = changeDescriptor,
-                persistenceBackendPath = "$internalAppFilesPath/wallet-${activeWallet.id.take(8)}.db",
+                persistenceBackendPath = "$internalAppFilesPath/wallet-${activeWallet.id.take(8)}.sqlite",
                 network = activeWallet.network.intoDomain(),
             )
 

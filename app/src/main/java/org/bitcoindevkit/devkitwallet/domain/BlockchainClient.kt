@@ -50,11 +50,11 @@ class ElectrumClient(private val url: String) : BlockchainClient {
     }
 
     override fun fullScan(fullScanRequest: FullScanRequest, stopGap: ULong): Update {
-        return client.fullScan(fullScanRequest, stopGap, batchSize = 10uL, fetchPrevTxouts = false)
+        return client.fullScan(fullScanRequest, stopGap, batchSize = 10uL, fetchPrevTxouts = true)
     }
 
     override fun sync(syncRequest: SyncRequest): Update {
-        return client.sync(syncRequest, batchSize = 2uL, fetchPrevTxouts = false)
+        return client.sync(syncRequest, batchSize = 2uL, fetchPrevTxouts = true)
     }
 
     override fun broadcast(transaction: Transaction) {

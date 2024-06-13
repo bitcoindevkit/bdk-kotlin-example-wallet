@@ -61,7 +61,7 @@ internal fun CreateNewWalletScreen(
 
             val walletName: MutableState<String> = remember { mutableStateOf("") }
             var selectedNetwork: Network by remember { mutableStateOf(Network.TESTNET) }
-            val network = listOf(Network.TESTNET, Network.REGTEST)
+            val network = listOf(Network.TESTNET, Network.SIGNET, Network.REGTEST)
             var selectedScriptType: ActiveWalletScriptType by remember { mutableStateOf(ActiveWalletScriptType.P2TR) }
             val scriptTypes = listOf(ActiveWalletScriptType.P2TR, ActiveWalletScriptType.P2WPKH)
 

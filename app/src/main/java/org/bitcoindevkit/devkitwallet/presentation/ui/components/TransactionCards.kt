@@ -117,7 +117,7 @@ fun pendingTransactionsItem(txDetails: TxDetails): String {
         appendLine("Received: ${txDetails.received}")
         appendLine("Sent: ${txDetails.sent}")
         appendLine("Total fee: ${txDetails.fee} sat")
-        appendLine("Fee rate: ${txDetails.feeRate.toSatPerVbCeil()} sat/vbyte")
+        appendLine("Fee rate: ${txDetails.feeRate?.toSatPerVbCeil() ?: 0} sat/vbyte")
         append("Txid: ${txDetails.txid.take(n = 8)}...${txDetails.txid.takeLast(n = 8)}")
     }
 }
@@ -130,7 +130,7 @@ fun confirmedTransactionsItem(txDetails: TxDetails): String {
         appendLine("Received: ${txDetails.received} sat")
         appendLine("Sent: ${txDetails.sent} sat")
         appendLine("Total fee: ${txDetails.fee} sat")
-        appendLine("Fee rate: ${txDetails.feeRate.toSatPerVbCeil()} sat/vbyte")
+        appendLine("Fee rate: ${txDetails.feeRate?.toSatPerVbCeil() ?: 0} sat/vbyte")
         appendLine("Block: ${txDetails.confirmationBlock?.height}")
         append("Txid: ${txDetails.txid.take(n = 8)}...${txDetails.txid.takeLast(n = 8)}")
     }

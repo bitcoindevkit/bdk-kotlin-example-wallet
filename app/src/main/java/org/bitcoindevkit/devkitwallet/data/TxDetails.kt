@@ -9,7 +9,7 @@ data class TxDetails(
     val sent: ULong,
     val received: ULong,
     val fee: ULong,
-    val feeRate: FeeRate,
+    val feeRate: FeeRate?,
     val pending: Boolean,
     val confirmationBlock: ConfirmationBlock?,
     val confirmationTimestamp: Timestamp?,
