@@ -5,15 +5,19 @@
 
 package org.bitcoindevkit.devkitwallet.domain
 
+import org.bitcoindevkit.FullScanRequest
+import org.bitcoindevkit.SyncRequest
 import org.bitcoindevkit.Transaction
 import org.bitcoindevkit.EsploraClient as BdkEsploraClient
+import org.bitcoindevkit.ElectrumClient as BdkElectrumClient
 import org.bitcoindevkit.Update
-import org.bitcoindevkit.Wallet as BdkWallet
 
 interface BlockchainClient {
     fun clientId(): String
 
-    fun fullScan(wallet: BdkWallet, stopGap: ULong, parallelRequests: ULong): Update
+    fun fullScan(fullScanRequest: FullScanRequest, stopGap: ULong): Update
+
+    fun sync(syncRequest: SyncRequest): Update
 
     fun broadcast(transaction: Transaction): Unit
 }
@@ -25,11 +29,35 @@ class EsploraClient(private val url: String) : BlockchainClient {
         return url
     }
 
-    override fun fullScan(wallet: BdkWallet, stopGap: ULong, parallelRequests: ULong): Update {
-        return client.fullScan(wallet, stopGap, parallelRequests)
+    override fun fullScan(fullScanRequest: FullScanRequest, stopGap: ULong): Update {
+        return client.fullScan(fullScanRequest, stopGap, parallelRequests = 2u)
+    }
+
+    override fun sync(syncRequest: SyncRequest): Update {
+        return client.sync(syncRequest, parallelRequests = 2u)
     }
 
     override fun broadcast(transaction: Transaction) {
         client.broadcast(transaction)
+    }
+}
+
+class ElectrumClient(private val url: String) : BlockchainClient {
+    private val client = BdkElectrumClient(url)
+
+    override fun clientId(): String {
+        return url
+    }
+
+    override fun fullScan(fullScanRequest: FullScanRequest, stopGap: ULong): Update {
+        return client.fullScan(fullScanRequest, stopGap, batchSize = 10uL, fetchPrevTxouts = false)
+    }
+
+    override fun sync(syncRequest: SyncRequest): Update {
+        return client.sync(syncRequest, batchSize = 2uL, fetchPrevTxouts = false)
+    }
+
+    override fun broadcast(transaction: Transaction) {
+        throw NotImplementedError("ElectrumClient.broadcast() is not implemented")
     }
 }
