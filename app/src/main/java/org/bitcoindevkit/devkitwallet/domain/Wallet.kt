@@ -8,8 +8,8 @@ package org.bitcoindevkit.devkitwallet.domain
 import android.util.Log
 import kotlinx.coroutines.runBlocking
 import org.bitcoindevkit.Address
-import org.bitcoindevkit.AddressIndex
 import org.bitcoindevkit.AddressInfo
+import org.bitcoindevkit.Amount
 import org.bitcoindevkit.CanonicalTx
 import org.bitcoindevkit.ChainPosition
 import org.bitcoindevkit.Descriptor
@@ -66,7 +66,7 @@ class Wallet private constructor(
         var txBuilder = recipientList.fold(TxBuilder()) { builder, recipient ->
             // val address = Address(recipient.address)
             val scriptPubKey: Script = Address(recipient.address, Network.TESTNET).scriptPubkey()
-            builder.addRecipient(scriptPubKey, recipient.amount)
+            builder.addRecipient(scriptPubKey, Amount.fromSat(recipient.amount))
         }
         if (disableRbf) {
             // Nothing
@@ -129,7 +129,7 @@ class Wallet private constructor(
                 is ChainPosition.Unconfirmed -> Triple(null, null, true)
                 is ChainPosition.Confirmed -> Triple(ConfirmationBlock(position.height), Timestamp(position.timestamp), false)
             }
-            TxDetails(tx.transaction, txid, sent, received, fee, feeRate, pending, confirmationBlock, confirmationTimestamp)
+            TxDetails(tx.transaction, txid, sent.toSat(), received.toSat(), fee, feeRate, pending, confirmationBlock, confirmationTimestamp)
         }
     }
 
@@ -144,15 +144,15 @@ class Wallet private constructor(
     // }
 
     fun sync() {
-        Log.i(TAG, "Wallet is syncing")
-        val update: Update = currentBlockchainClient?.fullScan(wallet, 20u, 1u) ?: throw IllegalStateException("Blockchain client not initialized")
+        val fullScanRequest = wallet.startFullScan()
+        val update: Update = currentBlockchainClient?.fullScan(fullScanRequest, 20u) ?: throw IllegalStateException("Blockchain client not initialized")
         Log.i(TAG, "Wallet sync complete with update $update")
         wallet.applyUpdate(update)
     }
 
-    fun getBalance(): ULong = wallet.getBalance().total
+    fun getBalance(): ULong = wallet.getBalance().total.toSat()
 
-    fun getNewAddress(): AddressInfo = wallet.getAddress(AddressIndex.New)
+    fun getNewAddress(): AddressInfo = wallet.revealNextAddress(KeychainKind.EXTERNAL)
 
     // fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LastUnused)
 
