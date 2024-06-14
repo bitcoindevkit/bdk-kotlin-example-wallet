@@ -17,3 +17,6 @@ fun DevkitTheme(content: @Composable () -> Unit) {
         content = content
     )
 }
+
+// NOTES ON THE UI
+// - The standard padding is 32dp for start/end, 16dp for top/bottom

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.OutlinedTextField
@@ -56,6 +57,7 @@ internal fun CreateNewWalletScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(color = DevkitWalletColors.primary)
+                .padding(vertical = 16.dp)
         ) {
             val (choices, button) = createRefs()
 
@@ -74,13 +76,13 @@ internal fun CreateNewWalletScreen(
                     }
                     .fillMaxSize()
                     .background(color = DevkitWalletColors.primary)
-                    .padding(16.dp)
-                    .padding(paddingValues),
+                    .padding(horizontal = 32.dp)
             ) {
 
                 OutlinedTextField(
                     modifier = Modifier
-                        .padding(vertical = 8.dp)
+                        .padding(bottom = 8.dp)
+                        .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),
                     value = walletName.value,
                     onValueChange = { walletName.value = it },
@@ -132,7 +134,6 @@ internal fun CreateNewWalletScreen(
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
-                    .padding(bottom = 24.dp)
             ) {
                 NeutralButton(
                     text = "Create Wallet",
