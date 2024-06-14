@@ -67,7 +67,7 @@ fun HomeNavigation(
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             }
-        ) { RecoveryPhraseScreen(navController = navController, activeWallet.getRecoveryPhrase()) }
+        ) { RecoveryPhraseScreen(activeWallet.getRecoveryPhrase(), navController = navController) }
 
         composable<CustomBlockchainClientScreen>(
             enterTransition = {
