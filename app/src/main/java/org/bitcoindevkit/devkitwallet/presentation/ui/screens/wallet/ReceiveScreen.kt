@@ -43,18 +43,17 @@ import com.google.zxing.qrcode.QRCodeWriter
 import org.bitcoindevkit.devkitwallet.presentation.navigation.HomeScreen
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.ReceiveScreenAction
-import org.bitcoindevkit.devkitwallet.presentation.viewmodels.AddressViewModel
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.ReceiveScreenState
 
 private const val TAG = "ReceiveScreen"
 
 @Composable
 internal fun ReceiveScreen(
+    state: ReceiveScreenState,
+    onAction: (ReceiveScreenAction) -> Unit,
     navController: NavController,
-    addressViewModel: AddressViewModel
 ) {
     Log.i(TAG, "We are recomposing the ReceiveScreen")
-    val state = addressViewModel.state
-    val onAction = addressViewModel::onAction
 
     Scaffold(
         topBar = {
@@ -81,7 +80,7 @@ internal fun ReceiveScreen(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     height = Dimension.fillToConstraints
-                }
+                }.padding(horizontal = 32.dp)
             ) {
                 val QR: ImageBitmap? = state.address?.let { addressToQR(it) }
                 Log.i("ReceiveScreen", "New receive address is ${state.address}")
@@ -128,7 +127,7 @@ internal fun ReceiveScreen(
                         .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
                 ) {
                     Text(
-                        text = "generate address",
+                        text = "Generate address",
                         fontSize = 14.sp,
                         fontFamily = monoRegular,
                         textAlign = TextAlign.Center,

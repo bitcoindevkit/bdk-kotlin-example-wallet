@@ -63,7 +63,13 @@ fun WalletNavigation(
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(ANIMATION_DURATION))
             }
-        ) { ReceiveScreen(navController, addressViewModel) }
+        ) {
+            ReceiveScreen(
+                state = addressViewModel.state,
+                onAction = addressViewModel::onAction,
+                navController
+            )
+        }
 
         composable<SendScreen>(
             enterTransition = {
