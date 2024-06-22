@@ -36,7 +36,7 @@ internal fun ActiveWalletsScreen(
 ) {
     Scaffold(
         topBar = {
-            SecondaryScreensAppBar(title = "Choose a Wallet", navigation = { navController.popBackStack() })
+            SecondaryScreensAppBar(title = "Choose a Wallet", navigation = { navController.navigateUp() })
         }
     ) { paddingValues ->
         Column(

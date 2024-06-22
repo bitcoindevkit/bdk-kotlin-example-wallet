@@ -48,7 +48,7 @@ internal fun TransactionScreen(
         topBar = {
             SecondaryScreensAppBar(
                 title = "Transaction Details",
-                navigation = { navController.popBackStack() }
+                navigation = { navController.navigateUp() }
             )
         }
     ) { paddingValues ->
@@ -151,7 +151,7 @@ fun TransactionDetailButton(content: String, navController: NavController, txid:
                     navController.navigate(RbfScreen(txid!!))
                 }
                 "back to transaction list" -> {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             }
         },

@@ -53,7 +53,7 @@ internal fun RecoverWalletScreen(
 ) {
     Scaffold(
         topBar = {
-            SecondaryScreensAppBar(title = "Recover a Wallet", navigation = { navController.popBackStack() })
+            SecondaryScreensAppBar(title = "Recover a Wallet", navigation = { navController.navigateUp() })
         }
     ) { paddingValues ->
 

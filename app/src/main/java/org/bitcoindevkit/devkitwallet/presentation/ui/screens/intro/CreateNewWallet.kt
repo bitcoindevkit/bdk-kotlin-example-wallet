@@ -48,7 +48,7 @@ internal fun CreateNewWalletScreen(
 ) {
     Scaffold(
         topBar = {
-            SecondaryScreensAppBar(title = "Create a New Wallet", navigation = { navController.popBackStack() })
+            SecondaryScreensAppBar(title = "Create a New Wallet", navigation = { navController.navigateUp() })
         }
     ) { paddingValues ->
 
