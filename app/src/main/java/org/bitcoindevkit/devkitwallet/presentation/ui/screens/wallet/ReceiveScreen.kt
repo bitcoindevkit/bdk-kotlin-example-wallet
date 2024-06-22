@@ -5,9 +5,13 @@
 
 package org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,13 +25,18 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +49,9 @@ import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.presentation.navigation.HomeScreen
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.ReceiveScreenAction
@@ -54,8 +66,10 @@ internal fun ReceiveScreen(
     navController: NavController,
 ) {
     Log.i(TAG, "We are recomposing the ReceiveScreen")
-
-    Scaffold(
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    Scaffold( snackbarHost = { SnackbarHost(snackbarHostState)},
         topBar = {
             SecondaryScreensAppBar(
                 title = "Receive Address",
@@ -70,17 +84,20 @@ internal fun ReceiveScreen(
                 .background(DevkitWalletColors.primary)
         ) {
             val (QRCode, bottomButtons) = createRefs()
-
+            val context = LocalContext.current
+            val scope = rememberCoroutineScope()
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.constrainAs(QRCode) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(bottomButtons.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    height = Dimension.fillToConstraints
-                }.padding(horizontal = 32.dp)
+                modifier = Modifier
+                    .constrainAs(QRCode) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(bottomButtons.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        height = Dimension.fillToConstraints
+                    }
+                    .padding(horizontal = 32.dp)
             ) {
                 val QR: ImageBitmap? = state.address?.let { addressToQR(it) }
                 Log.i("ReceiveScreen", "New receive address is ${state.address}")
@@ -92,7 +109,16 @@ internal fun ReceiveScreen(
                     )
                     Spacer(modifier = Modifier.padding(vertical = 8.dp))
                     SelectionContainer {
-                        Text(
+                        Text(modifier = Modifier
+                            .clickable {
+                                copyToClipboard(
+                                    state.address,
+                                    context,
+                                    scope,
+                                    snackbarHostState,
+                                    null
+                                )
+                            },
                             text = state.address,
                             fontFamily = monoRegular,
                             color = DevkitWalletColors.white
@@ -156,6 +182,19 @@ private fun addressToQR(address: String): ImageBitmap? {
         Log.i("ReceiveScreen", "Error with QRCode generation, $e")
     }
     return null
+}
+
+fun copyToClipboard(content: String, context: Context, scope: CoroutineScope, snackbarHostState: SnackbarHostState, setCopyClicked: ((Boolean) -> Unit)?) {
+    val clipboard: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip: ClipData = ClipData.newPlainText("", content)
+    clipboard.setPrimaryClip(clip)
+    scope.launch {
+        snackbarHostState.showSnackbar("Copied address to clipboard!")
+        delay(1000)
+        if (setCopyClicked != null) {
+            setCopyClicked(false)
+        }
+    }
 }
 
 // @Preview(device = Devices.PIXEL_4, showBackground = true)
