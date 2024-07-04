@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 
 @Composable
-fun NeutralButton(text: String, enabled: Boolean, onClick: () -> Unit) {
+fun NeutralButton(text: String, enabled: Boolean, modifier: Modifier? = null, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
@@ -28,11 +28,11 @@ fun NeutralButton(text: String, enabled: Boolean, onClick: () -> Unit) {
         ),
         shape = RoundedCornerShape(16.dp),
         enabled = enabled,
-        modifier = Modifier
-            .height(80.dp)
-            .fillMaxWidth(0.9f)
-            .padding(vertical = 8.dp, horizontal = 8.dp)
-            .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+        modifier = modifier ?: Modifier
+                .height(80.dp)
+                .fillMaxWidth(0.9f)
+                .padding(vertical = 8.dp, horizontal = 8.dp)
+                .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
     ) {
         Text(
             text = text,
