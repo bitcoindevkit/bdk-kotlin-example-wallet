@@ -5,7 +5,7 @@
 
 package org.bitcoindevkit.devkitwallet.domain
 
-import org.bitcoindevkit.Network
+import org.rustbitcoin.bitcoin.Network
 
 class BlockchainClientsConfig {
     private var defaultClient: BlockchainClient? = null

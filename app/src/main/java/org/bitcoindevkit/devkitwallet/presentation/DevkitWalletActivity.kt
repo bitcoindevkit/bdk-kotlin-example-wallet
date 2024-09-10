@@ -48,6 +48,7 @@ class DevkitWalletActivity : AppCompatActivity() {
                     is WalletCreateType.LOADEXISTING -> Wallet.loadActiveWallet(
                         activeWallet = walletCreateType.activeWallet,
                         internalAppFilesPath = filesDir.absolutePath,
+                        userPreferencesRepository = userPreferencesRepository,
                     )
                     is WalletCreateType.RECOVER -> Wallet.recoverWallet(
                         recoverWalletConfig = walletCreateType.recoverWalletConfig,

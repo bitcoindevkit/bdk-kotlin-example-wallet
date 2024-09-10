@@ -9,17 +9,18 @@ import android.util.Log
 import kotlinx.coroutines.runBlocking
 import org.bitcoindevkit.Address
 import org.bitcoindevkit.AddressInfo
-import org.bitcoindevkit.Amount
+import org.rustbitcoin.bitcoin.Amount
 import org.bitcoindevkit.CanonicalTx
 import org.bitcoindevkit.ChainPosition
+import org.bitcoindevkit.Connection
 import org.bitcoindevkit.Descriptor
 import org.bitcoindevkit.DescriptorSecretKey
-import org.bitcoindevkit.FeeRate
+import org.rustbitcoin.bitcoin.FeeRate
 import org.bitcoindevkit.KeychainKind
 import org.bitcoindevkit.Mnemonic
-import org.bitcoindevkit.Network
+import org.rustbitcoin.bitcoin.Network
 import org.bitcoindevkit.Psbt
-import org.bitcoindevkit.Script
+import org.rustbitcoin.bitcoin.Script
 import org.bitcoindevkit.TxBuilder
 import org.bitcoindevkit.Update
 import org.bitcoindevkit.WordCount
@@ -41,6 +42,10 @@ private const val TAG = "Wallet"
 class Wallet private constructor(
     private val wallet: BdkWallet,
     private val recoveryPhrase: String,
+    private val connection: Connection,
+    private var fullScanCompleted: Boolean,
+    private val walletId: String,
+    private val userPreferencesRepository: UserPreferencesRepository,
     blockchainClientsConfig: BlockchainClientsConfig
 ) {
     private var currentBlockchainClient: BlockchainClient? = blockchainClientsConfig.getClient()
@@ -113,7 +118,7 @@ class Wallet private constructor(
 
     fun broadcast(signedPsbt: Psbt): String {
         currentBlockchainClient?.broadcast(signedPsbt.extractTx()) ?: throw IllegalStateException("Blockchain client not initialized")
-        return signedPsbt.extractTx().txid()
+        return signedPsbt.extractTx().computeTxid()
     }
 
     private fun getAllTransactions(): List<CanonicalTx>  = wallet.transactions()
@@ -121,10 +126,10 @@ class Wallet private constructor(
     fun getAllTxDetails(): List<TxDetails> {
         val transactions = getAllTransactions()
         return transactions.map { tx ->
-            val txid = tx.transaction.txid()
+            val txid = tx.transaction.computeTxid()
             val (sent, received) = wallet.sentAndReceived(tx.transaction)
             var feeRate: FeeRate? = null
-            var fee: ULong? = null
+            var fee: Amount? = null
             // TODO: I don't know why we're getting negative fees here, but it looks like a bug
             try {
                 fee = wallet.calculateFee(tx.transaction)
@@ -139,9 +144,9 @@ class Wallet private constructor(
 
             val (confirmationBlock, confirmationTimestamp, pending) = when (val position = tx.chainPosition) {
                 is ChainPosition.Unconfirmed -> Triple(null, null, true)
-                is ChainPosition.Confirmed -> Triple(ConfirmationBlock(position.height), Timestamp(position.timestamp), false)
+                is ChainPosition.Confirmed -> Triple(ConfirmationBlock(position.confirmationBlockTime.blockId.height), Timestamp(position.confirmationBlockTime.confirmationTime), false)
             }
-            TxDetails(tx.transaction, txid, sent.toSat(), received.toSat(), fee ?: 0uL, feeRate, pending, confirmationBlock, confirmationTimestamp)
+            TxDetails(tx.transaction, txid, sent.toSat(), received.toSat(), fee?.toSat() ?: 0uL, feeRate, pending, confirmationBlock, confirmationTimestamp)
         }
     }
 
@@ -155,14 +160,44 @@ class Wallet private constructor(
     //     return null
     // }
 
-    fun sync() {
-        val fullScanRequest = wallet.startFullScan()
-        val update: Update = currentBlockchainClient?.fullScan(fullScanRequest, 20u) ?: throw IllegalStateException("Blockchain client not initialized")
-        Log.i(TAG, "Wallet sync complete with update $update")
+    // fun sync() {
+    //     val fullScanRequest = wallet.startFullScan().build()
+    //     val update: Update = currentBlockchainClient?.fullScan(fullScanRequest, 20u) ?: throw IllegalStateException("Blockchain client not initialized")
+    //     Log.i(TAG, "Wallet sync complete with update $update")
+    //     wallet.applyUpdate(update)
+    //     wallet.persist(connection)
+    // }
+
+    private fun fullScan() {
+        val fullScanRequest = wallet.startFullScan().build()
+        val update: Update = currentBlockchainClient?.fullScan(
+            fullScanRequest = fullScanRequest,
+            stopGap = 20u,
+        ) ?: throw IllegalStateException("Blockchain client not initialized")
         wallet.applyUpdate(update)
+        wallet.persist(connection)
     }
 
-    fun getBalance(): ULong = wallet.getBalance().total.toSat()
+    fun sync() {
+        if (!fullScanCompleted) {
+            Log.i(TAG, "Full scan required")
+            fullScan()
+            runBlocking {
+                userPreferencesRepository.setFullScanCompleted(walletId)
+                fullScanCompleted = true
+            }
+        } else {
+            Log.i(TAG, "Just a normal sync!")
+            val syncRequest = wallet.startSyncWithRevealedSpks().build()
+            val update = currentBlockchainClient?.sync(
+                syncRequest = syncRequest,
+            ) ?: throw IllegalStateException("Blockchain client not initialized")
+            wallet.applyUpdate(update)
+            wallet.persist(connection)
+        }
+    }
+
+    fun getBalance(): ULong = wallet.balance().total.toSat()
 
     fun getNewAddress(): AddressInfo = wallet.revealNextAddress(KeychainKind.EXTERNAL)
 
@@ -202,6 +237,7 @@ class Wallet private constructor(
                 KeychainKind.INTERNAL
             )
             val walletId = UUID.randomUUID().toString()
+            val connection = Connection("$internalAppFilesPath/wallet-${walletId.take(8)}.sqlite3",)
 
             // Create SingleWallet object for saving to datastore
             val newWalletForDatastore: SingleWallet = SingleWallet.newBuilder()
@@ -209,9 +245,9 @@ class Wallet private constructor(
                 .setName(newWalletConfig.name)
                 .setNetwork(newWalletConfig.network.intoProto())
                 .setScriptType(ActiveWalletScriptType.P2WPKH)
-                .setDescriptor(descriptor.asStringPrivate())
-                .setChangeDescriptor(changeDescriptor.asStringPrivate())
-                .setRecoveryPhrase(mnemonic.asString())
+                .setDescriptor(descriptor.toStringWithSecret())
+                .setChangeDescriptor(changeDescriptor.toStringWithSecret())
+                .setRecoveryPhrase(mnemonic.toString())
                 .build()
 
             // TODO: launch this correctly, not on the main thread
@@ -221,13 +257,17 @@ class Wallet private constructor(
             val bdkWallet = BdkWallet(
                 descriptor = descriptor,
                 changeDescriptor = changeDescriptor,
-                persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.sqlite",
                 network = newWalletConfig.network,
+                connection = connection,
             )
 
             return Wallet(
                 wallet = bdkWallet,
-                recoveryPhrase = mnemonic.asString(),
+                recoveryPhrase = mnemonic.toString(),
+                connection = connection,
+                fullScanCompleted = false,
+                walletId = walletId,
+                userPreferencesRepository = userPreferencesRepository,
                 blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(newWalletConfig.network)
             )
         }
@@ -235,19 +275,24 @@ class Wallet private constructor(
         fun loadActiveWallet(
             activeWallet: SingleWallet,
             internalAppFilesPath: String,
+            userPreferencesRepository: UserPreferencesRepository,
         ): Wallet {
             val descriptor = Descriptor(activeWallet.descriptor, activeWallet.network.intoDomain())
             val changeDescriptor = Descriptor(activeWallet.changeDescriptor, activeWallet.network.intoDomain())
-            val bdkWallet = BdkWallet(
+            val connection = Connection("$internalAppFilesPath/wallet-${activeWallet.id.take(8)}.sqlite3")
+            val bdkWallet = BdkWallet.load(
                 descriptor = descriptor,
                 changeDescriptor = changeDescriptor,
-                persistenceBackendPath = "$internalAppFilesPath/wallet-${activeWallet.id.take(8)}.sqlite",
-                network = activeWallet.network.intoDomain(),
+                connection = connection,
             )
 
             return Wallet(
                 wallet = bdkWallet,
                 recoveryPhrase = activeWallet.recoveryPhrase,
+                connection = connection,
+                fullScanCompleted = activeWallet.fullScanCompleted,
+                walletId = activeWallet.id,
+                userPreferencesRepository = userPreferencesRepository,
                 blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(activeWallet.network.intoDomain())
             )
         }
@@ -272,6 +317,7 @@ class Wallet private constructor(
                 KeychainKind.INTERNAL
             )
             val walletId = UUID.randomUUID().toString()
+            val connection = Connection("$internalAppFilesPath/wallet-${walletId.take(8)}.sqlite3",)
 
             // Create SingleWallet object for saving to datastore
             val newWalletForDatastore: SingleWallet = SingleWallet.newBuilder()
@@ -279,9 +325,9 @@ class Wallet private constructor(
                 .setName(recoverWalletConfig.name)
                 .setNetwork(recoverWalletConfig.network.intoProto())
                 .setScriptType(ActiveWalletScriptType.P2WPKH)
-                .setDescriptor(descriptor.asStringPrivate())
-                .setChangeDescriptor(changeDescriptor.asStringPrivate())
-                .setRecoveryPhrase(mnemonic.asString())
+                .setDescriptor(descriptor.toStringWithSecret())
+                .setChangeDescriptor(changeDescriptor.toStringWithSecret())
+                .setRecoveryPhrase(mnemonic.toString())
                 .build()
 
             // TODO: launch this correctly, not on the main thread
@@ -291,13 +337,17 @@ class Wallet private constructor(
             val bdkWallet = BdkWallet(
                 descriptor = descriptor,
                 changeDescriptor = changeDescriptor,
-                persistenceBackendPath = "$internalAppFilesPath/wallet-${walletId.take(8)}.db",
+                connection = connection,
                 network = recoverWalletConfig.network,
             )
 
             return Wallet(
                 wallet = bdkWallet,
-                recoveryPhrase = mnemonic.asString(),
+                recoveryPhrase = mnemonic.toString(),
+                connection = connection,
+                fullScanCompleted = false,
+                walletId = walletId,
+                userPreferencesRepository = userPreferencesRepository,
                 blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(recoverWalletConfig.network)
             )
         }

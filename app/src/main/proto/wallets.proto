@@ -16,6 +16,7 @@ message SingleWallet {
   string descriptor = 5;
   string changeDescriptor = 6;
   string recoveryPhrase = 7;
+  bool fullScanCompleted = 8;
 }
 
 enum ActiveWalletNetwork {

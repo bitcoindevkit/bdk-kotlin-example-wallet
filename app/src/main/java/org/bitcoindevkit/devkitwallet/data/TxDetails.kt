@@ -1,7 +1,7 @@
 package org.bitcoindevkit.devkitwallet.data
 
-import org.bitcoindevkit.FeeRate
 import org.bitcoindevkit.Transaction
+import org.rustbitcoin.bitcoin.FeeRate
 
 data class TxDetails(
     val transaction: Transaction,

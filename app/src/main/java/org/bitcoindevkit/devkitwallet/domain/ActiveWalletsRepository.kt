@@ -32,4 +32,20 @@ class UserPreferencesRepository(
             currentPreferences.toBuilder().addWallets(singleWallet).build()
         }
     }
+
+    suspend fun setFullScanCompleted(walletId: String) {
+        userPreferencesStore.updateData { currentPreferences ->
+            val updatedWalletsList = currentPreferences.walletsList.map { wallet ->
+                if (wallet.id == walletId) {
+                    wallet.toBuilder().setFullScanCompleted(true).build()
+                } else {
+                    wallet
+                }
+            }
+            currentPreferences.toBuilder()
+                .clearWallets()
+                .addAllWallets(updatedWalletsList)
+                .build()
+        }
+    }
 }

@@ -27,7 +27,7 @@ internal class AddressViewModel(private val wallet: Wallet) : ViewModel() {
     private fun updateAddress() {
         val newAddress: AddressInfo = wallet.getNewAddress()
         state = ReceiveScreenState(
-            address = newAddress.address.asString(),
+            address = newAddress.address.toString(),
             addressIndex = newAddress.index
         )
     }

@@ -35,7 +35,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
-import org.bitcoindevkit.Network
 import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
@@ -43,6 +42,7 @@ import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
+import org.rustbitcoin.bitcoin.Network
 
 @Composable
 internal fun CreateNewWalletScreen(

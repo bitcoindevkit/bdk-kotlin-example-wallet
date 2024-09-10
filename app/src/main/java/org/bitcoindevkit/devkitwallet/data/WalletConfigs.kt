@@ -5,7 +5,7 @@
 
 package org.bitcoindevkit.devkitwallet.data
 
-import org.bitcoindevkit.Network
+import org.rustbitcoin.bitcoin.Network
 
 data class NewWalletConfig(
     val name: String,

@@ -5,8 +5,8 @@
 
 package org.bitcoindevkit.devkitwallet.domain.utils
 
-import org.bitcoindevkit.Network
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletNetwork
+import org.rustbitcoin.bitcoin.Network
 
 fun Network.intoProto(): ActiveWalletNetwork {
     return when (this) {
