@@ -6,7 +6,10 @@
 package org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,8 +17,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
@@ -30,19 +36,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
+import org.bitcoindevkit.devkitwallet.data.TxDetails
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.confirmedTransactionsItem
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.pendingTransactionsItem
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.viewTransaction
 import org.rustbitcoin.bitcoin.Network
+import org.rustbitcoin.bitcoin.Script
 
 @Composable
 internal fun CreateNewWalletScreen(
@@ -65,9 +78,9 @@ internal fun CreateNewWalletScreen(
             val (choices, button) = createRefs()
 
             val walletName: MutableState<String> = remember { mutableStateOf("") }
-            var selectedNetwork: Network by remember { mutableStateOf(Network.TESTNET) }
-            val network = listOf(Network.TESTNET, Network.SIGNET, Network.REGTEST)
-            var selectedScriptType: ActiveWalletScriptType by remember { mutableStateOf(ActiveWalletScriptType.P2TR) }
+            val selectedNetwork: MutableState<Network> = remember { mutableStateOf(Network.TESTNET) }
+            val networks = listOf(Network.TESTNET, Network.SIGNET, Network.REGTEST)
+            val selectedScriptType: MutableState<ActiveWalletScriptType> = remember { mutableStateOf(ActiveWalletScriptType.P2TR) }
             val scriptTypes = listOf(ActiveWalletScriptType.P2TR, ActiveWalletScriptType.P2WPKH)
 
             Column(
@@ -103,30 +116,10 @@ internal fun CreateNewWalletScreen(
                     ),
                 )
 
-                Spacer(modifier = Modifier.padding(24.dp))
-                Text(
-                    text = "Network",
-                    color = DevkitWalletColors.white
-                )
-
-                network.forEach {
-                    RadioButtonWithLabel(
-                        label = it.displayString(),
-                        isSelected = selectedNetwork == it,
-                        onSelect = { selectedNetwork = it }
-                    )
-                }
-
-                Spacer(modifier = Modifier.padding(24.dp))
-                Text(text = "Script Type", color = DevkitWalletColors.white)
-
-                scriptTypes.forEach {
-                    RadioButtonWithLabel(
-                        label = it.displayString(),
-                        isSelected = selectedScriptType == it,
-                        onSelect = { selectedScriptType = it }
-                    )
-                }
+                Spacer(modifier = Modifier.padding(12.dp))
+                NetworkOptionCard(networks, selectedNetwork)
+                Spacer(modifier = Modifier.padding(16.dp))
+                ScriptTypeOptionCard(scriptTypes, selectedScriptType)
             }
 
             Column(
@@ -150,8 +143,8 @@ internal fun CreateNewWalletScreen(
                     onClick = {
                         val newWalletConfig = NewWalletConfig(
                             name = walletName.value,
-                            network = selectedNetwork,
-                            scriptType = selectedScriptType
+                            network = selectedNetwork.value,
+                            scriptType = selectedScriptType.value
                         )
                         onBuildWalletButtonClicked(
                             WalletCreateType.FROMSCRATCH(newWalletConfig)
@@ -164,10 +157,88 @@ internal fun CreateNewWalletScreen(
 }
 
 @Composable
+fun NetworkOptionCard(networks: List<Network>, selectedNetwork: MutableState<Network>) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = DevkitWalletColors.secondary,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .background(
+                color = DevkitWalletColors.primaryLight,
+                shape = RoundedCornerShape(16.dp)
+            ),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            text = "Network",
+            fontFamily = monoRegular,
+            fontSize = 18.sp,
+            color = DevkitWalletColors.white,
+            modifier = Modifier.padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
+        )
+
+        HorizontalDivider(color = DevkitWalletColors.secondary, thickness = 2.dp, modifier = Modifier.padding(bottom = 8.dp))
+
+        networks.forEachIndexed { index, it ->
+            RadioButtonWithLabel(
+                label = it.displayString(),
+                isSelected = selectedNetwork.value == it,
+                onSelect = { selectedNetwork.value = it }
+            )
+            if (index == 2) Spacer(modifier = Modifier.padding(bottom = 8.dp))
+        }
+    }
+}
+
+@Composable
+fun ScriptTypeOptionCard(scriptTypes: List<ActiveWalletScriptType>, selectedScriptType: MutableState<ActiveWalletScriptType>) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = DevkitWalletColors.secondary,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .background(
+                color = DevkitWalletColors.primaryLight,
+                shape = RoundedCornerShape(16.dp)
+            ),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            text = "Script Type",
+            fontFamily = monoRegular,
+            fontSize = 18.sp,
+            color = DevkitWalletColors.white,
+            modifier = Modifier.padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
+        )
+
+        HorizontalDivider(color = DevkitWalletColors.secondary, thickness = 2.dp, modifier = Modifier.padding(bottom = 8.dp))
+
+        scriptTypes.forEachIndexed { index, it ->
+            RadioButtonWithLabel(
+                label = it.displayString(),
+                isSelected = selectedScriptType.value == it,
+                onSelect = { selectedScriptType.value = it }
+            )
+            if (index == 1) Spacer(modifier = Modifier.padding(bottom = 8.dp))
+        }
+    }
+}
+
+@Composable
 fun RadioButtonWithLabel(label: String, isSelected: Boolean, onSelect: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
         modifier = Modifier
+            .padding(0.dp)
             .selectable(
                 selected = isSelected,
                 onClick = onSelect
@@ -179,13 +250,19 @@ fun RadioButtonWithLabel(label: String, isSelected: Boolean, onSelect: () -> Uni
             colors = RadioButtonDefaults.colors(
                 selectedColor = DevkitWalletColors.accent1,
                 unselectedColor = DevkitWalletColors.accent2
-            )
+            ),
+            modifier = Modifier
+                .padding(0.dp)
+                .size(40.dp)
         )
         Text(
             text = label,
             color = DevkitWalletColors.white,
+            fontFamily = monoRegular,
+            fontSize = 14.sp,
             modifier = Modifier
                 .clickable(onClick = onSelect)
+                .padding(0.dp)
         )
     }
 }
