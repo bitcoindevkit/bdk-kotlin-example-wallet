@@ -47,9 +47,9 @@ android {
 dependencies {
     // Basic android dependencies
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
-    implementation("androidx.core:core-ktx:1.13.0")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.datastore:datastore:1.1.0")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.datastore:datastore:1.1.1")
     implementation("com.google.protobuf:protobuf-javalite:3.18.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
@@ -62,13 +62,13 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.activity:activity-compose")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.navigation:navigation-compose:2.8.0-beta02")
+    implementation("androidx.navigation:navigation-compose:2.8.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.23.1")
 
     // Toolbar
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
 
     // Bitcoin Development Kit
     implementation("org.bitcoindevkit:bdk-android:1.0.0-beta.2")
@@ -78,8 +78,8 @@ dependencies {
 
     // Tests
     testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.6.1")
 }
 
 protobuf {
