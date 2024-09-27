@@ -30,10 +30,10 @@ private const val ANIMATION_DURATION: Int = 400
 @Composable
 fun WalletNavigation(
     drawerState: DrawerState,
+    walletViewModel: WalletViewModel,
     activeWallet: Wallet
 ) {
     val navController: NavHostController = rememberNavController()
-    val walletViewModel = WalletViewModel(activeWallet)
     val addressViewModel = AddressViewModel(activeWallet)
     val sendViewModel = SendViewModel(activeWallet)
 
@@ -48,7 +48,7 @@ fun WalletNavigation(
             popEnterTransition = {
                 slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(ANIMATION_DURATION))
             },
-        ) { WalletHomeScreen(navController, drawerState, walletViewModel) }
+        ) { WalletHomeScreen(drawerState = drawerState, state = walletViewModel.state, onAction = walletViewModel::onAction, navController = navController) }
 
         composable<ReceiveScreen>(
             enterTransition = {

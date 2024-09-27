@@ -17,7 +17,9 @@ import org.bitcoindevkit.Descriptor
 import org.bitcoindevkit.DescriptorSecretKey
 import org.rustbitcoin.bitcoin.FeeRate
 import org.bitcoindevkit.KeychainKind
+import org.bitcoindevkit.LightClient
 import org.bitcoindevkit.Mnemonic
+import org.bitcoindevkit.Peer
 import org.rustbitcoin.bitcoin.Network
 import org.bitcoindevkit.Psbt
 import org.rustbitcoin.bitcoin.Script
@@ -35,6 +37,12 @@ import org.bitcoindevkit.devkitwallet.domain.utils.intoDomain
 import org.bitcoindevkit.devkitwallet.domain.utils.intoProto
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.Recipient
 import org.bitcoindevkit.Wallet as BdkWallet
+import org.bitcoindevkit.NodeMessageHandler
+import org.bitcoindevkit.NodeState
+import org.bitcoindevkit.Warning
+import org.bitcoindevkit.buildLightClient
+import org.bitcoindevkit.runNode
+import org.rustbitcoin.bitcoin.Txid
 import java.util.UUID
 
 private const val TAG = "Wallet"
@@ -46,9 +54,11 @@ class Wallet private constructor(
     private var fullScanCompleted: Boolean,
     private val walletId: String,
     private val userPreferencesRepository: UserPreferencesRepository,
-    blockchainClientsConfig: BlockchainClientsConfig
+    blockchainClientsConfig: BlockchainClientsConfig,
+    private val internalAppFilesPath: String,
 ) {
     private var currentBlockchainClient: BlockchainClient? = blockchainClientsConfig.getClient()
+    public var kyotoLightClient: LightClient? = null
 
     fun getRecoveryPhrase(): List<String> {
         return recoveryPhrase.split(" ")
@@ -168,33 +178,57 @@ class Wallet private constructor(
     //     wallet.persist(connection)
     // }
 
-    private fun fullScan() {
-        val fullScanRequest = wallet.startFullScan().build()
-        val update: Update = currentBlockchainClient?.fullScan(
-            fullScanRequest = fullScanRequest,
-            stopGap = 20u,
-        ) ?: throw IllegalStateException("Blockchain client not initialized")
-        wallet.applyUpdate(update)
-        wallet.persist(connection)
+    // private fun fullScan() {
+    //     val fullScanRequest = wallet.startFullScan().build()
+    //     val update: Update = currentBlockchainClient?.fullScan(
+    //         fullScanRequest = fullScanRequest,
+    //         stopGap = 20u,
+    //     ) ?: throw IllegalStateException("Blockchain client not initialized")
+    //     wallet.applyUpdate(update)
+    //     wallet.persist(connection)
+    // }
+
+    // fun sync() {
+    //     if (!fullScanCompleted) {
+    //         Log.i(TAG, "Full scan required")
+    //         fullScan()
+    //         runBlocking {
+    //             userPreferencesRepository.setFullScanCompleted(walletId)
+    //             fullScanCompleted = true
+    //         }
+    //     } else {
+    //         Log.i(TAG, "Just a normal sync!")
+    //         val syncRequest = wallet.startSyncWithRevealedSpks().build()
+    //         val update = currentBlockchainClient?.sync(
+    //             syncRequest = syncRequest,
+    //         ) ?: throw IllegalStateException("Blockchain client not initialized")
+    //         wallet.applyUpdate(update)
+    //         wallet.persist(connection)
+    //     }
+    // }
+
+    fun startKyotoNode() {
+        val (node, client) = buildLightClient(
+            wallet = wallet,
+            // peers = listOf(Peer.V4(68u, 47u, 229u, 218u)), // Signet
+            peers = listOf(Peer.V4(10u, 0u, 2u, 2u)), // Regtest
+            connections = 1u,
+            // recoveryHeight = 200_000u, // Signet
+            recoveryHeight = 0u, // Regtest
+            useLookaheadScripts = true,
+            dataDir = this.internalAppFilesPath,
+        )
+        runNode(node)
+        kyotoLightClient = client
     }
 
-    fun sync() {
-        if (!fullScanCompleted) {
-            Log.i(TAG, "Full scan required")
-            fullScan()
-            runBlocking {
-                userPreferencesRepository.setFullScanCompleted(walletId)
-                fullScanCompleted = true
-            }
-        } else {
-            Log.i(TAG, "Just a normal sync!")
-            val syncRequest = wallet.startSyncWithRevealedSpks().build()
-            val update = currentBlockchainClient?.sync(
-                syncRequest = syncRequest,
-            ) ?: throw IllegalStateException("Blockchain client not initialized")
-            wallet.applyUpdate(update)
-            wallet.persist(connection)
-        }
+    suspend fun stopKyotoNode() {
+        kyotoLightClient?.shutdown()
+    }
+
+    fun applyUpdate(update: Update) {
+        wallet.applyUpdate(update)
+        wallet.persist(connection)
     }
 
     fun getBalance(): ULong = wallet.balance().total.toSat()
@@ -268,7 +302,8 @@ class Wallet private constructor(
                 fullScanCompleted = false,
                 walletId = walletId,
                 userPreferencesRepository = userPreferencesRepository,
-                blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(newWalletConfig.network)
+                blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(newWalletConfig.network),
+                internalAppFilesPath = internalAppFilesPath,
             )
         }
 
@@ -293,7 +328,8 @@ class Wallet private constructor(
                 fullScanCompleted = activeWallet.fullScanCompleted,
                 walletId = activeWallet.id,
                 userPreferencesRepository = userPreferencesRepository,
-                blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(activeWallet.network.intoDomain())
+                blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(activeWallet.network.intoDomain()),
+                internalAppFilesPath = internalAppFilesPath,
             )
         }
 
@@ -348,7 +384,8 @@ class Wallet private constructor(
                 fullScanCompleted = false,
                 walletId = walletId,
                 userPreferencesRepository = userPreferencesRepository,
-                blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(recoverWalletConfig.network)
+                blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(recoverWalletConfig.network),
+                internalAppFilesPath = internalAppFilesPath,
             )
         }
     }
@@ -372,5 +409,44 @@ fun createScriptAppropriateDescriptor(
             ActiveWalletScriptType.P2TR -> Descriptor.newBip86(bip32ExtendedRootKey, KeychainKind.INTERNAL, network)
             ActiveWalletScriptType.UNRECOGNIZED -> TODO()
         }
+    }
+}
+
+class KyotoMessageHandler(val triggerSnackbar: (message: String) -> Unit) : NodeMessageHandler {
+    override fun blocksDisconnected(blocks: List<UInt>) {
+        Log.i("KyotoMessageHandler", "Blocks disconnected: $blocks")
+    }
+
+    override fun connectionsMet() {
+        Log.i("KyotoMessageHandler", "Connections met")
+    }
+
+    override fun dialog(dialog: String) {
+        Log.i("KyotoMessageHandler", "Dialog: $dialog")
+        if (dialog.contains("peer height")) {
+            val height = dialog.split("peer height: ")[1].split(" ")[0]
+            Log.i("KyotoMessageHandler", "Peer height from the dialog method: $height")
+            triggerSnackbar("New block mined: $height")
+        }
+    }
+
+    override fun stateChanged(state: NodeState) {
+        Log.i("KyotoMessageHandler", "State changed: $state")
+    }
+
+    override fun synced(tip: UInt) {
+        Log.i("KyotoMessageHandler", "Synced: $tip")
+    }
+
+    override fun txFailed(txid: Txid) {
+        Log.i("KyotoMessageHandler", "Tx failed: $txid")
+    }
+
+    override fun txSent(txid: Txid) {
+        Log.i("KyotoMessageHandler", "Tx sent: $txid")
+    }
+
+    override fun warning(warning: Warning) {
+        Log.i("KyotoMessageHandler", "Warning: $warning")
     }
 }

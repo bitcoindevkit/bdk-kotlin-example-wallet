@@ -32,9 +32,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -68,20 +71,39 @@ private const val TAG = "WalletHomeScreen"
 
 @Composable
 internal fun WalletHomeScreen(
-    navController: NavHostController,
     drawerState: DrawerState,
-    walletViewModel: WalletViewModel,
+    state: WalletScreenState,
+    onAction: (WalletScreenAction) -> Unit,
+    navController: NavHostController,
 ) {
     val networkAvailable: Boolean = isOnline(LocalContext.current)
-    val state: WalletScreenState = walletViewModel.state
-    val onAction = walletViewModel::onAction
+    // val state: WalletScreenState = walletViewModel.state
+    // val onAction = walletViewModel::onAction
 
+    val snackbarHostState = remember { SnackbarHostState() }
     val interactionSource = remember { MutableInteractionSource() }
     val scope: CoroutineScope = rememberCoroutineScope()
 
+    LaunchedEffect(Unit) {
+        onAction(WalletScreenAction.UpdateBalance)
+    }
+
     Scaffold(
-        topBar = { WalletAppBar(scope = scope, drawerState = drawerState) }
+        topBar = { WalletAppBar(scope = scope, drawerState = drawerState) },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
+
+        // If a new snackbar has be triggered, show it
+        state.snackbarMessage?.let { message ->
+            Log.i("WalletHomeScreen", "Showing snackbar: $message")
+            LaunchedEffect(message) {
+                scope.launch {
+                    snackbarHostState.showSnackbar(message)
+                    onAction(WalletScreenAction.ClearSnackbar)
+                }
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -164,7 +186,8 @@ internal fun WalletHomeScreen(
             }
 
             NeutralButton(
-                text = "sync",
+                text = "post balance",
+                // enabled = false, // Disabled for Kyoto node
                 enabled = networkAvailable,
                 onClick = { onAction(WalletScreenAction.UpdateBalance) }
             )
