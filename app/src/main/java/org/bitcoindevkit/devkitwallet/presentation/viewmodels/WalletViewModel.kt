@@ -14,8 +14,8 @@ import androidx.lifecycle.viewModelScope
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
+import org.bitcoindevkit.devkitwallet.domain.KyotoNodeEventHandler
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
@@ -30,9 +30,21 @@ internal class WalletViewModel(
 
     fun onAction(action: WalletScreenAction) {
         when (action) {
-            WalletScreenAction.UpdateBalance -> updateBalance()
-            WalletScreenAction.SwitchUnit    -> switchUnit()
+            WalletScreenAction.SwitchUnit     -> switchUnit()
+            WalletScreenAction.UpdateBalance  -> updateBalance()
+            WalletScreenAction.StartKyotoNode -> startKyotoNode()
+            WalletScreenAction.StopKyotoNode  -> stopKyotoNode()
+            WalletScreenAction.StartKyotoSync -> startKyotoSync()
+            WalletScreenAction.ClearSnackbar  -> clearSnackbar()
         }
+    }
+
+    private fun showSnackbar(message: String) {
+        state = state.copy(snackbarMessage = message)
+    }
+
+    private fun clearSnackbar() {
+        state = state.copy(snackbarMessage = null)
     }
 
     private fun switchUnit() {
@@ -43,14 +55,47 @@ internal class WalletViewModel(
     }
 
     private fun updateBalance() {
-        state = state.copy(syncing = true)
+        Log.i("Kyoto", "Updating balance method triggered")
         viewModelScope.launch(Dispatchers.IO) {
-            wallet.sync()
-            withContext(Dispatchers.Main) {
-                val newBalance = wallet.getBalance()
-                Log.i(TAG, "New balance: $newBalance")
-                state = state.copy(balance = newBalance, syncing = false)
+            val newBalance = wallet.getBalance()
+            Log.i("Kyoto", "New balance: $newBalance")
+            state = state.copy(balance = newBalance)
+            Log.i("Kyoto", "New state object: $state")
+        }
+    }
+
+    private fun startKyotoNode() {
+        Log.i("Kyoto", "Starting Kyoto node")
+        wallet.startKyotoNode()
+    }
+
+    private fun startKyotoSync() {
+        Log.i("Kyoto", "Starting Kyoto sync")
+        val kyotoMessageHandler = KyotoNodeEventHandler(triggerSnackbar = ::showSnackbar)
+        updateBalance()
+
+        viewModelScope.launch {
+            var loopIteration = 0
+            while (wallet.kyotoLightClient != null) {
+                loopIteration++
+                Log.i("Kyoto", "Syncing loop iteration $loopIteration")
+
+                val update = wallet.kyotoLightClient?.update(kyotoMessageHandler)
+                if (update == null) {
+                    Log.i("Kyoto", "Update is null")
+                } else {
+                    Log.i("Kyoto", "Applying an update to the wallet")
+                    wallet.applyUpdate(update)
+                }
+                updateBalance()
             }
+        }
+    }
+
+    private fun stopKyotoNode() {
+        Log.i("Kyoto", "Stopping Kyoto node")
+        viewModelScope.launch {
+            wallet.stopKyotoNode()
         }
     }
 }

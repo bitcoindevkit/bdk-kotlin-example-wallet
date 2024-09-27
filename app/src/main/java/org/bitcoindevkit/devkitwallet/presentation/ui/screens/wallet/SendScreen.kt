@@ -83,7 +83,6 @@ internal fun SendScreen(
     val (showDialog, setShowDialog) =  rememberSaveable { mutableStateOf(false) }
 
     val sendAll: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val rbfDisabled: MutableState<Boolean> = remember { mutableStateOf(false) }
     val opReturnMsg: MutableState<String?> = remember { mutableStateOf(null) }
 
     val bottomSheetScaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState()
@@ -96,7 +95,7 @@ internal fun SendScreen(
             )
         },
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetContent = { AdvancedOptions(sendAll, rbfDisabled, opReturnMsg, recipientList) },
+        sheetContent = { AdvancedOptions(sendAll, opReturnMsg, recipientList) },
         sheetContainerColor = DevkitWalletColors.primaryDark,
         scaffoldState = bottomSheetScaffoldState,
         sheetPeekHeight = 0.dp,
@@ -132,7 +131,6 @@ internal fun SendScreen(
                     showDialog = showDialog,
                     setShowDialog = setShowDialog,
                     transactionType = if (sendAll.value) TransactionType.SEND_ALL else TransactionType.STANDARD,
-                    rbfDisabled = rbfDisabled.value,
                     opReturnMsg = opReturnMsg.value,
                     context = context,
                     onAction = onAction
@@ -173,7 +171,6 @@ internal fun SendScreen(
 @Composable
 internal fun AdvancedOptions(
     sendAll: MutableState<Boolean>,
-    rbfDisabled: MutableState<Boolean>,
     opReturnMsg: MutableState<String?>,
     recipientList: MutableList<Recipient>
 ) {
@@ -213,34 +210,6 @@ internal fun AdvancedOptions(
                 onCheckedChange = {
                     sendAll.value = !sendAll.value
                     while (recipientList.size > 1) { recipientList.removeLast() }
-                },
-                colors = SwitchDefaults.colors(
-                    uncheckedBorderColor = DevkitWalletColors.primaryDark,
-                    uncheckedThumbColor = DevkitWalletColors.primaryDark,
-                    uncheckedTrackColor = DevkitWalletColors.white,
-                    checkedThumbColor = DevkitWalletColors.white,
-                    checkedTrackColor = DevkitWalletColors.accent1,
-                )
-            )
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "Disable Replace-by-Fee",
-                color = DevkitWalletColors.white,
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center,
-                lineHeight = 28.sp,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Switch(
-                checked = rbfDisabled.value,
-                onCheckedChange = {
-                    rbfDisabled.value = !rbfDisabled.value
                 },
                 colors = SwitchDefaults.colors(
                     uncheckedBorderColor = DevkitWalletColors.primaryDark,
@@ -504,7 +473,6 @@ private fun Dialog(
     showDialog: Boolean,
     setShowDialog: (Boolean) -> Unit,
     transactionType: TransactionType,
-    rbfDisabled: Boolean,
     opReturnMsg: String?,
     context: Context,
     onAction: (SendScreenAction) -> Unit,
@@ -541,7 +509,6 @@ private fun Dialog(
                                 recipients = recipientList,
                                 feeRate = feeRate.value.toULong(),
                                 transactionType = transactionType,
-                                rbfDisabled = rbfDisabled,
                                 opReturnMsg = opReturnMsg
                             )
                             onAction(SendScreenAction.Broadcast(txDataBundle))

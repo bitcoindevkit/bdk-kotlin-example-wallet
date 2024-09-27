@@ -9,11 +9,15 @@ import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
 
 data class WalletScreenState(
     val balance: ULong = 0u,
-    val syncing: Boolean = false,
-    val unit: CurrencyUnit = CurrencyUnit.Bitcoin
+    val unit: CurrencyUnit = CurrencyUnit.Bitcoin,
+    val snackbarMessage: String? = null
 )
 
 sealed interface WalletScreenAction {
     data object UpdateBalance : WalletScreenAction
     data object SwitchUnit : WalletScreenAction
+    data object StartKyotoNode : WalletScreenAction
+    data object StopKyotoNode : WalletScreenAction
+    data object StartKyotoSync : WalletScreenAction
+    data object ClearSnackbar : WalletScreenAction
 }

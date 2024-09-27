@@ -15,15 +15,19 @@ import org.bitcoindevkit.ChainPosition
 import org.bitcoindevkit.Connection
 import org.bitcoindevkit.Descriptor
 import org.bitcoindevkit.DescriptorSecretKey
+import org.bitcoindevkit.IpAddress
 import org.rustbitcoin.bitcoin.FeeRate
 import org.bitcoindevkit.KeychainKind
+import org.bitcoindevkit.LightClient
 import org.bitcoindevkit.Mnemonic
+import org.bitcoindevkit.Peer
 import org.rustbitcoin.bitcoin.Network
 import org.bitcoindevkit.Psbt
 import org.rustbitcoin.bitcoin.Script
 import org.bitcoindevkit.TxBuilder
 import org.bitcoindevkit.Update
 import org.bitcoindevkit.WordCount
+import org.bitcoindevkit.buildLightClient
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.ConfirmationBlock
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
@@ -34,6 +38,7 @@ import org.bitcoindevkit.devkitwallet.data.TxDetails
 import org.bitcoindevkit.devkitwallet.domain.utils.intoDomain
 import org.bitcoindevkit.devkitwallet.domain.utils.intoProto
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.Recipient
+import org.bitcoindevkit.runNode
 import org.bitcoindevkit.Wallet as BdkWallet
 import java.util.UUID
 
@@ -46,9 +51,12 @@ class Wallet private constructor(
     private var fullScanCompleted: Boolean,
     private val walletId: String,
     private val userPreferencesRepository: UserPreferencesRepository,
+    private val internalAppFilesPath: String,
     blockchainClientsConfig: BlockchainClientsConfig
 ) {
     private var currentBlockchainClient: BlockchainClient? = blockchainClientsConfig.getClient()
+    public var kyotoLightClient: LightClient? = null
+    // public var latestBlock: ULong = 0uL
 
     fun getRecoveryPhrase(): List<String> {
         return recoveryPhrase.split(" ")
@@ -57,7 +65,6 @@ class Wallet private constructor(
     fun createTransaction(
         recipientList: List<Recipient>,
         feeRate: FeeRate,
-        disableRbf: Boolean,
         opReturnMsg: String?
     ): Psbt {
         // technique 1 for adding a list of recipients to the TxBuilder
@@ -72,11 +79,6 @@ class Wallet private constructor(
             // val address = Address(recipient.address)
             val scriptPubKey: Script = Address(recipient.address, Network.TESTNET).scriptPubkey()
             builder.addRecipient(scriptPubKey, Amount.fromSat(recipient.amount))
-        }
-        if (disableRbf) {
-            // Nothing
-        } else {
-            txBuilder = txBuilder.enableRbf()
         }
         // if (!opReturnMsg.isNullOrEmpty()) {
         //     txBuilder = txBuilder.addData(opReturnMsg.toByteArray(charset = Charsets.UTF_8).asUByteArray().toList())
@@ -168,38 +170,67 @@ class Wallet private constructor(
     //     wallet.persist(connection)
     // }
 
-    private fun fullScan() {
-        val fullScanRequest = wallet.startFullScan().build()
-        val update: Update = currentBlockchainClient?.fullScan(
-            fullScanRequest = fullScanRequest,
-            stopGap = 20u,
-        ) ?: throw IllegalStateException("Blockchain client not initialized")
-        wallet.applyUpdate(update)
-        wallet.persist(connection)
-    }
+    // private fun fullScan() {
+    //     val fullScanRequest = wallet.startFullScan().build()
+    //     val update: Update = currentBlockchainClient?.fullScan(
+    //         fullScanRequest = fullScanRequest,
+    //         stopGap = 20u,
+    //     ) ?: throw IllegalStateException("Blockchain client not initialized")
+    //     wallet.applyUpdate(update)
+    //     wallet.persist(connection)
+    // }
 
-    fun sync() {
-        if (!fullScanCompleted) {
-            Log.i(TAG, "Full scan required")
-            fullScan()
-            runBlocking {
-                userPreferencesRepository.setFullScanCompleted(walletId)
-                fullScanCompleted = true
-            }
-        } else {
-            Log.i(TAG, "Just a normal sync!")
-            val syncRequest = wallet.startSyncWithRevealedSpks().build()
-            val update = currentBlockchainClient?.sync(
-                syncRequest = syncRequest,
-            ) ?: throw IllegalStateException("Blockchain client not initialized")
-            wallet.applyUpdate(update)
-            wallet.persist(connection)
-        }
-    }
+    // fun sync() {
+    //     if (!fullScanCompleted) {
+    //         Log.i(TAG, "Full scan required")
+    //         fullScan()
+    //         runBlocking {
+    //             userPreferencesRepository.setFullScanCompleted(walletId)
+    //             fullScanCompleted = true
+    //         }
+    //     } else {
+    //         Log.i(TAG, "Just a normal sync!")
+    //         val syncRequest = wallet.startSyncWithRevealedSpks().build()
+    //         val update = currentBlockchainClient?.sync(
+    //             syncRequest = syncRequest,
+    //         ) ?: throw IllegalStateException("Blockchain client not initialized")
+    //         wallet.applyUpdate(update)
+    //         wallet.persist(connection)
+    //     }
+    // }
 
     fun getBalance(): ULong = wallet.balance().total.toSat()
 
     fun getNewAddress(): AddressInfo = wallet.revealNextAddress(KeychainKind.EXTERNAL)
+
+    fun startKyotoNode() {
+        Log.i(TAG, "Starting Kyoto node")
+        // val ip: IpAddress = IpAddress.fromIpv4(68u, 47u, 229u, 218u) // Signet
+        val ip: IpAddress = IpAddress.fromIpv4(10u, 0u, 2u, 2u) // Regtest
+        val peer1: Peer = Peer(ip, null, false)
+        val peers: List<Peer> = listOf(peer1)
+
+        val (node, client) = buildLightClient(
+            wallet = wallet,
+            peers = peers,
+            connections = 1u,
+            // recoveryHeight = 200_000u, // Signet
+            recoveryHeight = 0u, // Regtest
+            dataDir = this.internalAppFilesPath,
+        )
+        runNode(node)
+        kyotoLightClient = client
+        Log.i(TAG, "Kyoto node started")
+    }
+
+    suspend fun stopKyotoNode() {
+        kyotoLightClient?.shutdown()
+    }
+
+    fun applyUpdate(update: Update) {
+        wallet.applyUpdate(update)
+        wallet.persist(connection)
+    }
 
     // fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LastUnused)
 
@@ -268,6 +299,7 @@ class Wallet private constructor(
                 fullScanCompleted = false,
                 walletId = walletId,
                 userPreferencesRepository = userPreferencesRepository,
+                internalAppFilesPath = internalAppFilesPath,
                 blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(newWalletConfig.network)
             )
         }
@@ -293,6 +325,7 @@ class Wallet private constructor(
                 fullScanCompleted = activeWallet.fullScanCompleted,
                 walletId = activeWallet.id,
                 userPreferencesRepository = userPreferencesRepository,
+                internalAppFilesPath = internalAppFilesPath,
                 blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(activeWallet.network.intoDomain())
             )
         }
@@ -348,6 +381,7 @@ class Wallet private constructor(
                 fullScanCompleted = false,
                 walletId = walletId,
                 userPreferencesRepository = userPreferencesRepository,
+                internalAppFilesPath = internalAppFilesPath,
                 blockchainClientsConfig = BlockchainClientsConfig.createDefaultConfig(recoverWalletConfig.network)
             )
         }
