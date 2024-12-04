@@ -84,6 +84,12 @@ fun HomeNavigation(
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             }
-        ) { CompactBlockFilterClientScreen(activeWallet, walletViewModel::onAction, navController = navController) }
+        ) {
+            CompactBlockFilterClientScreen(
+                state = walletViewModel.state,
+                onAction = walletViewModel::onAction,
+                navController = navController
+            )
+        }
     }
 }

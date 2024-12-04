@@ -181,13 +181,6 @@ internal fun WalletHomeScreen(
             }
 
             NeutralButton(
-                text = "update balance",
-                enabled = networkAvailable,
-                // onClick = {  }
-                onClick = { onAction(WalletScreenAction.UpdateBalance) }
-            )
-
-            NeutralButton(
                 text = "transaction history",
                 enabled = networkAvailable,
                 onClick = { navController.navigate(TransactionHistoryScreen) }

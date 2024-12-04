@@ -6,7 +6,10 @@ import org.bitcoindevkit.NodeState
 import org.bitcoindevkit.Warning
 import org.rustbitcoin.bitcoin.Txid
 
-class KyotoNodeEventHandler(val triggerSnackbar: (message: String) -> Unit) : NodeEventHandler {
+class KyotoNodeEventHandler(
+    val triggerSnackbar: (message: String) -> Unit,
+    val updateLatestBLock: (blockHeight: UInt) -> Unit,
+) : NodeEventHandler {
     override fun blocksDisconnected(blocks: List<UInt>) {
         Log.i("KyotoNodeEvent", "Blocks disconnected: $blocks")
     }
@@ -17,11 +20,11 @@ class KyotoNodeEventHandler(val triggerSnackbar: (message: String) -> Unit) : No
 
     override fun dialog(dialog: String) {
         Log.i("KyotoNodeEvent", "Dialog: $dialog")
-        if (dialog.contains("peer height")) {
-            val height = dialog.split("peer height: ")[1].split(" ")[0]
-            Log.i("KyotoNodeEvent", "Peer height from the dialog method: $height")
-            triggerSnackbar("New block mined: $height")
-        }
+        // if (dialog.contains("peer height")) {
+        //     val height = dialog.split("peer height: ")[1].split(" ")[0]
+        //     Log.i("KyotoNodeEvent", "Peer height from the dialog method: $height")
+        //     triggerSnackbar("New block mined: $height")
+        // }
     }
 
     override fun stateChanged(state: NodeState) {
@@ -30,6 +33,8 @@ class KyotoNodeEventHandler(val triggerSnackbar: (message: String) -> Unit) : No
 
     override fun synced(tip: UInt) {
         Log.i("KyotoNodeEvent", "Synced: $tip")
+        triggerSnackbar("Synced to block $tip")
+        updateLatestBLock(tip)
     }
 
     override fun txFailed(txid: Txid) {

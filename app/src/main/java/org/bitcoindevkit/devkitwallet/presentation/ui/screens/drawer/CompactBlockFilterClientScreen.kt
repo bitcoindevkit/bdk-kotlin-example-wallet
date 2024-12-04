@@ -27,22 +27,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.KyotoNodeStatus
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
 @Composable
 internal fun CompactBlockFilterClientScreen(
-    activeWallet: Wallet,
+    state: WalletScreenState,
     onAction: (WalletScreenAction) -> Unit,
     navController: NavController
 ) {
-    val kyotoIsActive: Boolean = activeWallet.kyotoLightClient != null
-    // val blockHeight: ULong = activeWallet.latestKyotoBlock
 
     Scaffold(
         topBar = {
@@ -66,7 +65,7 @@ internal fun CompactBlockFilterClientScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                val status = if (kyotoIsActive) "Online" else "Offline"
+                val status = if (state.kyotoNodeStatus == KyotoNodeStatus.Running) "Online" else "Offline"
                 Text(
                     text = "CBF Node Status: $status",
                     color = DevkitWalletColors.white,
@@ -79,46 +78,46 @@ internal fun CompactBlockFilterClientScreen(
                         .padding(horizontal = 8.dp)
                         .size(size = 21.dp)
                         .clip(shape = CircleShape)
-                        .background(if (kyotoIsActive) Color(0xFF2A9D8F) else Color(0xFFE76F51) )
+                        .background(if (state.kyotoNodeStatus == KyotoNodeStatus.Running) Color(0xFF2A9D8F) else Color(0xFFE76F51) )
                 )
             }
 
-            // Row(
-            //     verticalAlignment = Alignment.CenterVertically,
-            //     horizontalArrangement = Arrangement.SpaceBetween,
-            //     modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
-            // ) {
-            //     Text(
-            //         text = "Latest known block:",
-            //         color = DevkitWalletColors.white,
-            //         fontSize = 14.sp,
-            //         fontFamily = monoRegular,
-            //         textAlign = TextAlign.Start,
-            //     )
-            //     Text(
-            //         text = blockHeight.toString(),
-            //         color = DevkitWalletColors.white,
-            //         fontSize = 14.sp,
-            //         fontFamily = monoRegular,
-            //         textAlign = TextAlign.Start,
-            //     )
-            // }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+            ) {
+                Text(
+                    text = "Latest known block:",
+                    color = DevkitWalletColors.white,
+                    fontSize = 14.sp,
+                    fontFamily = monoRegular,
+                    textAlign = TextAlign.Start,
+                )
+                Text(
+                    text = "${state.latestBlock}",
+                    color = DevkitWalletColors.white,
+                    fontSize = 14.sp,
+                    fontFamily = monoRegular,
+                    textAlign = TextAlign.Start,
+                )
+            }
 
             Spacer(modifier = Modifier.padding(16.dp))
 
             NeutralButton(
                 text = "Start Node",
-                enabled = !kyotoIsActive,
+                enabled = state.kyotoNodeStatus == KyotoNodeStatus.Stopped,
                 onClick = { onAction(WalletScreenAction.StartKyotoNode) }
             )
             NeutralButton(
                 text = "Start Sync",
-                enabled = kyotoIsActive,
+                enabled = state.kyotoNodeStatus == KyotoNodeStatus.Running,
                 onClick = { onAction(WalletScreenAction.StartKyotoSync) }
             )
             NeutralButton(
                 text = "Stop Node",
-                enabled = kyotoIsActive,
+                enabled = state.kyotoNodeStatus == KyotoNodeStatus.Running,
                 onClick = { onAction(WalletScreenAction.StopKyotoNode) }
             )
         }

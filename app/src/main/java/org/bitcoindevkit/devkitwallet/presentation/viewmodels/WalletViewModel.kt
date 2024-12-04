@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
 import org.bitcoindevkit.devkitwallet.domain.KyotoNodeEventHandler
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.KyotoNodeStatus
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
@@ -54,8 +55,11 @@ internal class WalletViewModel(
         }
     }
 
+    private fun updateLatestBlock(blockHeight: UInt) {
+        state = state.copy(latestBlock = blockHeight)
+    }
+
     private fun updateBalance() {
-        Log.i("Kyoto", "Updating balance method triggered")
         viewModelScope.launch(Dispatchers.IO) {
             val newBalance = wallet.getBalance()
             Log.i("Kyoto", "New balance: $newBalance")
@@ -67,19 +71,19 @@ internal class WalletViewModel(
     private fun startKyotoNode() {
         Log.i("Kyoto", "Starting Kyoto node")
         wallet.startKyotoNode()
+        state = state.copy(kyotoNodeStatus = KyotoNodeStatus.Running)
     }
 
     private fun startKyotoSync() {
         Log.i("Kyoto", "Starting Kyoto sync")
-        val kyotoMessageHandler = KyotoNodeEventHandler(triggerSnackbar = ::showSnackbar)
+        val kyotoMessageHandler = KyotoNodeEventHandler(
+            triggerSnackbar = ::showSnackbar,
+            updateLatestBLock = ::updateLatestBlock
+        )
         updateBalance()
 
         viewModelScope.launch {
-            var loopIteration = 0
             while (wallet.kyotoLightClient != null) {
-                loopIteration++
-                Log.i("Kyoto", "Syncing loop iteration $loopIteration")
-
                 val update = wallet.kyotoLightClient?.update(kyotoMessageHandler)
                 if (update == null) {
                     Log.i("Kyoto", "Update is null")
@@ -97,5 +101,6 @@ internal class WalletViewModel(
         viewModelScope.launch {
             wallet.stopKyotoNode()
         }
+        state = state.copy(kyotoNodeStatus = KyotoNodeStatus.Stopped)
     }
 }
