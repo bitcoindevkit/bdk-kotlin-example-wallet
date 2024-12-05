@@ -19,5 +19,12 @@ internal val devkitTypography = Typography(
     ),
 )
 
+val introText = TextStyle(
+    fontFamily = quattroRegular,
+    fontWeight = FontWeight.Normal,
+    fontSize = 18.sp,
+    lineHeight = 28.sp
+)
+
 // These are the default text styles used by Material3 components:
 // Buttons: labelLarge

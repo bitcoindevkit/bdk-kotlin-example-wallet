@@ -32,6 +32,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.devkitTypography
+import org.bitcoindevkit.devkitwallet.presentation.theme.introText
 
 @Composable
 fun OnboardingScreen(onFinishOnboarding: () -> Unit) {
@@ -40,7 +41,8 @@ fun OnboardingScreen(onFinishOnboarding: () -> Unit) {
         "Easter egg #1: \uD83E\uDD5A",
         "Welcome to the Devkit Wallet! This app is a playground for developers and bitcoin enthusiasts to experiment with Bitcoin.",
         "It is developed with the Bitcoin Dev Kit, a powerful library produced and maintained by the Bitcoin Dev Kit Foundation.",
-        "The Foundation maintains this app as a way to showcase the capabilities of the Bitcoin Dev Kit and to provide a starting point for developers to build their own apps.\nIt is not a production application, and only works for testnet, signet, and regtest. Have fun!"
+        "This version of the app is using Compact Block Filters to sync its wallets.",
+        "The Foundation maintains this app as a way to showcase the capabilities of the Bitcoin Dev Kit and to provide a starting point for developers to build their own apps.\n\nIt is not a production application, and only works for testnet, signet, and regtest. Have fun!"
     )
 
     ConstraintLayout(
@@ -80,6 +82,7 @@ fun OnboardingScreen(onFinishOnboarding: () -> Unit) {
                 1 -> IntroTextPart(messages[1])
                 2 -> IntroTextPart(messages[2])
                 3 -> IntroTextPart(messages[3])
+                4 -> IntroTextPart(messages[4])
             }
         }
 
@@ -118,6 +121,15 @@ fun OnboardingScreen(onFinishOnboarding: () -> Unit) {
                         if (currentIndex == 3) Color(0xffE9C46A) else Color(0xffE9C46A).copy(alpha = 0.3f)
                     )
             )
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .size(size = 16.dp)
+                    .clip(shape = CircleShape)
+                    .background(
+                        if (currentIndex == 4) Color(0xffE9C46A) else Color(0xffE9C46A).copy(alpha = 0.3f)
+                    )
+            )
         }
 
         Row(
@@ -142,13 +154,13 @@ fun OnboardingScreen(onFinishOnboarding: () -> Unit) {
                 style = devkitTypography.labelLarge
             )
             Text(
-                text = if (currentIndex < 3) "Next" else "Awesome!",
+                text = if (currentIndex < 4) "Next" else "Awesome!",
                 modifier = Modifier
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        if (currentIndex < 3) setCurrentIndex((currentIndex + 1).coerceIn(0, 3)) else onFinishOnboarding()
+                        if (currentIndex < 4) setCurrentIndex((currentIndex + 1).coerceIn(0, 4)) else onFinishOnboarding()
                     },
                 color = DevkitWalletColors.white,
                 style = devkitTypography.labelLarge
@@ -163,6 +175,6 @@ fun IntroTextPart(message: String) {
         text = message,
         modifier = Modifier.padding(horizontal = 32.dp),
         color = DevkitWalletColors.white,
-        style = devkitTypography.labelLarge
+        style = introText
     )
 }
