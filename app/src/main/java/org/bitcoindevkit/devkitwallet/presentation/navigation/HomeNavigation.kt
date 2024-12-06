@@ -15,7 +15,7 @@ import androidx.navigation.compose.composable
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.WalletRoot
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.AboutScreen
-import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.CompactBlockFilterClientScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.CompactBlockFiltersNodeScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.RecoveryPhraseScreen
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 
@@ -85,7 +85,7 @@ fun HomeNavigation(
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             }
         ) {
-            CompactBlockFilterClientScreen(
+            CompactBlockFiltersNodeScreen(
                 state = walletViewModel.state,
                 onAction = walletViewModel::onAction,
                 navController = navController

@@ -14,6 +14,7 @@ internal val devkitTypography = Typography(
     labelLarge = TextStyle(
         fontFamily = quattroRegular,
         fontWeight = FontWeight.Normal,
+        color = DevkitWalletColors.white,
         fontSize = 16.sp,
         lineHeight = 28.sp
     ),

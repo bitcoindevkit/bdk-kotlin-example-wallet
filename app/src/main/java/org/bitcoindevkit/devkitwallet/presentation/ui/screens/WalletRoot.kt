@@ -42,6 +42,7 @@ import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.navigation.AboutScreen
 import org.bitcoindevkit.devkitwallet.presentation.navigation.CompactBlockFilterClientScreen
 import org.bitcoindevkit.devkitwallet.presentation.navigation.RecoveryPhraseScreen
+import org.bitcoindevkit.devkitwallet.presentation.theme.devkitTypography
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 
@@ -86,12 +87,12 @@ internal fun WalletRoot(
                     )
                     Text(
                         text = "BDK Android Sample Wallet",
-                        color = DevkitWalletColors.white,
+                        style = devkitTypography.labelLarge
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(
                         "Version 0.1.0",
-                        color = DevkitWalletColors.white,
+                        style = devkitTypography.labelLarge
                     )
                 }
                 Column(
@@ -113,7 +114,7 @@ internal fun WalletRoot(
                         colors = navigationItemColors
                     )
                     NavigationDrawerItem(
-                        label = { DrawerItemLabel("Compact Block Filter Client") },
+                        label = { DrawerItemLabel("Compact Block Filters Node") },
                         selected = items[2] == selectedItem.value,
                         onClick = { navController.navigate(CompactBlockFilterClientScreen) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),

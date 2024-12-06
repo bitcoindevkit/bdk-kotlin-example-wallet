@@ -6,12 +6,17 @@
 package org.bitcoindevkit.devkitwallet.domain
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.bitcoindevkit.Address
 import org.bitcoindevkit.AddressInfo
 import org.rustbitcoin.bitcoin.Amount
 import org.bitcoindevkit.CanonicalTx
 import org.bitcoindevkit.ChainPosition
+import org.bitcoindevkit.Client
 import org.bitcoindevkit.Connection
 import org.bitcoindevkit.Descriptor
 import org.bitcoindevkit.DescriptorSecretKey
@@ -19,15 +24,16 @@ import org.bitcoindevkit.IpAddress
 import org.rustbitcoin.bitcoin.FeeRate
 import org.bitcoindevkit.KeychainKind
 import org.bitcoindevkit.LightClient
+import org.bitcoindevkit.LightClientBuilder
 import org.bitcoindevkit.Mnemonic
 import org.bitcoindevkit.Peer
 import org.rustbitcoin.bitcoin.Network
 import org.bitcoindevkit.Psbt
+import org.bitcoindevkit.ScanType
 import org.rustbitcoin.bitcoin.Script
 import org.bitcoindevkit.TxBuilder
 import org.bitcoindevkit.Update
 import org.bitcoindevkit.WordCount
-import org.bitcoindevkit.buildLightClient
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.ConfirmationBlock
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
@@ -38,8 +44,8 @@ import org.bitcoindevkit.devkitwallet.data.TxDetails
 import org.bitcoindevkit.devkitwallet.domain.utils.intoDomain
 import org.bitcoindevkit.devkitwallet.domain.utils.intoProto
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.Recipient
-import org.bitcoindevkit.runNode
 import org.bitcoindevkit.Wallet as BdkWallet
+import org.bitcoindevkit.Client as KyotoClient
 import java.util.UUID
 
 private const val TAG = "Wallet"
@@ -55,8 +61,7 @@ class Wallet private constructor(
     blockchainClientsConfig: BlockchainClientsConfig
 ) {
     private var currentBlockchainClient: BlockchainClient? = blockchainClientsConfig.getClient()
-    public var kyotoLightClient: LightClient? = null
-    // public var latestBlock: ULong = 0uL
+    public var kyotoClient: KyotoClient? = null
 
     fun getRecoveryPhrase(): List<String> {
         return recoveryPhrase.split(" ")
@@ -162,43 +167,6 @@ class Wallet private constructor(
     //     return null
     // }
 
-    // fun sync() {
-    //     val fullScanRequest = wallet.startFullScan().build()
-    //     val update: Update = currentBlockchainClient?.fullScan(fullScanRequest, 20u) ?: throw IllegalStateException("Blockchain client not initialized")
-    //     Log.i(TAG, "Wallet sync complete with update $update")
-    //     wallet.applyUpdate(update)
-    //     wallet.persist(connection)
-    // }
-
-    // private fun fullScan() {
-    //     val fullScanRequest = wallet.startFullScan().build()
-    //     val update: Update = currentBlockchainClient?.fullScan(
-    //         fullScanRequest = fullScanRequest,
-    //         stopGap = 20u,
-    //     ) ?: throw IllegalStateException("Blockchain client not initialized")
-    //     wallet.applyUpdate(update)
-    //     wallet.persist(connection)
-    // }
-
-    // fun sync() {
-    //     if (!fullScanCompleted) {
-    //         Log.i(TAG, "Full scan required")
-    //         fullScan()
-    //         runBlocking {
-    //             userPreferencesRepository.setFullScanCompleted(walletId)
-    //             fullScanCompleted = true
-    //         }
-    //     } else {
-    //         Log.i(TAG, "Just a normal sync!")
-    //         val syncRequest = wallet.startSyncWithRevealedSpks().build()
-    //         val update = currentBlockchainClient?.sync(
-    //             syncRequest = syncRequest,
-    //         ) ?: throw IllegalStateException("Blockchain client not initialized")
-    //         wallet.applyUpdate(update)
-    //         wallet.persist(connection)
-    //     }
-    // }
-
     fun getBalance(): ULong = wallet.balance().total.toSat()
 
     fun getNewAddress(): AddressInfo = wallet.revealNextAddress(KeychainKind.EXTERNAL)
@@ -207,45 +175,30 @@ class Wallet private constructor(
         Log.i(TAG, "Starting Kyoto node")
         // val ip: IpAddress = IpAddress.fromIpv4(68u, 47u, 229u, 218u) // Signet
         val ip: IpAddress = IpAddress.fromIpv4(10u, 0u, 2u, 2u) // Regtest
-        val peer1: Peer = Peer(ip, null, false)
+        val peer1: Peer = Peer(ip, 18444u, false) // Regtest
+        // val peer1: Peer = Peer(ip, null, false)
         val peers: List<Peer> = listOf(peer1)
 
-        val (node, client) = buildLightClient(
-            wallet = wallet,
-            peers = peers,
-            connections = 1u,
-            // recoveryHeight = 200_000u, // Signet
-            recoveryHeight = 0u, // Regtest
-            dataDir = this.internalAppFilesPath,
-        )
-        runNode(node)
-        kyotoLightClient = client
+        val (client, node) = LightClientBuilder()
+            .dataDir(this.internalAppFilesPath)
+            .peers(peers)
+            .connections(1u)
+            .scanType(ScanType.New)
+            .build(this.wallet)
+
+        node.run()
+        kyotoClient = client
         Log.i(TAG, "Kyoto node started")
     }
 
     suspend fun stopKyotoNode() {
-        kyotoLightClient?.shutdown()
+        kyotoClient?.shutdown()
     }
 
     fun applyUpdate(update: Update) {
         wallet.applyUpdate(update)
         wallet.persist(connection)
     }
-
-    // fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LastUnused)
-
-    // fun isBlockChainCreated() = ::electrumServer.isInitialized
-
-    // fun getElectrumURL(): String = electrumServer.getElectrumURL()
-
-    // fun isElectrumServerDefault(): Boolean = electrumServer.isElectrumServerDefault()
-
-    // fun setElectrumSettings(electrumSettings: ElectrumSettings) {
-    //     when (electrumSettings) {
-    //         ElectrumSettings.DEFAULT -> electrumServer.useDefaultElectrum()
-    //         ElectrumSettings.CUSTOM ->  electrumServer.useCustomElectrum()
-    //     }
-    // }
 
     companion object {
         fun createWallet(

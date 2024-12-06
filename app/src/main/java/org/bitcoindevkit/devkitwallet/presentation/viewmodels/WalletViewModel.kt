@@ -11,11 +11,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.bitcoindevkit.Warning
 import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
-import org.bitcoindevkit.devkitwallet.domain.KyotoNodeEventHandler
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.KyotoNodeStatus
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
@@ -28,6 +29,8 @@ internal class WalletViewModel(
 
     var state: WalletScreenState by mutableStateOf(WalletScreenState())
         private set
+
+    private val kyotoCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
     fun onAction(action: WalletScreenAction) {
         when (action) {
@@ -76,22 +79,31 @@ internal class WalletViewModel(
 
     private fun startKyotoSync() {
         Log.i("Kyoto", "Starting Kyoto sync")
-        val kyotoMessageHandler = KyotoNodeEventHandler(
-            triggerSnackbar = ::showSnackbar,
-            updateLatestBLock = ::updateLatestBlock
-        )
-        updateBalance()
 
-        viewModelScope.launch {
-            while (wallet.kyotoLightClient != null) {
-                val update = wallet.kyotoLightClient?.update(kyotoMessageHandler)
+        kyotoCoroutineScope.launch {
+            while (wallet.kyotoClient != null) {
+                val update = wallet.kyotoClient?.update()
                 if (update == null) {
-                    Log.i("Kyoto", "Update is null")
+                    Log.i("Kyoto", "UPDATE: Update is null")
                 } else {
-                    Log.i("Kyoto", "Applying an update to the wallet")
+                    Log.i("Kyoto", "UPDATE: Applying an update to the wallet")
                     wallet.applyUpdate(update)
                 }
                 updateBalance()
+            }
+        }
+
+        kyotoCoroutineScope.launch {
+            while (wallet.kyotoClient != null) {
+                val nextLog: org.bitcoindevkit.Log = wallet.kyotoClient!!.nextLog()
+                Log.i("Kyoto", "LOG: $nextLog")
+            }
+        }
+
+        kyotoCoroutineScope.launch {
+            while (wallet.kyotoClient != null) {
+                val nextWarning: Warning = wallet.kyotoClient!!.nextWarning()
+                Log.i("Kyoto", "WARNING: $nextWarning")
             }
         }
     }

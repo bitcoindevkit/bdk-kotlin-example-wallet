@@ -37,7 +37,7 @@ import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAc
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
 @Composable
-internal fun CompactBlockFilterClientScreen(
+internal fun CompactBlockFiltersNodeScreen(
     state: WalletScreenState,
     onAction: (WalletScreenAction) -> Unit,
     navController: NavController
@@ -46,7 +46,7 @@ internal fun CompactBlockFilterClientScreen(
     Scaffold(
         topBar = {
             SecondaryScreensAppBar(
-                title = "Compact Block Filter Client",
+                title = "Compact Block Filters Node",
                 navigation = { navController.navigate(WalletScreen) }
             )
         },
