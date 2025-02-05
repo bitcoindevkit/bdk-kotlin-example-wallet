@@ -57,7 +57,6 @@ class Wallet private constructor(
     fun createTransaction(
         recipientList: List<Recipient>,
         feeRate: FeeRate,
-        disableRbf: Boolean,
         opReturnMsg: String?
     ): Psbt {
         // technique 1 for adding a list of recipients to the TxBuilder
@@ -72,11 +71,6 @@ class Wallet private constructor(
             // val address = Address(recipient.address)
             val scriptPubKey: Script = Address(recipient.address, Network.TESTNET).scriptPubkey()
             builder.addRecipient(scriptPubKey, Amount.fromSat(recipient.amount))
-        }
-        if (disableRbf) {
-            // Nothing
-        } else {
-            txBuilder = txBuilder.enableRbf()
         }
         // if (!opReturnMsg.isNullOrEmpty()) {
         //     txBuilder = txBuilder.addData(opReturnMsg.toByteArray(charset = Charsets.UTF_8).asUByteArray().toList())

@@ -31,7 +31,6 @@ internal class SendViewModel(private val wallet: Wallet) : ViewModel() {
                 TransactionType.STANDARD -> wallet.createTransaction(
                     recipientList = txInfo.recipients,
                     feeRate = FeeRate.fromSatPerVb(txInfo.feeRate),
-                    disableRbf = txInfo.rbfDisabled,
                     opReturnMsg = txInfo.opReturnMsg
                 )
                 // TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, FeeRate.fromSatPerVb(feeRate), rbfEnabled, opReturnMsg)
