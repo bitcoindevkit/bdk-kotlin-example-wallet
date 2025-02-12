@@ -30,6 +30,8 @@ import androidx.navigation.compose.rememberNavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 
 @Composable
 internal fun AboutScreen(navController: NavController) {
@@ -47,20 +49,21 @@ internal fun AboutScreen(navController: NavController) {
                 .background(DevkitWalletColors.primary)
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.padding(24.dp))
             Image(
                 painter = painterResource(id = R.drawable.bdk_logo),
-                contentDescription = "Bitcoin testnet logo",
+                contentDescription = "BDK logo",
                 Modifier.size(180.dp)
             )
             Spacer(modifier = Modifier.padding(24.dp))
             Text(
-                text = "This wallet is build for developers to learn how to leverage the Bitcoin Development Kit.",
+                text = "This wallet is build for:\n\n1. Developers interested in learning how to leverage the Bitcoin Development Kit on Android.\n\n2. Any bitcoiner looking for a Signet/Testnet/Regtest wallet!",
                 color = DevkitWalletColors.white,
-                fontSize = 14.sp,
                 textAlign = TextAlign.Start,
+                fontFamily = quattroRegular,
                 modifier = Modifier.padding(all = 8.dp)
             )
         }
