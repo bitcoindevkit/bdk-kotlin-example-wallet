@@ -40,10 +40,10 @@ class BlockchainClientsConfig {
                     config.addClient(EsploraClient("http://10.0.2.2:3002"), true)
                 }
                 Network.TESTNET -> {
-                    config.addClient(ElectrumClient("ssl://electrum.blockstream.info:60002"), true)
+                    config.addClient(EsploraClient("https://blockstream.info/testnet/api/"), true)
                 }
                 Network.SIGNET -> {
-                    config.addClient(ElectrumClient("ssl://mempool.space:60602"), true)
+                    config.addClient(EsploraClient("http://signet.bitcoindevkit.net"), true)
                 }
                 Network.BITCOIN -> throw IllegalArgumentException("This app does not support mainnet")
             }

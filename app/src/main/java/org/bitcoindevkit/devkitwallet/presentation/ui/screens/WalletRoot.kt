@@ -98,7 +98,7 @@ internal fun WalletRoot(
                     )
                     Spacer(modifier = Modifier.padding(16.dp))
                     Text(
-                        "Version 0.1.0/Electrum",
+                        "Version 0.1.0/Esplora",
                         color = DevkitWalletColors.white,
                         fontFamily = quattroRegular,
                         fontSize = 14.sp,
@@ -123,7 +123,7 @@ internal fun WalletRoot(
                         colors = navigationItemColors
                     )
                     NavigationDrawerItem(
-                        label = { DrawerItemLabel("Custom Blockchain Client") },
+                        label = { DrawerItemLabel("Esplora Client") },
                         selected = items[2] == selectedItem.value,
                         onClick = { navController.navigate(CustomBlockchainClientScreen) },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),

@@ -9,7 +9,6 @@ import org.bitcoindevkit.FullScanRequest
 import org.bitcoindevkit.SyncRequest
 import org.bitcoindevkit.Transaction
 import org.bitcoindevkit.EsploraClient as BdkEsploraClient
-import org.bitcoindevkit.ElectrumClient as BdkElectrumClient
 import org.bitcoindevkit.Update
 
 interface BlockchainClient {
@@ -39,25 +38,5 @@ class EsploraClient(private val url: String) : BlockchainClient {
 
     override fun broadcast(transaction: Transaction) {
         client.broadcast(transaction)
-    }
-}
-
-class ElectrumClient(private val url: String) : BlockchainClient {
-    private val client = BdkElectrumClient(url)
-
-    override fun clientId(): String {
-        return url
-    }
-
-    override fun fullScan(fullScanRequest: FullScanRequest, stopGap: ULong): Update {
-        return client.fullScan(fullScanRequest, stopGap, batchSize = 10uL, fetchPrevTxouts = true)
-    }
-
-    override fun sync(syncRequest: SyncRequest): Update {
-        return client.sync(syncRequest, batchSize = 2uL, fetchPrevTxouts = true)
-    }
-
-    override fun broadcast(transaction: Transaction) {
-        throw NotImplementedError("ElectrumClient.broadcast() is not implemented")
     }
 }

@@ -35,7 +35,7 @@ internal fun CustomBlockchainClient(navController: NavController) {
     Scaffold(
         topBar = {
             SecondaryScreensAppBar(
-                title = "Custom Blockchain Client",
+                title = "Esplora Client",
                 navigation = { navController.navigate(WalletScreen) }
             )
         },

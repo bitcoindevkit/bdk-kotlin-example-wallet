@@ -39,7 +39,7 @@ fun OnboardingScreen(onFinishOnboarding: () -> Unit) {
     val messages = listOf(
         "Easter egg #1: \uD83E\uDD5A",
         "Welcome to the Devkit Wallet! This app is a playground for developers and bitcoin enthusiasts to experiment with bitcoin's test networks.",
-        "It is developed with the Bitcoin Dev Kit, a powerful set of libraries produced and maintained by the Bitcoin Dev Kit Foundation.",
+        "It is developed with the Bitcoin Dev Kit, a powerful set of libraries produced and maintained by the Bitcoin Dev Kit Foundation.\n\nThe variant of the app you have installed in the Esplora variant, which uses Esplora clients to fetch blockchain data for the wallet.",
         "The Foundation maintains this app as a way to showcase the capabilities of the Bitcoin Dev Kit and to provide a starting point for developers to build their own apps.\n\nIt is not a production application, and only works for testnet, signet, and regtest. Have fun!"
     )
 
