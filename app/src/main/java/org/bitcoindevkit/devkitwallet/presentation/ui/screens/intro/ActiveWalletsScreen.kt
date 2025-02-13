@@ -10,9 +10,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,6 +30,8 @@ import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 
 @Composable
 internal fun ActiveWalletsScreen(
@@ -45,34 +50,60 @@ internal fun ActiveWalletsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            Spacer(modifier = Modifier.height(12.dp))
             activeWallets.forEach {
                 ActiveWalletCard(wallet = it, onBuildWalletButtonClicked)
             }
+            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }
 
 @Composable
 fun ActiveWalletCard(wallet: SingleWallet, onBuildWalletButtonClicked: (WalletCreateType) -> Unit) {
-    Row(
+    Column(
         Modifier
-            .padding(horizontal = 8.dp, vertical = 6.dp)
             .fillMaxWidth()
+            // Padding outside the card
+            .padding(horizontal = 16.dp, vertical = 8.dp)
             .background(
                 color = DevkitWalletColors.primaryLight,
                 shape = RoundedCornerShape(16.dp)
             )
+            // Padding inside the card
+            .padding(horizontal = 4.dp, vertical = 8.dp)
             .clickable { onBuildWalletButtonClicked(WalletCreateType.LOADEXISTING(wallet)) },
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.Start
+    ) {
+        DataField("Name", wallet.name)
+        DataField("Network", wallet.network.toString())
+        DataField("Script Type", wallet.scriptType.toString())
+    }
+}
+
+@Composable
+fun DataField(name: String, value: String) {
+    Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween
+        horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp)
     ) {
         Text(
-            "Name: ${wallet.name}\nNetwork: ${wallet.network}\nScript Type: ${wallet.scriptType}",
-            fontFamily = monoRegular,
-            fontSize = 12.sp,
-            lineHeight = 20.sp,
+            text = name,
+            fontFamily = quattroRegular,
+            fontSize = 14.sp,
+            lineHeight = 18.sp,
             color = DevkitWalletColors.white,
-            modifier = Modifier.padding(16.dp)
+        )
+        Text(
+            text = value,
+            fontFamily = quattroRegular,
+            fontSize = 14.sp,
+            lineHeight = 18.sp,
+            color = DevkitWalletColors.white,
         )
     }
 }
