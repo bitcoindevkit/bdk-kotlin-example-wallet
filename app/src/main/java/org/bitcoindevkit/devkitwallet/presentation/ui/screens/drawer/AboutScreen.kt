@@ -6,7 +6,6 @@
 package org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,14 +22,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.R
 import androidx.navigation.compose.rememberNavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 
 @Composable
@@ -41,12 +38,12 @@ internal fun AboutScreen(navController: NavController) {
                 title = "About",
                 navigation = { navController.navigate(WalletScreen) }
             )
-        }
+        },
+        containerColor = DevkitWalletColors.primary
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DevkitWalletColors.primary)
                 .padding(paddingValues)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Top,

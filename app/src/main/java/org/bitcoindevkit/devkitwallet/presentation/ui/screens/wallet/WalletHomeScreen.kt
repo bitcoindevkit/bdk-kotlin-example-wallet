@@ -62,7 +62,6 @@ import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAc
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 import org.bitcoindevkit.devkitwallet.presentation.navigation.ReceiveScreen
 import org.bitcoindevkit.devkitwallet.presentation.navigation.SendScreen
-import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 
 private const val TAG = "WalletHomeScreen"
 
@@ -80,12 +79,12 @@ internal fun WalletHomeScreen(
     val scope: CoroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        topBar = { WalletAppBar(scope = scope, drawerState = drawerState) }
+        topBar = { WalletAppBar(scope = scope, drawerState = drawerState) },
+        containerColor = DevkitWalletColors.primary
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DevkitWalletColors.primary)
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
