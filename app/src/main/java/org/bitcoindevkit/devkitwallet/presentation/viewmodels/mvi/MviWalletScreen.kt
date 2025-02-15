@@ -10,7 +10,8 @@ import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
 data class WalletScreenState(
     val balance: ULong = 0u,
     val syncing: Boolean = false,
-    val unit: CurrencyUnit = CurrencyUnit.Bitcoin
+    val unit: CurrencyUnit = CurrencyUnit.Bitcoin,
+    val esploraEndpoint: String = ""
 )
 
 sealed interface WalletScreenAction {

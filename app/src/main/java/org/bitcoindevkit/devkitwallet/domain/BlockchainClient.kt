@@ -19,6 +19,8 @@ interface BlockchainClient {
     fun sync(syncRequest: SyncRequest): Update
 
     fun broadcast(transaction: Transaction): Unit
+
+    fun endpoint(): String
 }
 
 class EsploraClient(private val url: String) : BlockchainClient {
@@ -38,5 +40,9 @@ class EsploraClient(private val url: String) : BlockchainClient {
 
     override fun broadcast(transaction: Transaction) {
         client.broadcast(transaction)
+    }
+
+    override fun endpoint(): String {
+        return url
     }
 }

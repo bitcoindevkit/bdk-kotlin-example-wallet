@@ -5,6 +5,7 @@
 
 package org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,9 +29,9 @@ import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
-import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
+
+private const val TAG = "ActiveWalletsScreen"
 
 @Composable
 internal fun ActiveWalletsScreen(
@@ -39,6 +39,8 @@ internal fun ActiveWalletsScreen(
     navController: NavController,
     onBuildWalletButtonClicked: (WalletCreateType) -> Unit
 ) {
+    Log.i(TAG, "Active wallets = $activeWallets")
+    Log.i(TAG, "Active wallets script types = ${activeWallets.first().scriptType}")
     Scaffold(
         topBar = {
             SecondaryScreensAppBar(title = "Choose a Wallet", navigation = { navController.navigateUp() })

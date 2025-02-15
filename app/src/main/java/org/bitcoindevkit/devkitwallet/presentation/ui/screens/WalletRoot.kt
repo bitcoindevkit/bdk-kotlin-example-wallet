@@ -41,22 +41,23 @@ import androidx.navigation.NavController
 import com.composables.icons.lucide.History
 import com.composables.icons.lucide.Info
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Satellite
 import com.composables.icons.lucide.SatelliteDish
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletNavigation
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.navigation.AboutScreen
-import org.bitcoindevkit.devkitwallet.presentation.navigation.CustomBlockchainClientScreen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.BlockchainClientScreen
 import org.bitcoindevkit.devkitwallet.presentation.navigation.RecoveryPhraseScreen
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 
 @OptIn(androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
 internal fun WalletRoot(
     navController: NavController,
-    activeWallet: Wallet
+    activeWallet: Wallet,
+    walletViewModel: WalletViewModel
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
@@ -139,7 +140,7 @@ internal fun WalletRoot(
                         icon = { Icon(Lucide.SatelliteDish, contentDescription = "Esplora Client", tint = DevkitWalletColors.white) },
                         label = { DrawerItemLabel("Esplora Client") },
                         selected = items[2] == selectedItem.value,
-                        onClick = { navController.navigate(CustomBlockchainClientScreen) },
+                        onClick = { navController.navigate(BlockchainClientScreen) },
                         colors = navigationItemColors,
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                     )
@@ -149,7 +150,8 @@ internal fun WalletRoot(
         content = {
             WalletNavigation(
                 drawerState = drawerState,
-                activeWallet = activeWallet
+                activeWallet = activeWallet,
+                walletViewModel = walletViewModel
             )
         }
     )

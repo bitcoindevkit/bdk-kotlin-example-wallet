@@ -30,10 +30,10 @@ private const val ANIMATION_DURATION: Int = 400
 @Composable
 fun WalletNavigation(
     drawerState: DrawerState,
-    activeWallet: Wallet
+    activeWallet: Wallet,
+    walletViewModel: WalletViewModel
 ) {
     val navController: NavHostController = rememberNavController()
-    val walletViewModel = WalletViewModel(activeWallet)
     val addressViewModel = AddressViewModel(activeWallet)
     val sendViewModel = SendViewModel(activeWallet)
 

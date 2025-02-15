@@ -25,7 +25,7 @@ object AboutScreen
 @Serializable
 object RecoveryPhraseScreen
 @Serializable
-object CustomBlockchainClientScreen
+object BlockchainClientScreen
 
 // Wallet navigation destinations
 @Serializable

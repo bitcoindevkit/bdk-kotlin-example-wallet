@@ -154,14 +154,6 @@ class Wallet private constructor(
     //     return null
     // }
 
-    // fun sync() {
-    //     val fullScanRequest = wallet.startFullScan().build()
-    //     val update: Update = currentBlockchainClient?.fullScan(fullScanRequest, 20u) ?: throw IllegalStateException("Blockchain client not initialized")
-    //     Log.i(TAG, "Wallet sync complete with update $update")
-    //     wallet.applyUpdate(update)
-    //     wallet.persist(connection)
-    // }
-
     private fun fullScan() {
         val fullScanRequest = wallet.startFullScan().build()
         val update: Update = currentBlockchainClient?.fullScan(
@@ -195,14 +187,8 @@ class Wallet private constructor(
 
     fun getNewAddress(): AddressInfo = wallet.revealNextAddress(KeychainKind.EXTERNAL)
 
-    // fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LastUnused)
-
-    // fun isBlockChainCreated() = ::electrumServer.isInitialized
-
-    // fun getElectrumURL(): String = electrumServer.getElectrumURL()
-
-    // fun isElectrumServerDefault(): Boolean = electrumServer.isElectrumServerDefault()
-
+    fun getClientEndpoint(): String = currentBlockchainClient?.endpoint() ?: "No active client"
+    
     // fun setElectrumSettings(electrumSettings: ElectrumSettings) {
     //     when (electrumSettings) {
     //         ElectrumSettings.DEFAULT -> electrumServer.useDefaultElectrum()

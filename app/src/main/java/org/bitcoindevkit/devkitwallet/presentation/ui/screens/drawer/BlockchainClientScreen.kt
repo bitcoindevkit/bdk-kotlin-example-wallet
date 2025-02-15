@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -16,16 +17,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
 @Composable
-internal fun CustomBlockchainClient(navController: NavController) {
+internal fun BlockchainClientScreen(
+    state: WalletScreenState,
+    navController: NavController
+) {
     val focusManager = LocalFocusManager.current
     // val isBlockChainCreated = Wallet.isBlockChainCreated()
-    val electrumServer: MutableState<String> = remember { mutableStateOf("") }
+    val serverEndpoint: MutableState<String> = remember { mutableStateOf("") }
     val isChecked: MutableState<Boolean> = remember { mutableStateOf(false) }
     // if (isBlockChainCreated) {
     //     electrumServer.value = Wallet.getElectrumURL()
@@ -47,7 +55,18 @@ internal fun CustomBlockchainClient(navController: NavController) {
                 .padding(paddingValues)
                 .padding(all = 16.dp),
         ) {
-
+            Text(
+                text = "Current Esplora client endpoint",
+                color = DevkitWalletColors.white,
+                fontSize = 18.sp,
+                fontFamily = quattroBold,
+            )
+            Text(
+                text = state.esploraEndpoint,
+                color = DevkitWalletColors.white,
+                fontSize = 14.sp,
+                fontFamily = quattroRegular,
+            )
             // Row(verticalAlignment = Alignment.CenterVertically) {
             //     Text(
             //         text = "Use default electrum URL",
