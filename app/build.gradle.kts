@@ -2,13 +2,15 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.protobuf")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.20"
+    id("org.jetbrains.kotlin.plugin.compose")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 // This is the version of the app that is displayed in the UI on the drawer.
 val variantName = "Version 0.1.0/Esplora"
 
 android {
+    namespace = "org.bitcoindevkit.devkitwallet"
     compileSdk = 35
 
     buildFeatures {
@@ -34,19 +36,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.5"
-    }
-
-    namespace = "org.bitcoindevkit.devkitwallet"
 }
 
 dependencies {
