@@ -16,6 +16,7 @@ import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.WalletRoot
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.AboutScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.BlockchainClientScreen
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.LogsScreen
 import org.bitcoindevkit.devkitwallet.presentation.ui.screens.drawer.RecoveryPhraseScreen
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 
@@ -89,5 +90,20 @@ fun HomeNavigation(
             state = walletViewModel.state,
             navController = navController
         ) }
+
+        composable<LogsScreen>(
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, animationSpec = tween(ANIMATION_DURATION))
+            }
+        ) { LogsScreen(navController = navController) }
     }
 }

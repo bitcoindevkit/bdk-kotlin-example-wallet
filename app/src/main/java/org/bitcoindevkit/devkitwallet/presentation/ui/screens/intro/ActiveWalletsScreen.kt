@@ -5,7 +5,6 @@
 
 package org.bitcoindevkit.devkitwallet.presentation.ui.screens.intro
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,8 +38,6 @@ internal fun ActiveWalletsScreen(
     navController: NavController,
     onBuildWalletButtonClicked: (WalletCreateType) -> Unit
 ) {
-    Log.i(TAG, "Active wallets = $activeWallets")
-    Log.i(TAG, "Active wallets script types = ${activeWallets.first().scriptType}")
     Scaffold(
         topBar = {
             SecondaryScreensAppBar(title = "Choose a Wallet", navigation = { navController.navigateUp() })
@@ -55,6 +52,15 @@ internal fun ActiveWalletsScreen(
             Spacer(modifier = Modifier.height(12.dp))
             activeWallets.forEach {
                 ActiveWalletCard(wallet = it, onBuildWalletButtonClicked)
+            }
+            if (activeWallets.isEmpty()) {
+                Text(
+                    text = "No active wallets.",
+                    fontSize = 16.sp,
+                    fontFamily = quattroRegular,
+                    color = DevkitWalletColors.white,
+                    modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally)
+                )
             }
             Spacer(modifier = Modifier.height(12.dp))
         }
