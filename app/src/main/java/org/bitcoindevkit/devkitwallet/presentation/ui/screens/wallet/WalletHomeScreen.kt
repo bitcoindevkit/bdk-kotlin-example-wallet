@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CurrencyBitcoin
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -44,24 +45,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.compose.material.icons.rounded.CurrencyBitcoin
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Menu
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.LoadingAnimation
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
-import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.domain.utils.formatInBtc
-import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
-import org.bitcoindevkit.devkitwallet.presentation.navigation.TransactionHistoryScreen
-import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
-import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
-import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
-import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
+import org.bitcoindevkit.devkitwallet.domain.utils.formatInBtc
 import org.bitcoindevkit.devkitwallet.presentation.navigation.ReceiveScreen
 import org.bitcoindevkit.devkitwallet.presentation.navigation.SendScreen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.TransactionHistoryScreen
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
+import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
+import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.LoadingAnimation
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
+import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
 private const val TAG = "WalletHomeScreen"
 
@@ -83,9 +83,10 @@ internal fun WalletHomeScreen(
         containerColor = DevkitWalletColors.primary
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.padding(24.dp))
@@ -106,7 +107,7 @@ internal fun WalletHomeScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                when(state.unit) {
+                when (state.unit) {
                     CurrencyUnit.Bitcoin -> {
                         Icon(
                             imageVector = Icons.Rounded.CurrencyBitcoin,
@@ -176,56 +177,61 @@ internal fun WalletHomeScreen(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .height(140.dp)
-                    .fillMaxWidth(0.9f)
+                modifier =
+                    Modifier
+                        .height(140.dp)
+                        .fillMaxWidth(0.9f)
             ) {
                 Button(
                     onClick = { navController.navigate(ReceiveScreen) },
                     colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
                     shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier
-                        .height(160.dp)
-                        .padding(vertical = 8.dp, horizontal = 8.dp)
-                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                    modifier =
+                        Modifier
+                            .height(160.dp)
+                            .padding(vertical = 8.dp, horizontal = 8.dp)
+                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
                 ) {
                     Text(
                         text = "receive",
                         fontSize = 16.sp,
                         textAlign = TextAlign.End,
                         lineHeight = 28.sp,
-                        modifier = Modifier
-                            .fillMaxWidth(0.4f)
-                            .align(Alignment.Bottom)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(0.4f)
+                                .align(Alignment.Bottom)
                     )
                 }
 
                 Button(
                     onClick = { navController.navigate(SendScreen) },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = DevkitWalletColors.accent2,
-                        disabledContainerColor = DevkitWalletColors.accent2,
-                    ),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = DevkitWalletColors.accent2,
+                            disabledContainerColor = DevkitWalletColors.accent2,
+                        ),
                     shape = RoundedCornerShape(16.dp),
                     enabled = networkAvailable,
-                    modifier = Modifier
-                        .height(160.dp)
-                        .padding(vertical = 8.dp, horizontal = 8.dp)
-                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                    modifier =
+                        Modifier
+                            .height(160.dp)
+                            .padding(vertical = 8.dp, horizontal = 8.dp)
+                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
                 ) {
                     Text(
                         text = "send",
                         fontSize = 16.sp,
                         textAlign = TextAlign.End,
                         lineHeight = 28.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.Bottom)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Bottom)
                     )
                 }
             }
         }
-
     }
 }
 
@@ -251,9 +257,10 @@ internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = DevkitWalletColors.primaryDark,
-        )
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = DevkitWalletColors.primaryDark,
+            )
     )
 }
 

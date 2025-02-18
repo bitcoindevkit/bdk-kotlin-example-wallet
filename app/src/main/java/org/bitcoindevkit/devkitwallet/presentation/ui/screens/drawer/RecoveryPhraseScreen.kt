@@ -25,17 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 
 @Composable
-internal fun RecoveryPhraseScreen(
-    recoveryPhrase: List<String>,
-    navController: NavController,
-) {
+internal fun RecoveryPhraseScreen(recoveryPhrase: List<String>, navController: NavController) {
     val (currentIndex, setCurrentIndex) = remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -59,7 +56,7 @@ internal fun RecoveryPhraseScreen(
         ) { screen ->
             when (screen) {
                 0 -> WarningText(setCurrentIndex = setCurrentIndex)
-                1 -> RecoveryPhrase(recoveryPhrase =recoveryPhrase)
+                1 -> RecoveryPhrase(recoveryPhrase = recoveryPhrase)
             }
         }
     }
@@ -111,12 +108,24 @@ fun RecoveryPhrase(recoveryPhrase: List<String>) {
     }
 }
 
-
 @Preview(device = Devices.PIXEL_4, showBackground = true)
 @Composable
 internal fun PreviewRecoveryPhraseScreen() {
     RecoveryPhraseScreen(
-        listOf("word1", "word2", "word3", "word4", "word5", "word6", "word7", "word8", "word9", "word10", "word11", "word12"),
+        listOf(
+            "word1",
+            "word2",
+            "word3",
+            "word4",
+            "word5",
+            "word6",
+            "word7",
+            "word8",
+            "word9",
+            "word10",
+            "word11",
+            "word12"
+        ),
         rememberNavController()
     )
 }

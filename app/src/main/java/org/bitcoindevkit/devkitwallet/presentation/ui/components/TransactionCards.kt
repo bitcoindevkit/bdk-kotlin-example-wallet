@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.data.TxDetails
-import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.viewTransaction
-import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.domain.utils.timestampToString
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
+import org.bitcoindevkit.devkitwallet.presentation.ui.screens.wallet.viewTransaction
 
 private const val TAG = "TransactionCards"
 
@@ -57,12 +57,13 @@ fun ConfirmedTransactionCard(details: TxDetails, navController: NavController) {
             modifier = Modifier.padding(16.dp)
         )
         Box(
-            modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
-                .size(size = 24.dp)
-                .clip(shape = CircleShape)
-                .background(DevkitWalletColors.secondary)
-                .align(Alignment.Top)
+            modifier =
+                Modifier
+                    .padding(top = 16.dp, end = 16.dp)
+                    .size(size = 24.dp)
+                    .clip(shape = CircleShape)
+                    .background(DevkitWalletColors.secondary)
+                    .align(Alignment.Top)
         )
     }
 }
@@ -99,12 +100,13 @@ fun PendingTransactionCard(details: TxDetails, navController: NavController) {
             modifier = Modifier.padding(16.dp)
         )
         Box(
-            modifier = Modifier
-                .padding(top = 16.dp, end = 16.dp)
-                .size(size = 24.dp)
-                .clip(shape = CircleShape)
-                .background(Color(0xffE9C46A))
-                .align(Alignment.Top)
+            modifier =
+                Modifier
+                    .padding(top = 16.dp, end = 16.dp)
+                    .size(size = 24.dp)
+                    .clip(shape = CircleShape)
+                    .background(Color(0xffE9C46A))
+                    .align(Alignment.Top)
         )
     }
 }

@@ -38,19 +38,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.NewWalletConfig
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
+import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.monoRegular
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.rustbitcoin.bitcoin.Network
 
 @Composable
 internal fun CreateNewWalletScreen(
     navController: NavController,
-    onBuildWalletButtonClicked: (WalletCreateType) -> Unit
+    onBuildWalletButtonClicked: (WalletCreateType) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -70,7 +70,8 @@ internal fun CreateNewWalletScreen(
             val walletName: MutableState<String> = remember { mutableStateOf("") }
             val selectedNetwork: MutableState<Network> = remember { mutableStateOf(Network.TESTNET) }
             val networks = listOf(Network.TESTNET, Network.SIGNET, Network.REGTEST)
-            val selectedScriptType: MutableState<ActiveWalletScriptType> = remember { mutableStateOf(ActiveWalletScriptType.P2TR) }
+            val selectedScriptType: MutableState<ActiveWalletScriptType> =
+                remember { mutableStateOf(ActiveWalletScriptType.P2TR) }
             val scriptTypes = listOf(ActiveWalletScriptType.P2TR, ActiveWalletScriptType.P2WPKH)
 
             Column(
@@ -171,7 +172,11 @@ fun NetworkOptionCard(networks: List<Network>, selectedNetwork: MutableState<Net
             modifier = Modifier.padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
         )
 
-        HorizontalDivider(color = DevkitWalletColors.secondary, thickness = 2.dp, modifier = Modifier.padding(bottom = 8.dp))
+        HorizontalDivider(
+            color = DevkitWalletColors.secondary,
+            thickness = 2.dp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
 
         networks.forEachIndexed { index, it ->
             RadioButtonWithLabel(
@@ -185,7 +190,10 @@ fun NetworkOptionCard(networks: List<Network>, selectedNetwork: MutableState<Net
 }
 
 @Composable
-fun ScriptTypeOptionCard(scriptTypes: List<ActiveWalletScriptType>, selectedScriptType: MutableState<ActiveWalletScriptType>) {
+fun ScriptTypeOptionCard(
+    scriptTypes: List<ActiveWalletScriptType>,
+    selectedScriptType: MutableState<ActiveWalletScriptType>,
+) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -209,7 +217,11 @@ fun ScriptTypeOptionCard(scriptTypes: List<ActiveWalletScriptType>, selectedScri
             modifier = Modifier.padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
         )
 
-        HorizontalDivider(color = DevkitWalletColors.secondary, thickness = 2.dp, modifier = Modifier.padding(bottom = 8.dp))
+        HorizontalDivider(
+            color = DevkitWalletColors.secondary,
+            thickness = 2.dp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
 
         scriptTypes.forEachIndexed { index, it ->
             RadioButtonWithLabel(

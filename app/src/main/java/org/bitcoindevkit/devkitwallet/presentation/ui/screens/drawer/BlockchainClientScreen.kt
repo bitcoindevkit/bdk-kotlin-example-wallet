@@ -20,17 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroBold
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
 @Composable
-internal fun BlockchainClientScreen(
-    state: WalletScreenState,
-    navController: NavController
-) {
+internal fun BlockchainClientScreen(state: WalletScreenState, navController: NavController) {
     val focusManager = LocalFocusManager.current
     // val isBlockChainCreated = Wallet.isBlockChainCreated()
     val serverEndpoint: MutableState<String> = remember { mutableStateOf("") }

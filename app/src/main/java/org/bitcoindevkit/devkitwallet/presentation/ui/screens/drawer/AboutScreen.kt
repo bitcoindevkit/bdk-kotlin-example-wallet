@@ -23,12 +23,20 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.R
 import androidx.navigation.compose.rememberNavController
+import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletScreen
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
+
+private val message: String = """
+    "This wallet is build for:
+    
+    1. Developers interested in learning how to leverage the Bitcoin Development Kit on Android.
+    
+    2. Any bitcoiner looking for a Signet/Testnet/Regtest wallet!"
+""".trimIndent()
 
 @Composable
 internal fun AboutScreen(navController: NavController) {
@@ -57,7 +65,7 @@ internal fun AboutScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.padding(24.dp))
             Text(
-                text = "This wallet is build for:\n\n1. Developers interested in learning how to leverage the Bitcoin Development Kit on Android.\n\n2. Any bitcoiner looking for a Signet/Testnet/Regtest wallet!",
+                text = message,
                 color = DevkitWalletColors.white,
                 textAlign = TextAlign.Start,
                 fontFamily = quattroRegular,

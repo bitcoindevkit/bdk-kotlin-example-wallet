@@ -24,11 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.SingleWallet
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
+import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 
 private const val TAG = "ActiveWalletsScreen"
 
@@ -36,7 +36,7 @@ private const val TAG = "ActiveWalletsScreen"
 internal fun ActiveWalletsScreen(
     activeWallets: List<SingleWallet>,
     navController: NavController,
-    onBuildWalletButtonClicked: (WalletCreateType) -> Unit
+    onBuildWalletButtonClicked: (WalletCreateType) -> Unit,
 ) {
     Scaffold(
         topBar = {

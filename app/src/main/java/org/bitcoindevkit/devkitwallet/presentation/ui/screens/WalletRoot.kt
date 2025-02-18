@@ -31,7 +31,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import org.bitcoindevkit.devkitwallet.BuildConfig
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -43,37 +42,35 @@ import com.composables.icons.lucide.Info
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.SatelliteDish
 import com.composables.icons.lucide.ScrollText
-import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
-import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletNavigation
+import org.bitcoindevkit.devkitwallet.BuildConfig
 import org.bitcoindevkit.devkitwallet.R
 import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.navigation.AboutScreen
 import org.bitcoindevkit.devkitwallet.presentation.navigation.BlockchainClientScreen
 import org.bitcoindevkit.devkitwallet.presentation.navigation.LogsScreen
 import org.bitcoindevkit.devkitwallet.presentation.navigation.RecoveryPhraseScreen
+import org.bitcoindevkit.devkitwallet.presentation.navigation.WalletNavigation
+import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.WalletViewModel
 
 @OptIn(androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
-internal fun WalletRoot(
-    navController: NavController,
-    activeWallet: Wallet,
-    walletViewModel: WalletViewModel
-) {
+internal fun WalletRoot(navController: NavController, activeWallet: Wallet, walletViewModel: WalletViewModel) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email, Icons.Default.Face)
     val selectedItem = remember { mutableStateOf(items[0]) }
 
-    val navigationItemColors = colors(
-        selectedContainerColor = DevkitWalletColors.primary,
-        unselectedContainerColor = DevkitWalletColors.primary,
-        selectedTextColor = DevkitWalletColors.white,
-        unselectedTextColor = DevkitWalletColors.white
-    )
+    val navigationItemColors =
+        colors(
+            selectedContainerColor = DevkitWalletColors.primary,
+            unselectedContainerColor = DevkitWalletColors.primary,
+            selectedTextColor = DevkitWalletColors.white,
+            unselectedTextColor = DevkitWalletColors.white
+        )
 
-    ModalNavigationDrawer (
+    ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(
@@ -91,7 +88,7 @@ internal fun WalletRoot(
                     Image(
                         painter = painterResource(id = R.drawable.ic_testnet_logo),
                         contentDescription = "Bitcoin testnet logo",
-                        Modifier
+                        modifier = Modifier
                             .size(90.dp)
                             .padding(bottom = 16.dp)
                     )
@@ -131,7 +128,13 @@ internal fun WalletRoot(
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                     )
                     NavigationDrawerItem(
-                        icon = { Icon(Lucide.History, contentDescription = "Recovery Phrase", tint = DevkitWalletColors.white) },
+                        icon = {
+                            Icon(
+                                Lucide.History,
+                                contentDescription = "Recovery Phrase",
+                                tint = DevkitWalletColors.white
+                            )
+                        },
                         label = { DrawerItemLabel("Recovery Phrase") },
                         selected = items[1] == selectedItem.value,
                         onClick = { navController.navigate(RecoveryPhraseScreen) },
@@ -139,7 +142,13 @@ internal fun WalletRoot(
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                     )
                     NavigationDrawerItem(
-                        icon = { Icon(Lucide.SatelliteDish, contentDescription = "Esplora Client", tint = DevkitWalletColors.white) },
+                        icon = {
+                            Icon(
+                                Lucide.SatelliteDish,
+                                contentDescription = "Esplora Client",
+                                tint = DevkitWalletColors.white
+                            )
+                        },
                         label = { DrawerItemLabel("Esplora Client") },
                         selected = items[2] == selectedItem.value,
                         onClick = { navController.navigate(BlockchainClientScreen) },
@@ -147,7 +156,13 @@ internal fun WalletRoot(
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                     )
                     NavigationDrawerItem(
-                        icon = { Icon(Lucide.ScrollText, contentDescription = "Logs", tint = DevkitWalletColors.white) },
+                        icon = {
+                            Icon(
+                                Lucide.ScrollText,
+                                contentDescription = "Logs",
+                                tint = DevkitWalletColors.white
+                            )
+                        },
                         label = { DrawerItemLabel("Logs") },
                         selected = items[3] == selectedItem.value,
                         onClick = { navController.navigate(LogsScreen) },

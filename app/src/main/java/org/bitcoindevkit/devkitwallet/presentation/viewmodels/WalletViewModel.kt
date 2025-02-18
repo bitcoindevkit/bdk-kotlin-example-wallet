@@ -11,20 +11,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import org.bitcoindevkit.devkitwallet.domain.Wallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.bitcoindevkit.devkitwallet.domain.CurrencyUnit
+import org.bitcoindevkit.devkitwallet.domain.Wallet
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenAction
 import org.bitcoindevkit.devkitwallet.presentation.viewmodels.mvi.WalletScreenState
 
 private const val TAG = "WalletViewModel"
 
 class WalletViewModel(
-    private val wallet: Wallet
+    private val wallet: Wallet,
 ) : ViewModel() {
-
     var state: WalletScreenState by mutableStateOf(WalletScreenState())
         private set
 
@@ -35,7 +34,7 @@ class WalletViewModel(
     fun onAction(action: WalletScreenAction) {
         when (action) {
             WalletScreenAction.UpdateBalance -> updateBalance()
-            WalletScreenAction.SwitchUnit    -> switchUnit()
+            WalletScreenAction.SwitchUnit -> switchUnit()
         }
     }
 

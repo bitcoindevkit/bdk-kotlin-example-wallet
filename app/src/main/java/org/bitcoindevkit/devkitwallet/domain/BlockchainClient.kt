@@ -8,8 +8,8 @@ package org.bitcoindevkit.devkitwallet.domain
 import org.bitcoindevkit.FullScanRequest
 import org.bitcoindevkit.SyncRequest
 import org.bitcoindevkit.Transaction
-import org.bitcoindevkit.EsploraClient as BdkEsploraClient
 import org.bitcoindevkit.Update
+import org.bitcoindevkit.EsploraClient as BdkEsploraClient
 
 interface BlockchainClient {
     fun clientId(): String

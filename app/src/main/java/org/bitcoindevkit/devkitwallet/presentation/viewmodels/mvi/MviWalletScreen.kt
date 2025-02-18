@@ -11,10 +11,11 @@ data class WalletScreenState(
     val balance: ULong = 0u,
     val syncing: Boolean = false,
     val unit: CurrencyUnit = CurrencyUnit.Bitcoin,
-    val esploraEndpoint: String = ""
+    val esploraEndpoint: String = "",
 )
 
 sealed interface WalletScreenAction {
     data object UpdateBalance : WalletScreenAction
+
     data object SwitchUnit : WalletScreenAction
 }

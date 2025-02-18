@@ -20,10 +20,7 @@ import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SecondaryScreensAppBar(
-    title: String,
-    navigation: () -> Unit
-) {
+internal fun SecondaryScreensAppBar(title: String, navigation: () -> Unit) {
     TopAppBar(
         title = {
             Text(
@@ -42,8 +39,9 @@ internal fun SecondaryScreensAppBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = DevkitWalletColors.primaryDark,
-        )
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = DevkitWalletColors.primaryDark,
+            )
     )
 }

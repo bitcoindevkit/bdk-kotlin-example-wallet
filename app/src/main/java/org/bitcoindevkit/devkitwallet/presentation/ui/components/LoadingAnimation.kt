@@ -31,7 +31,7 @@ fun LoadingAnimation(
     circleColor: Color = Color(0xffE9C46A),
     circleSize: Dp = 21.dp,
     animationDelay: Int = 800,
-    initialAlpha: Float = 0.3f
+    initialAlpha: Float = 0.3f,
 ) {
     val circles = listOf(
         remember { Animatable(initialValue = initialAlpha) },
@@ -66,7 +66,7 @@ fun LoadingAnimation(
                 modifier = Modifier
                     .size(size = circleSize)
                     .clip(shape = CircleShape)
-                    .background(circleColor.copy(alpha = animatable.value)                    )
+                    .background(circleColor.copy(alpha = animatable.value))
             )
         }
     }

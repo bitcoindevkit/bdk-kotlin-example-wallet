@@ -14,9 +14,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -36,19 +36,19 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
-import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.data.ActiveWalletScriptType
 import org.bitcoindevkit.devkitwallet.data.RecoverWalletConfig
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
-import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
+import org.bitcoindevkit.devkitwallet.presentation.WalletCreateType
 import org.bitcoindevkit.devkitwallet.presentation.theme.DevkitWalletColors
 import org.bitcoindevkit.devkitwallet.presentation.theme.quattroRegular
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.NeutralButton
+import org.bitcoindevkit.devkitwallet.presentation.ui.components.SecondaryScreensAppBar
 import org.rustbitcoin.bitcoin.Network
 
 @Composable
 internal fun RecoverWalletScreen(
     navController: NavController,
-    onBuildWalletButtonClicked: (WalletCreateType) -> Unit
+    onBuildWalletButtonClicked: (WalletCreateType) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -59,17 +59,18 @@ internal fun RecoverWalletScreen(
 
         // the screen is broken into 2 parts: the screen title and the body
         ConstraintLayout(
-            modifier = Modifier
-                .fillMaxHeight(1f)
-                .padding(paddingValues)
+            modifier =
+                Modifier
+                    .fillMaxHeight(1f)
+                    .padding(paddingValues)
         ) {
-
             val (screenTitle, body) = createRefs()
 
-            val emptyRecoveryPhrase: Map<Int, String> = mapOf(
-                1 to "", 2 to "", 3 to "", 4 to "", 5 to "", 6 to "",
-                7 to "", 8 to "", 9 to "", 10 to "", 11 to "", 12 to ""
-            )
+            val emptyRecoveryPhrase: Map<Int, String> =
+                mapOf(
+                    1 to "", 2 to "", 3 to "", 4 to "", 5 to "", 6 to "",
+                    7 to "", 8 to "", 9 to "", 10 to "", 11 to "", 12 to ""
+                )
             val (recoveryPhraseWordMap, setRecoveryPhraseWordMap) = remember { mutableStateOf(emptyRecoveryPhrase) }
             val walletName: MutableState<String> = remember { mutableStateOf("") }
             var selectedNetwork: Network by remember { mutableStateOf(Network.TESTNET) }
@@ -80,16 +81,18 @@ internal fun RecoverWalletScreen(
             // the app name
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth(1f)
-                    .constrainAs(screenTitle) {
-                        top.linkTo(parent.top)
-                    }
+                modifier =
+                    Modifier
+                        .fillMaxWidth(1f)
+                        .constrainAs(screenTitle) {
+                            top.linkTo(parent.top)
+                        }
             ) {
                 Column {
                     OutlinedTextField(
-                        modifier = Modifier
-                            .padding(vertical = 8.dp),
+                        modifier =
+                            Modifier
+                                .padding(vertical = 8.dp),
                         value = walletName.value,
                         onValueChange = { walletName.value = it },
                         label = {
@@ -100,11 +103,12 @@ internal fun RecoverWalletScreen(
                         },
                         singleLine = true,
                         textStyle = TextStyle(fontFamily = quattroRegular, color = DevkitWalletColors.white),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            cursorColor = DevkitWalletColors.accent1,
-                            focusedBorderColor = DevkitWalletColors.accent1,
-                            unfocusedBorderColor = DevkitWalletColors.white,
-                        ),
+                        colors =
+                            OutlinedTextFieldDefaults.colors(
+                                cursorColor = DevkitWalletColors.accent1,
+                                focusedBorderColor = DevkitWalletColors.accent1,
+                                unfocusedBorderColor = DevkitWalletColors.white,
+                            ),
                     )
 
                     network.forEach {
@@ -130,19 +134,21 @@ internal fun RecoverWalletScreen(
             MyList(
                 recoveryPhraseWordMap,
                 setRecoveryPhraseWordMap,
-                modifier = Modifier
-                    .constrainAs(body) {
-                        top.linkTo(screenTitle.bottom)
-                        bottom.linkTo(parent.bottom)
-                        height = Dimension.fillToConstraints
-                    },
+                modifier =
+                    Modifier
+                        .constrainAs(body) {
+                            top.linkTo(screenTitle.bottom)
+                            bottom.linkTo(parent.bottom)
+                            height = Dimension.fillToConstraints
+                        },
                 onClick = {
-                    val recoverWalletConfig = RecoverWalletConfig(
-                        name = walletName.value,
-                        network = selectedNetwork,
-                        scriptType = selectedScriptType,
-                        recoveryPhrase = buildRecoveryPhrase(recoveryPhraseWordMap),
-                    )
+                    val recoverWalletConfig =
+                        RecoverWalletConfig(
+                            name = walletName.value,
+                            network = selectedNetwork,
+                            scriptType = selectedScriptType,
+                            recoveryPhrase = buildRecoveryPhrase(recoveryPhraseWordMap),
+                        )
                     onBuildWalletButtonClicked(WalletCreateType.RECOVER(recoverWalletConfig))
                 }
             )
@@ -155,7 +161,7 @@ fun MyList(
     recoveryPhraseWordMap: Map<Int, String>,
     setRecoveryPhraseWordMap: (Map<Int, String>) -> Unit,
     modifier: Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -182,7 +188,7 @@ fun WordField(
     wordNumber: Int,
     recoveryWordMap: Map<Int, String>,
     setRecoveryPhraseWordMap: (Map<Int, String>) -> Unit,
-    focusManager: FocusManager
+    focusManager: FocusManager,
 ) {
     OutlinedTextField(
         value = recoveryWordMap[wordNumber] ?: "elvis is here",
@@ -199,25 +205,30 @@ fun WordField(
                 color = DevkitWalletColors.white,
             )
         },
-        textStyle = TextStyle(
-            fontSize = 16.sp,
-            color = DevkitWalletColors.white
-        ),
-        colors = OutlinedTextFieldDefaults.colors(
-            cursorColor = DevkitWalletColors.accent1,
-            focusedBorderColor = DevkitWalletColors.accent1,
-            unfocusedBorderColor = DevkitWalletColors.white,
-        ),
-        modifier = Modifier
-            .padding(4.dp),
-        keyboardOptions = when (wordNumber) {
-            12 -> KeyboardOptions(imeAction = ImeAction.Done)
-            else -> KeyboardOptions(imeAction = ImeAction.Next)
-        },
-        keyboardActions = KeyboardActions(
-            onNext = { focusManager.moveFocus(FocusDirection.Down) },
-            onDone = { focusManager.clearFocus() }
-        ),
+        textStyle =
+            TextStyle(
+                fontSize = 16.sp,
+                color = DevkitWalletColors.white
+            ),
+        colors =
+            OutlinedTextFieldDefaults.colors(
+                cursorColor = DevkitWalletColors.accent1,
+                focusedBorderColor = DevkitWalletColors.accent1,
+                unfocusedBorderColor = DevkitWalletColors.white,
+            ),
+        modifier =
+            Modifier
+                .padding(4.dp),
+        keyboardOptions =
+            when (wordNumber) {
+                12 -> KeyboardOptions(imeAction = ImeAction.Done)
+                else -> KeyboardOptions(imeAction = ImeAction.Next)
+            },
+        keyboardActions =
+            KeyboardActions(
+                onNext = { focusManager.moveFocus(FocusDirection.Down) },
+                onDone = { focusManager.clearFocus() }
+            ),
         singleLine = true,
         // contentPadding = TextFieldDefaults.contentPaddingWithoutLabel(
         //     start = 8.dp,
