@@ -1,9 +1,12 @@
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 plugins {
     id("com.android.application") version "8.7.1"
     id("org.jetbrains.kotlin.android") version "2.1.10"
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.10"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.10"
     id("com.google.protobuf") version "0.9.4"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 }
 
 // This is the version of the app that is displayed in the UI on the drawer.
@@ -43,7 +46,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-
 }
 
 dependencies {
@@ -83,9 +85,9 @@ dependencies {
     implementation("com.google.zxing:core:3.4.1")
 
     // Tests
-    testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.6.1")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 }
 
 protobuf {
@@ -101,5 +103,12 @@ protobuf {
                 }
             }
         }
+    }
+}
+
+ktlint {
+    ignoreFailures = false
+    reporters {
+        reporter(ReporterType.PLAIN).apply { outputToConsole = true }
     }
 }
