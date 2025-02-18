@@ -236,11 +236,12 @@ class Wallet private constructor(
                     KeychainKind.INTERNAL
                 )
             val walletId = UUID.randomUUID().toString()
-            val connection = Connection("$internalAppFilesPath/wallet-${walletId.take(8)}.sqlite3",)
+            val connection = Connection("$internalAppFilesPath/wallet-${walletId.take(8)}.sqlite3")
 
             // Create SingleWallet object for saving to datastore
             val newWalletForDatastore: SingleWallet =
-                SingleWallet.newBuilder()
+                SingleWallet
+                    .newBuilder()
                     .setId(walletId)
                     .setName(newWalletConfig.name)
                     .setNetwork(newWalletConfig.network.intoProto())
@@ -321,11 +322,12 @@ class Wallet private constructor(
                     KeychainKind.INTERNAL
                 )
             val walletId = UUID.randomUUID().toString()
-            val connection = Connection("$internalAppFilesPath/wallet-${walletId.take(8)}.sqlite3",)
+            val connection = Connection("$internalAppFilesPath/wallet-${walletId.take(8)}.sqlite3")
 
             // Create SingleWallet object for saving to datastore
             val newWalletForDatastore: SingleWallet =
-                SingleWallet.newBuilder()
+                SingleWallet
+                    .newBuilder()
                     .setId(walletId)
                     .setName(recoverWalletConfig.name)
                     .setNetwork(recoverWalletConfig.network.intoProto())

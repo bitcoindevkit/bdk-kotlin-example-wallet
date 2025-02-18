@@ -106,8 +106,7 @@ internal fun ReceiveScreen(
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                             height = Dimension.fillToConstraints
-                        }
-                        .padding(horizontal = 32.dp)
+                        }.padding(horizontal = 32.dp)
             ) {
                 val qr: ImageBitmap? = state.address?.let { addressToQR(it) }
                 Log.i("ReceiveScreen", "New receive address is ${state.address}")
@@ -131,8 +130,7 @@ internal fun ReceiveScreen(
                                                 snackbarHostState,
                                                 null
                                             )
-                                        }
-                                        .background(
+                                        }.background(
                                             color = DevkitWalletColors.primaryLight,
                                             shape = RoundedCornerShape(16.dp)
                                         ).padding(12.dp),
@@ -168,8 +166,7 @@ internal fun ReceiveScreen(
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }
-                    .padding(bottom = 24.dp)
+                    }.padding(bottom = 24.dp)
             ) {
                 Button(
                     onClick = { onAction(ReceiveScreenAction.UpdateAddress) },

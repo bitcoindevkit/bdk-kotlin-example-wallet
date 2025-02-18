@@ -43,8 +43,7 @@ fun ConfirmedTransactionCard(details: TxDetails, navController: NavController) {
             .background(
                 color = DevkitWalletColors.primaryLight,
                 shape = RoundedCornerShape(16.dp)
-            )
-            .clickable { viewTransaction(navController = navController, txid = details.txid) },
+            ).clickable { viewTransaction(navController = navController, txid = details.txid) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Absolute.SpaceBetween
     ) {
@@ -77,13 +76,11 @@ fun PendingTransactionCard(details: TxDetails, navController: NavController) {
             .background(
                 color = DevkitWalletColors.primaryLight,
                 shape = RoundedCornerShape(16.dp)
-            )
-            .border(
+            ).border(
                 width = 2.dp,
                 color = DevkitWalletColors.accent1,
                 shape = RoundedCornerShape(16.dp)
-            )
-            .clickable {
+            ).clickable {
                 viewTransaction(
                     navController = navController,
                     txid = details.txid

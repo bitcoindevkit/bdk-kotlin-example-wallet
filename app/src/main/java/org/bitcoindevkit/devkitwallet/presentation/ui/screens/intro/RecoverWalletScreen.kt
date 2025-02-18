@@ -66,11 +66,20 @@ internal fun RecoverWalletScreen(
         ) {
             val (screenTitle, body) = createRefs()
 
-            val emptyRecoveryPhrase: Map<Int, String> =
-                mapOf(
-                    1 to "", 2 to "", 3 to "", 4 to "", 5 to "", 6 to "",
-                    7 to "", 8 to "", 9 to "", 10 to "", 11 to "", 12 to ""
-                )
+            val emptyRecoveryPhrase: Map<Int, String> = mapOf(
+                1 to "",
+                2 to "",
+                3 to "",
+                4 to "",
+                5 to "",
+                6 to "",
+                7 to "",
+                8 to "",
+                9 to "",
+                10 to "",
+                11 to "",
+                12 to ""
+            )
             val (recoveryPhraseWordMap, setRecoveryPhraseWordMap) = remember { mutableStateOf(emptyRecoveryPhrase) }
             val walletName: MutableState<String> = remember { mutableStateOf("") }
             var selectedNetwork: Network by remember { mutableStateOf(Network.TESTNET) }
@@ -243,7 +252,13 @@ fun WordField(
 private fun buildRecoveryPhrase(recoveryPhraseWordMap: Map<Int, String>): String {
     var recoveryPhrase = ""
     recoveryPhraseWordMap.values.forEach {
-        recoveryPhrase = recoveryPhrase.plus(it.trim().replace(" ", "").lowercase().plus(" "))
+        recoveryPhrase = recoveryPhrase.plus(
+            it
+                .trim()
+                .replace(" ", "")
+                .lowercase()
+                .plus(" ")
+        )
     }
     return recoveryPhrase.trim()
 }

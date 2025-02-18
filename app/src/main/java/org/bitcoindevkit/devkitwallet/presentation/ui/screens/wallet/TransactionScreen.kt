@@ -66,8 +66,7 @@ internal fun TransactionScreen(txid: String?, navController: NavController) {
                             top.linkTo(parent.top)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
-                        }
-                        .padding(top = 70.dp)
+                        }.padding(top = 70.dp)
             ) {
                 Text(
                     text = "Transaction",

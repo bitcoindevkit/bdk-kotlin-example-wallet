@@ -142,8 +142,7 @@ internal fun SendScreen(navController: NavController, sendViewModel: SendViewMod
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }
-                    .padding(bottom = 32.dp)
+                    }.padding(bottom = 32.dp)
             ) {
                 Button(
                     onClick = { setShowDialog(true) },

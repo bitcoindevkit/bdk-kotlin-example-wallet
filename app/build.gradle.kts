@@ -107,6 +107,7 @@ protobuf {
 }
 
 ktlint {
+    version = "1.5.0"
     ignoreFailures = false
     reporters {
         reporter(ReporterType.PLAIN).apply { outputToConsole = true }

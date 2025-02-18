@@ -80,8 +80,7 @@ internal fun CreateNewWalletScreen(
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }
-                    .fillMaxSize()
+                    }.fillMaxSize()
                     .background(color = DevkitWalletColors.primary)
                     .padding(horizontal = 32.dp)
             ) {
@@ -119,8 +118,7 @@ internal fun CreateNewWalletScreen(
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }
-                    .fillMaxWidth()
+                    }.fillMaxWidth()
                     .padding(horizontal = 32.dp)
             ) {
                 NeutralButton(
@@ -156,8 +154,7 @@ fun NetworkOptionCard(networks: List<Network>, selectedNetwork: MutableState<Net
                 width = 2.dp,
                 color = DevkitWalletColors.secondary,
                 shape = RoundedCornerShape(16.dp)
-            )
-            .background(
+            ).background(
                 color = DevkitWalletColors.primaryLight,
                 shape = RoundedCornerShape(16.dp)
             ),
@@ -201,8 +198,7 @@ fun ScriptTypeOptionCard(
                 width = 2.dp,
                 color = DevkitWalletColors.secondary,
                 shape = RoundedCornerShape(16.dp)
-            )
-            .background(
+            ).background(
                 color = DevkitWalletColors.primaryLight,
                 shape = RoundedCornerShape(16.dp)
             ),

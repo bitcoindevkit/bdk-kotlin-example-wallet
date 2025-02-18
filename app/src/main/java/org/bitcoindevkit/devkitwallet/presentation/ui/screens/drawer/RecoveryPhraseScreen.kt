@@ -44,7 +44,6 @@ internal fun RecoveryPhraseScreen(recoveryPhrase: List<String>, navController: N
         },
         containerColor = DevkitWalletColors.primary
     ) { paddingValues ->
-
         Crossfade(
             modifier = Modifier.padding(paddingValues),
             targetState = currentIndex,

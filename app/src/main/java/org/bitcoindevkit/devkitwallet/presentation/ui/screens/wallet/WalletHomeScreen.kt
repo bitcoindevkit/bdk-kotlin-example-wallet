@@ -96,14 +96,12 @@ internal fun WalletHomeScreen(
                         interactionSource,
                         indication = null,
                         onClick = { onAction(WalletScreenAction.SwitchUnit) }
-                    )
-                    .fillMaxWidth(0.9f)
+                    ).fillMaxWidth(0.9f)
                     .padding(horizontal = 8.dp)
                     .background(
                         color = DevkitWalletColors.primaryLight,
                         shape = RoundedCornerShape(16.dp)
-                    )
-                    .height(100.dp),
+                    ).height(100.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
