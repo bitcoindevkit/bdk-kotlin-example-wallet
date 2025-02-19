@@ -87,10 +87,9 @@ internal fun ReceiveScreen(
         containerColor = DevkitWalletColors.primary
     ) { paddingValues ->
         ConstraintLayout(
-            modifier =
-                Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
         ) {
             val (QRCode, bottomButtons) = createRefs()
             val context = LocalContext.current
@@ -98,15 +97,14 @@ internal fun ReceiveScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier =
-                    Modifier
-                        .constrainAs(QRCode) {
-                            top.linkTo(parent.top)
-                            bottom.linkTo(bottomButtons.top)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            height = Dimension.fillToConstraints
-                        }.padding(horizontal = 32.dp)
+                modifier = Modifier
+                    .constrainAs(QRCode) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(bottomButtons.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        height = Dimension.fillToConstraints
+                    }.padding(horizontal = 32.dp)
             ) {
                 val qr: ImageBitmap? = state.address?.let { addressToQR(it) }
                 Log.i("ReceiveScreen", "New receive address is ${state.address}")
@@ -120,20 +118,19 @@ internal fun ReceiveScreen(
                     Box {
                         SelectionContainer {
                             Text(
-                                modifier =
-                                    Modifier
-                                        .clickable {
-                                            copyToClipboard(
-                                                state.address,
-                                                context,
-                                                scope,
-                                                snackbarHostState,
-                                                null
-                                            )
-                                        }.background(
-                                            color = DevkitWalletColors.primaryLight,
-                                            shape = RoundedCornerShape(16.dp)
-                                        ).padding(12.dp),
+                                modifier = Modifier
+                                    .clickable {
+                                        copyToClipboard(
+                                            state.address,
+                                            context,
+                                            scope,
+                                            snackbarHostState,
+                                            null
+                                        )
+                                    }.background(
+                                        color = DevkitWalletColors.primaryLight,
+                                        shape = RoundedCornerShape(16.dp)
+                                    ).padding(12.dp),
                                 text = state.address.chunked(4).joinToString(" "),
                                 fontFamily = monoRegular,
                                 color = DevkitWalletColors.white
@@ -143,11 +140,10 @@ internal fun ReceiveScreen(
                             Lucide.ClipboardCopy,
                             tint = Color.White,
                             contentDescription = "Copy to clipboard",
-                            modifier =
-                                Modifier
-                                    .padding(8.dp)
-                                    .size(20.dp)
-                                    .align(Alignment.BottomEnd)
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .size(20.dp)
+                                .align(Alignment.BottomEnd)
                         )
                     }
                     Spacer(modifier = Modifier.padding(vertical = 16.dp))
@@ -172,12 +168,11 @@ internal fun ReceiveScreen(
                     onClick = { onAction(ReceiveScreenAction.UpdateAddress) },
                     colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                     shape = RoundedCornerShape(16.dp),
-                    modifier =
-                        Modifier
-                            .height(80.dp)
-                            .fillMaxWidth(0.9f)
-                            .padding(vertical = 8.dp, horizontal = 8.dp)
-                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                    modifier = Modifier
+                        .height(80.dp)
+                        .fillMaxWidth(0.9f)
+                        .padding(vertical = 8.dp, horizontal = 8.dp)
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
                 ) {
                     Text(
                         text = "Generate address",

@@ -41,21 +41,19 @@ internal fun WalletChoiceScreen(navController: NavController) {
         containerColor = DevkitWalletColors.primary
     ) { paddingValues ->
         ConstraintLayout(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
             val (logo, active, create, recover) = createRefs()
 
             Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 90.dp)
-                        .constrainAs(logo) {
-                            top.linkTo(parent.top)
-                        },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 90.dp)
+                    .constrainAs(logo) {
+                        top.linkTo(parent.top)
+                    },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -79,16 +77,15 @@ internal fun WalletChoiceScreen(navController: NavController) {
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 enabled = true,
-                modifier =
-                    Modifier
-                        .size(width = 300.dp, height = 150.dp)
-                        .padding(vertical = 8.dp, horizontal = 8.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
-                        .constrainAs(active) {
-                            bottom.linkTo(create.top)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }
+                modifier = Modifier
+                    .size(width = 300.dp, height = 150.dp)
+                    .padding(vertical = 8.dp, horizontal = 8.dp)
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
+                    .constrainAs(active) {
+                        bottom.linkTo(create.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
             ) {
                 Text(
                     text = "Use an\nActive Wallet",
@@ -102,16 +99,15 @@ internal fun WalletChoiceScreen(navController: NavController) {
                 onClick = { navController.navigate(CreateNewWalletScreen) },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
-                modifier =
-                    Modifier
-                        .size(width = 300.dp, height = 150.dp)
-                        .padding(vertical = 8.dp, horizontal = 8.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
-                        .constrainAs(create) {
-                            bottom.linkTo(recover.top)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }
+                modifier = Modifier
+                    .size(width = 300.dp, height = 150.dp)
+                    .padding(vertical = 8.dp, horizontal = 8.dp)
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
+                    .constrainAs(create) {
+                        bottom.linkTo(recover.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
             ) {
                 Text(
                     text = "Create a\nNew Wallet",
@@ -125,16 +121,15 @@ internal fun WalletChoiceScreen(navController: NavController) {
                 onClick = { navController.navigate(WalletRecoveryScreen) },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
-                modifier =
-                    Modifier
-                        .size(width = 300.dp, height = 150.dp)
-                        .padding(vertical = 8.dp, horizontal = 8.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
-                        .constrainAs(recover) {
-                            bottom.linkTo(parent.bottom, margin = 70.dp)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }
+                modifier = Modifier
+                    .size(width = 300.dp, height = 150.dp)
+                    .padding(vertical = 8.dp, horizontal = 8.dp)
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
+                    .constrainAs(recover) {
+                        bottom.linkTo(parent.bottom, margin = 70.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
             ) {
                 Text(
                     text = "Recover an\nExisting Wallet",

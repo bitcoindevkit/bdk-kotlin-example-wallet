@@ -59,10 +59,9 @@ internal fun RecoverWalletScreen(
 
         // the screen is broken into 2 parts: the screen title and the body
         ConstraintLayout(
-            modifier =
-                Modifier
-                    .fillMaxHeight(1f)
-                    .padding(paddingValues)
+            modifier = Modifier
+                .fillMaxHeight(1f)
+                .padding(paddingValues)
         ) {
             val (screenTitle, body) = createRefs()
 
@@ -90,18 +89,16 @@ internal fun RecoverWalletScreen(
             // the app name
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier =
-                    Modifier
-                        .fillMaxWidth(1f)
-                        .constrainAs(screenTitle) {
-                            top.linkTo(parent.top)
-                        }
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+                    .constrainAs(screenTitle) {
+                        top.linkTo(parent.top)
+                    }
             ) {
                 Column {
                     OutlinedTextField(
-                        modifier =
-                            Modifier
-                                .padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .padding(vertical = 8.dp),
                         value = walletName.value,
                         onValueChange = { walletName.value = it },
                         label = {
@@ -143,13 +140,12 @@ internal fun RecoverWalletScreen(
             MyList(
                 recoveryPhraseWordMap,
                 setRecoveryPhraseWordMap,
-                modifier =
-                    Modifier
-                        .constrainAs(body) {
-                            top.linkTo(screenTitle.bottom)
-                            bottom.linkTo(parent.bottom)
-                            height = Dimension.fillToConstraints
-                        },
+                modifier = Modifier
+                    .constrainAs(body) {
+                        top.linkTo(screenTitle.bottom)
+                        bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
+                    },
                 onClick = {
                     val recoverWalletConfig =
                         RecoverWalletConfig(
@@ -225,9 +221,8 @@ fun WordField(
                 focusedBorderColor = DevkitWalletColors.accent1,
                 unfocusedBorderColor = DevkitWalletColors.white,
             ),
-        modifier =
-            Modifier
-                .padding(4.dp),
+        modifier = Modifier
+            .padding(4.dp),
         keyboardOptions =
             when (wordNumber) {
                 12 -> KeyboardOptions(imeAction = ImeAction.Done)

@@ -51,22 +51,20 @@ internal fun TransactionScreen(txid: String?, navController: NavController) {
         containerColor = DevkitWalletColors.primary
     ) { paddingValues ->
         ConstraintLayout(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(DevkitWalletColors.primary)
-                    .padding(paddingValues)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(DevkitWalletColors.primary)
+                .padding(paddingValues)
         ) {
             val (screenTitle, transactions, bottomButton) = createRefs()
 
             Column(
-                modifier =
-                    Modifier
-                        .constrainAs(screenTitle) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }.padding(top = 70.dp)
+                modifier = Modifier
+                    .constrainAs(screenTitle) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }.padding(top = 70.dp)
             ) {
                 Text(
                     text = "Transaction",
@@ -88,8 +86,8 @@ internal fun TransactionScreen(txid: String?, navController: NavController) {
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier =
-                    Modifier.constrainAs(transactions) {
+                modifier = Modifier
+                    .constrainAs(transactions) {
                         top.linkTo(screenTitle.bottom)
                         bottom.linkTo(bottomButton.top)
                         start.linkTo(parent.start)
@@ -120,16 +118,15 @@ internal fun TransactionScreen(txid: String?, navController: NavController) {
             }
 
             Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth(0.9f)
-                        .padding(vertical = 8.dp, horizontal = 8.dp)
-                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-                        .constrainAs(bottomButton) {
-                            bottom.linkTo(parent.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .padding(vertical = 8.dp, horizontal = 8.dp)
+                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                    .constrainAs(bottomButton) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
             ) {
                 TransactionDetailButton(
                     content = "increase fees",
@@ -156,10 +153,9 @@ fun TransactionDetailButton(content: String, navController: NavController, txid:
         },
         colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
         shape = RoundedCornerShape(16.dp),
-        modifier =
-            Modifier
-                .height(60.dp)
-                .fillMaxWidth()
+        modifier = Modifier
+            .height(60.dp)
+            .fillMaxWidth()
     ) {
         Text(
             text = content,

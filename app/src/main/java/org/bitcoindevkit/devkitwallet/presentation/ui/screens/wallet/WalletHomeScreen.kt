@@ -83,10 +83,9 @@ internal fun WalletHomeScreen(
         containerColor = DevkitWalletColors.primary
     ) { paddingValues ->
         Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.padding(24.dp))
@@ -175,30 +174,27 @@ internal fun WalletHomeScreen(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier =
-                    Modifier
-                        .height(140.dp)
-                        .fillMaxWidth(0.9f)
+                modifier = Modifier
+                    .height(140.dp)
+                    .fillMaxWidth(0.9f)
             ) {
                 Button(
                     onClick = { navController.navigate(ReceiveScreen) },
                     colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
                     shape = RoundedCornerShape(16.dp),
-                    modifier =
-                        Modifier
-                            .height(160.dp)
-                            .padding(vertical = 8.dp, horizontal = 8.dp)
-                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                    modifier = Modifier
+                        .height(160.dp)
+                        .padding(vertical = 8.dp, horizontal = 8.dp)
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
                 ) {
                     Text(
                         text = "receive",
                         fontSize = 16.sp,
                         textAlign = TextAlign.End,
                         lineHeight = 28.sp,
-                        modifier =
-                            Modifier
-                                .fillMaxWidth(0.4f)
-                                .align(Alignment.Bottom)
+                        modifier = Modifier
+                            .fillMaxWidth(0.4f)
+                            .align(Alignment.Bottom)
                     )
                 }
 
@@ -211,21 +207,19 @@ internal fun WalletHomeScreen(
                         ),
                     shape = RoundedCornerShape(16.dp),
                     enabled = networkAvailable,
-                    modifier =
-                        Modifier
-                            .height(160.dp)
-                            .padding(vertical = 8.dp, horizontal = 8.dp)
-                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                    modifier = Modifier
+                        .height(160.dp)
+                        .padding(vertical = 8.dp, horizontal = 8.dp)
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
                 ) {
                     Text(
                         text = "send",
                         fontSize = 16.sp,
                         textAlign = TextAlign.End,
                         lineHeight = 28.sp,
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .align(Alignment.Bottom)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Bottom)
                     )
                 }
             }

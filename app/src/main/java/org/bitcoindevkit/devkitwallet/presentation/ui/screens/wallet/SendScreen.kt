@@ -99,18 +99,17 @@ internal fun SendScreen(navController: NavController, sendViewModel: SendViewMod
         sheetPeekHeight = 0.dp,
     ) { paddingValues ->
         ConstraintLayout(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .background(DevkitWalletColors.primary)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(DevkitWalletColors.primary)
         ) {
             val (transactionInputs, bottomButtons) = createRefs()
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier =
-                    Modifier.constrainAs(transactionInputs) {
+                modifier = Modifier
+                    .constrainAs(transactionInputs) {
                         top.linkTo(parent.top)
                         bottom.linkTo(bottomButtons.top)
                         start.linkTo(parent.start)
@@ -148,12 +147,11 @@ internal fun SendScreen(navController: NavController, sendViewModel: SendViewMod
                     onClick = { setShowDialog(true) },
                     colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent2),
                     shape = RoundedCornerShape(16.dp),
-                    modifier =
-                        Modifier
-                            .height(80.dp)
-                            .fillMaxWidth(0.9f)
-                            .padding(vertical = 8.dp, horizontal = 8.dp)
-                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                    modifier = Modifier
+                        .height(80.dp)
+                        .fillMaxWidth(0.9f)
+                        .padding(vertical = 8.dp, horizontal = 8.dp)
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
                 ) {
                     Text(
                         text = "broadcast transaction",
@@ -175,10 +173,9 @@ internal fun AdvancedOptions(
     recipientList: MutableList<Recipient>,
 ) {
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Row(
             Modifier
@@ -214,23 +211,21 @@ internal fun AdvancedOptions(
                         recipientList.removeLast()
                     }
                 },
-                colors =
-                    SwitchDefaults.colors(
-                        uncheckedBorderColor = DevkitWalletColors.primaryDark,
-                        uncheckedThumbColor = DevkitWalletColors.primaryDark,
-                        uncheckedTrackColor = DevkitWalletColors.white,
-                        checkedThumbColor = DevkitWalletColors.white,
-                        checkedTrackColor = DevkitWalletColors.accent1,
-                    )
+                colors = SwitchDefaults.colors(
+                    uncheckedBorderColor = DevkitWalletColors.primaryDark,
+                    uncheckedThumbColor = DevkitWalletColors.primaryDark,
+                    uncheckedTrackColor = DevkitWalletColors.white,
+                    checkedThumbColor = DevkitWalletColors.white,
+                    checkedTrackColor = DevkitWalletColors.accent1
+                )
             )
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             OutlinedTextField(
-                modifier =
-                    Modifier
-                        .padding(vertical = 8.dp)
-                        .weight(0.5f),
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .weight(0.5f),
                 value = opReturnMsg.value ?: "",
                 onValueChange = {
                     opReturnMsg.value = it
@@ -243,12 +238,11 @@ internal fun AdvancedOptions(
                 },
                 singleLine = true,
                 textStyle = TextStyle(color = DevkitWalletColors.white),
-                colors =
-                    OutlinedTextFieldDefaults.colors(
-                        cursorColor = DevkitWalletColors.accent1,
-                        focusedBorderColor = DevkitWalletColors.accent1,
-                        unfocusedBorderColor = DevkitWalletColors.white,
-                    ),
+                colors = OutlinedTextFieldDefaults.colors(
+                    cursorColor = DevkitWalletColors.accent1,
+                    focusedBorderColor = DevkitWalletColors.accent1,
+                    unfocusedBorderColor = DevkitWalletColors.white
+                ),
             )
         }
 
@@ -308,20 +302,18 @@ internal fun AdvancedOptions(
 @Composable
 private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
     LazyColumn(
-        modifier =
-            Modifier
-                .fillMaxWidth(0.9f)
-                .heightIn(max = 100.dp)
+        modifier = Modifier
+            .fillMaxWidth(0.9f)
+            .heightIn(max = 100.dp)
     ) {
         itemsIndexed(recipientList) { index, _ ->
             val recipientAddress: MutableState<String> = rememberSaveable { mutableStateOf("") }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 OutlinedTextField(
-                    modifier =
-                        Modifier
-                            .padding(vertical = 8.dp)
-                            .weight(0.5f),
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .weight(0.5f),
                     value = recipientAddress.value,
                     onValueChange = {
                         recipientAddress.value = it
@@ -335,12 +327,11 @@ private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
                     },
                     singleLine = true,
                     textStyle = TextStyle(color = DevkitWalletColors.white),
-                    colors =
-                        OutlinedTextFieldDefaults.colors(
-                            cursorColor = DevkitWalletColors.accent1,
-                            focusedBorderColor = DevkitWalletColors.accent1,
-                            unfocusedBorderColor = DevkitWalletColors.white,
-                        ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        cursorColor = DevkitWalletColors.accent1,
+                        focusedBorderColor = DevkitWalletColors.accent1,
+                        unfocusedBorderColor = DevkitWalletColors.white
+                    )
                 )
             }
         }
@@ -372,20 +363,18 @@ fun checkRecipientList(
 @Composable
 private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transactionType: TransactionType) {
     LazyColumn(
-        modifier =
-            Modifier
-                .fillMaxWidth(0.9f)
-                .heightIn(max = 100.dp)
+        modifier = Modifier
+            .fillMaxWidth(0.9f)
+            .heightIn(max = 100.dp)
     ) {
         itemsIndexed(recipientList) { index, _ ->
             val amount: MutableState<String> = rememberSaveable { mutableStateOf("") }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 OutlinedTextField(
-                    modifier =
-                        Modifier
-                            .padding(vertical = 8.dp)
-                            .weight(0.5f),
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .weight(0.5f),
                     value = amount.value,
                     onValueChange = {
                         amount.value = it
@@ -409,12 +398,11 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
                     },
                     singleLine = true,
                     textStyle = TextStyle(color = DevkitWalletColors.white),
-                    colors =
-                        OutlinedTextFieldDefaults.colors(
-                            cursorColor = DevkitWalletColors.accent1,
-                            focusedBorderColor = DevkitWalletColors.accent1,
-                            unfocusedBorderColor = DevkitWalletColors.white,
-                        ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        cursorColor = DevkitWalletColors.accent1,
+                        focusedBorderColor = DevkitWalletColors.accent1,
+                        unfocusedBorderColor = DevkitWalletColors.white
+                    ),
                     enabled = (
                         when (transactionType) {
                             TransactionType.SEND_ALL -> false
@@ -431,10 +419,9 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
 private fun TransactionFeeInput(feeRate: MutableState<String>) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         OutlinedTextField(
-            modifier =
-                Modifier
-                    .padding(vertical = 8.dp)
-                    .fillMaxWidth(0.9f),
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth(0.9f),
             value = feeRate.value,
             onValueChange = { newValue: String ->
                 feeRate.value = newValue.filter { it.isDigit() }
@@ -447,12 +434,11 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
                     color = DevkitWalletColors.white,
                 )
             },
-            colors =
-                OutlinedTextFieldDefaults.colors(
-                    cursorColor = DevkitWalletColors.accent1,
-                    focusedBorderColor = DevkitWalletColors.accent1,
-                    unfocusedBorderColor = DevkitWalletColors.white,
-                ),
+            colors = OutlinedTextFieldDefaults.colors(
+                cursorColor = DevkitWalletColors.accent1,
+                focusedBorderColor = DevkitWalletColors.accent1,
+                unfocusedBorderColor = DevkitWalletColors.white
+            ),
         )
     }
 }
@@ -462,10 +448,9 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
 fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: BottomSheetScaffoldState) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier =
-            Modifier
-                .padding(vertical = 8.dp)
-                .background(DevkitWalletColors.secondary)
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .background(DevkitWalletColors.secondary)
     ) {
         Button(
             onClick = {
@@ -474,11 +459,10 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
                 }
             },
             colors = ButtonDefaults.buttonColors(Color.Transparent),
-            modifier =
-                Modifier
-                    .height(60.dp)
-                    .fillMaxWidth(fraction = 0.9f)
-                    .padding(vertical = 8.dp)
+            modifier = Modifier
+                .height(60.dp)
+                .fillMaxWidth(fraction = 0.9f)
+                .padding(vertical = 8.dp)
         ) {
             Text(
                 text = "advanced options",
